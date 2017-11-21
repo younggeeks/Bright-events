@@ -15,10 +15,6 @@
 .link-button{
     margin:10px 0 20px 0 ;
 }
-
-.mdl-card__menu{
-    opacity: 1.0 !important;
-}
 .mdl-card__title{
     opacity: 1.4;
 }
@@ -33,4 +29,10 @@
 }
 .table-link{
     text-decoration: none;
+}
+.bottom-spacing-20{
+    margin-bottom:20px;
+}
+.top-spacing-10{
+    margin-top:10px;
 }
