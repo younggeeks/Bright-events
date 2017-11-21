@@ -1,0 +1,36 @@
+
+.bright-logo{
+    width: 100px;
+    height:auto;
+    border-radius: 4px;
+}
+.centered{
+    text-align: center !important;
+}
+.auth-box{
+   margin-top: 40px;
+    border: 0.8px solid darkgray;
+    border-radius: 4px
+}
+.link-button{
+    margin:10px 0 20px 0 ;
+}
+
+.mdl-card__menu{
+    opacity: 1.0 !important;
+}
+.mdl-card__title{
+    opacity: 1.4;
+}
+.event-card .mdl-card__title {
+    color: white;
+    height: 70px;
+    background: url('assets/img/wedding.jpg') center ;
+}
+#eventsChart{
+    width: 90% !important;
+    height: auto !important;
+}
+.table-link{
+    text-decoration: none;
+}
