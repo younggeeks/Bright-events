@@ -26,5 +26,12 @@ git clone git@github.com:younggeeks/Bright-events.git
  * [Bootstrap 4 ](http://getbootstrap.com/) For Responsiveness with their Grid system
  * [Chartjs](chartjs.org) Killer Graphs - as seen in Dashboard
  * [Semantic-UI](semantic-ui.com) The Awesome Input Fields You see
-
  
+### Take a sneak peek at the new UI
+
+![Screenshot](https://raw.githubusercontent.com/younggeeks/Bright-events/screenshots/screenshots/deskto.png)
+
+### It looks Good on Mobile Too 
+
+![Mobile Screen](https://github.com/younggeeks/Bright-events/blob/screenshots/screenshots/mobile.PNG?raw=true)
+
