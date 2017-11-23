@@ -59,10 +59,22 @@ class UsersTester(unittest.TestCase):
         # testing if Login is successful
         self.assertEqual(response.status_code, 200)
 
-    def test_login_unsuccessful(self):
+    def test_login_unsuccessful_wrong_email(self):
         credentials = {
-            "email": "younggeeks101@gmail.com32",
+            "email": "younggeeks101@gmail.comd",
             "password": "secret",
+        }
+
+        response = self.app.post("{}/api/v1/auth/login".format(BASE_URL),
+                                 data=json.dumps(credentials), content_type='application/json')
+
+        # testing if Login is unsuccessful
+        self.assertEqual(response.status_code, 401)
+
+    def test_login_unsuccessful_wrong_password(self):
+        credentials = {
+            "email": "younggeeks101@gmail.com",
+            "password": "secretj",
         }
 
         response = self.app.post("{}/api/v1/auth/login".format(BASE_URL),
