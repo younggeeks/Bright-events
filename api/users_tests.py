@@ -85,10 +85,9 @@ class UsersTester(unittest.TestCase):
 
     def test_logout_unsuccessful(self):
         credentials = {
-            "email": "younggeeks101@gmail.com",
+            "email": "younggeeks101@gmail.comw",
             "password": "secretd",
         }
-
         response = self.app.post("{}/api/v1/auth/logout".format(BASE_URL),
                                  data=json.dumps(credentials), content_type='application/json')
 
@@ -100,7 +99,6 @@ class UsersTester(unittest.TestCase):
             "email": "younggeeks101@gmail.com",
             "password": "secretd",
         }
-
         response = self.app.post("{}/api/v1/auth/reset-password".format(BASE_URL),
                                  data=json.dumps(credentials), content_type='application/json')
 

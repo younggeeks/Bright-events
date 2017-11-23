@@ -30,8 +30,6 @@ events = [
 
 # helper function that converts List of  Models to List of Dictionaries
 def get_data(data_type):
-    if not data_type:
-        return None
     if data_type == 'users':
         dict_users = []
         for user in users:
