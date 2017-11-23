@@ -197,14 +197,11 @@ api.add_resource(RSVP, '/api/v1/events/<event_id>/rsvp')
 api.add_resource(EventList, '/api/v1/events/<event_id>')
 api.add_resource(Attendees, '/api/v1/events/<event_id>/guests')
 
-
 # routes for Authentication
 api.add_resource(Register, '/api/v1/auth/register')
 api.add_resource(Login, '/api/v1/auth/login')
 api.add_resource(Logout, '/api/v1/auth/logout')
 api.add_resource(PasswordReset, '/api/v1/auth/reset-password')
 
-
 if __name__ == '__main__':
     app.run(debug=True)
-

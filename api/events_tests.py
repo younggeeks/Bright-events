@@ -63,8 +63,12 @@ class EventTester(unittest.TestCase):
         event = {
             "name": "Angular Conference 2018",
             "address": "ijumaa",
-            "id": "9494",
-            "category": " Wedding"
+            "id": "9494dfasd",
+            "category": " Wedding",
+            "start_date": "1/2/323",
+            "end_date": "1/3/343",
+            "user": "Samaki",
+            "description": "awesome event You would'nt want to miss it"
         }
         response = self.app.put("{}/api/v1/events/{}".format(BASE_URL, event["id"]),
                                 data=json.dumps(event), content_type='application/json')
