@@ -12,7 +12,7 @@ Bright events provides a platform for event organizers to create and manage diff
 
 
 ## Working Demo of API Can be accessed at:
-   [Heroku Api Demo ](https://getmdl.io/)
+   [Heroku Api Demo ](https://bright-event.herokuapp.com/api/v1/events)
 
 
 
