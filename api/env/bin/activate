@@ -40,7 +40,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/Samjunior/ANDELABOOTCAMP/challenges/brighter-events/Bright-events/api/env"
+VIRTUAL_ENV="/Users/Samjunior/ANDELABOOTCAMP/challenges/sample-api/env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
