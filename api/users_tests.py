@@ -77,7 +77,7 @@ class UsersTester(unittest.TestCase):
             "password": "secret",
         }
 
-        response = self.app.post("{}/api/v1/auth/login".format(BASE_URL),
+        response = self.app.post("{}/api/v1/auth/logout".format(BASE_URL),
                                  data=json.dumps(credentials), content_type='application/json')
 
         # testing if Login is unsuccessful
@@ -89,7 +89,7 @@ class UsersTester(unittest.TestCase):
             "password": "secretd",
         }
 
-        response = self.app.post("{}/api/v1/auth/login".format(BASE_URL),
+        response = self.app.post("{}/api/v1/auth/logout".format(BASE_URL),
                                  data=json.dumps(credentials), content_type='application/json')
 
         # testing if Login is unsuccessful
