@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/younggeeks/Bright-events.svg?branch=master)](https://travis-ci.org/younggeeks/Bright-events)
 # Bright Events
 Bright events provides a platform for event organizers to create and manage different types of events while making them easily accessible to target markets
 
