@@ -117,9 +117,8 @@ class EventList(Resource):
             resp = jsonify({"message": "Event Not Found, Update Failed", "status": 404})
             resp.status_code = 404
             return resp
+    
         event = event[0]
-
-        print event
         if "name" in data:
             event["name"] = data["name"]
         if "address" in data:
