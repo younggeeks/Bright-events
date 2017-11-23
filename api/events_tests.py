@@ -109,7 +109,7 @@ class EventTester(unittest.TestCase):
         self.assertEqual(len(data["attendees"]), 6)
 
     def test_retrieve_guest_unsuccessful(self):
-        event_id = 89494
+        event_id = 99494
         response = self.app.get("{}/api/v1/events/{}/guests".format(BASE_URL, event_id))
         self.assertEqual(response.status_code, 404)
 
