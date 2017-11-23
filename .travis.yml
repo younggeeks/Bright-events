@@ -2,6 +2,12 @@ language : python
 
 install:
   - pip install -r requirements.txt
+  - pip install python-coveralls
+  - pip install coverage       # Add me to install coverage.py
+  - pip install nose  
 # command to run tests
 script:
-  - nosetests api # or py.test for Python versions 3.5 and below
+  - nosetests --with-coverage api # or py.test for Python versions 3.5 and below
+
+after_success:  
+  - coveralls
