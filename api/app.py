@@ -118,6 +118,8 @@ class EventList(Resource):
             resp.status_code = 404
             return resp
         event = event[0]
+
+        print event
         if "name" in data:
             event["name"] = data["name"]
         if "address" in data:
@@ -126,7 +128,7 @@ class EventList(Resource):
             event["start_date"] = data["start_date"]
         if "end_date" in data:
             event["end_date"] = data["end_date"]
-        if "user " in data:
+        if "user" in data:
             event["user"] = data["user"]
         if "description" in data:
             event["description"] = data["description"]
