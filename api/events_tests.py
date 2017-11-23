@@ -63,7 +63,7 @@ class EventTester(unittest.TestCase):
         event = {
             "name": "Angular Conference 2018",
             "address": "ijumaa",
-            "id": "9494dfasd",
+            "id": "9494",
             "category": " Wedding",
             "start_date": "1/2/323",
             "end_date": "1/3/343",
