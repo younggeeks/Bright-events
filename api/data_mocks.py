@@ -1,6 +1,11 @@
 from helpers import user_parser, event_parser
 from models import User, Event
-import uuid
+
+rsvp = [
+    {
+        "event_id": "user_id"
+    }
+]
 
 users = [
     User(id=2, full_name="samwel Charles", email="younggeeks101@gmail.com", password="secret"),
@@ -9,6 +14,21 @@ users = [
     User(id=76, full_name="Deo Mwingereza", email="deo@chyna.com", password="mwingereza"),
     User(id=5634, full_name="Justus Micah", email="jmicah@jerusalem.com", password="ThouShaltNotPeep"),
     User(id=55, full_name="Renatus John", email="kinate@ymail.com", password="msukumahalisi")
+]
+
+rsvps = [
+    {
+        "event_id": 9494,
+        "users": [
+         User(id=2, full_name="samwel Charles", email="younggeeks101@gmail.com", password="secret")
+        ]
+     },
+    {
+        "event_id": 987,
+        "users": [
+         User(id=2, full_name="samwel Charles", email="younggeeks101@gmail.com", password="secret")
+        ]
+     }
 ]
 
 events = [
@@ -29,13 +49,18 @@ events = [
 
 
 # helper function that converts List of  Models to List of Dictionaries
-def get_data(data_type):
+def get_data(data_type, data=None):
     if data_type == 'users':
         dict_users = []
-        for user in users:
-            dict_users.append(user_parser(user))
+        if data is not None:
+            for user in data:
+                dict_users.append(user_parser(user))
+            return dict_users
+        else:
+            for user in users:
+                dict_users.append(user_parser(user))
 
-        return dict_users
+            return dict_users
     else:
         events_list = []
         for event in events:
