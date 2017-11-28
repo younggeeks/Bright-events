@@ -4,17 +4,22 @@ from flask_restful import Resource, Api, reqparse
 from helpers import event_parser, user_parser, failed_login
 from data_mocks import events, get_data, users, rsvps
 import uuid
-
 app = Flask(__name__)
 api = Api(app)
+
+
+class Specs(Resource):
+    def get(self):
+        pass
 
 
 class Register(Resource):
     def post(self):
         data = request.get_json()
-        user = filter(lambda found_user: found_user["email"] == data["email"], get_data("users"))
+        user = [user for user in users if user.email == data["email"]]
+        print user
         if not user:
-            new_user = User(id=data["id"], full_name=data["full_name"], email=data["email"], password=data["password"])
+            new_user = user[0]
             users.append(new_user)
             response = jsonify({"message": "Successfully created User", "user": user_parser(new_user)})
             response.status_code = 201
@@ -27,10 +32,11 @@ class Register(Resource):
 class Login(Resource):
     def post(self):
         credentials = request.get_json()
-        user = filter(lambda found_user: found_user["email"] == credentials["email"], get_data("users"))
+        user = [found_user for found_user in users if found_user.email == credentials["email"]]
         if not user:
             return failed_login()
-        if credentials["password"] not in user[0].values():
+        user = user_parser(user[0])
+        if credentials["password"] not in user.values():
             return failed_login()
         return jsonify({
             "message": "User Login Successfully",
@@ -172,6 +178,12 @@ class EventList(Resource):
             response.status_code = 404
             return response
 
+        print len(users)
+
+        usersss = [event.id for event in events if str(event.id) != str(event_id)]
+
+        print usersss
+
         response = jsonify({"message": "Event Deleted Successfully", "status": 200})
         response.status_code = 200
         return response
@@ -222,12 +234,22 @@ class RSVP(Resource):
         # filter method above returns an array so we pass in index 0 to get the first one
         user = user[0]
 
-        guests = filter(lambda found_event: str(found_event["event_id"]) == str(event_id), rsvps)
+        rsvp_events = filter(lambda found_event: str(found_event["event_id"]) == str(event_id), rsvps)
         new_user = User(id=user["id"], full_name=user["full_name"], email=user["email"], password=user["password"])
-        if guests:
-            guests[0]["users"].append(new_user)
+        if rsvp_events:
+            event_guests = filter(lambda found_user: str(found_user["id"]) == str(data["user_id"]),
+                                  get_data("users", rsvp_events[0]["users"]))
+
+            existing_users = filter(lambda found_user: str(found_user["id"]) == str(user["id"]), event_guests)
+            if existing_users:
+                return jsonify({
+                    "message": "Your name is already in guest list of  {}".format(event[0]["name"]),
+                    "status": 400
+                })
+            rsvp_events[0]["users"].append(new_user)
+
         else:
-            guests.append(
+            rsvp_events.append(
                 {
                     "event_id": event_id,
                     "users": [new_user]
