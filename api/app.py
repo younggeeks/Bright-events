@@ -2,25 +2,23 @@ from flask import Flask, request, jsonify
 from models import User, Event
 from flask_restful import Resource, Api, reqparse
 from helpers import event_parser, user_parser, failed_login
-from data_mocks import events, get_data, users, rsvps
+from data_mocks import DataMocks
 import uuid
 app = Flask(__name__)
 api = Api(app)
 
+events = DataMocks().events
 
-class Specs(Resource):
-    def get(self):
-        pass
 
 
 class Register(Resource):
     def post(self):
         data = request.get_json()
-        user = [user for user in users if user.email == data["email"]]
+        user = [user for user in DataMocks.users if user.email == data["email"]]
         print user
         if not user:
-            new_user = user[0]
-            users.append(new_user)
+            new_user = User(id=data["id"], full_name=data["full_name"], email=data["email"], password=data["password"])
+            DataMocks.users.append(new_user)
             response = jsonify({"message": "Successfully created User", "user": user_parser(new_user)})
             response.status_code = 201
             return response
@@ -32,7 +30,7 @@ class Register(Resource):
 class Login(Resource):
     def post(self):
         credentials = request.get_json()
-        user = [found_user for found_user in users if found_user.email == credentials["email"]]
+        user = [found_user for found_user in DataMocks.users if found_user.email == credentials["email"]]
         if not user:
             return failed_login()
         user = user_parser(user[0])
@@ -48,14 +46,15 @@ class Login(Resource):
 class Logout(Resource):
     def post(self):
         credentials = request.get_json()
-        user = filter(lambda found_user: found_user["email"] == credentials["email"], get_data("users"))
-
+        user = [found_user for found_user in DataMocks.users if found_user.email == credentials["email"]]
         if not user:
             resp = jsonify({"message": "User is already Signed out"})
             resp.status_code = 401
             return resp
 
-        if credentials["password"] not in user[0].values():
+        user = user_parser(user[0])
+
+        if credentials["password"] not in user.values():
             resp = jsonify({"message": "User is already Signed out"})
             resp.status_code = 401
             return resp
@@ -78,18 +77,17 @@ class SearchEvent(Resource):
 class PasswordReset(Resource):
     def post(self):
         data = request.get_json()
-        user = filter(lambda found_user: found_user["email"] == data["email"], get_data("users"))
-
+        user = [found_user for found_user in DataMocks.users if found_user.email == data["email"]]
         if not user:
             resp = jsonify({"message": "Email {} is not associated with any Account,"
                                        " Reset Failed".format(data["email"])})
             resp.status_code = 401
             return resp
-
-        user = user[0]
-        user["password"] = data["password"]
-        new_users = filter(lambda found_user: found_user["email"] != data["email"], get_data("users"))
-        new_users.append(user)
+        #
+        # user = user[0]
+        # user["password"] = data["password"]
+        # new_users = filter(lambda ne: found_user["email"] != data["email"], get_data("users"))
+        # new_users.append(user)
 
         # in real data base we could update the existing list with new user details
 
@@ -103,12 +101,12 @@ class Events(Resource):
         return jsonify({
             "message": "successfully Fetched Events",
             "status": 200,
-            "events": get_data("events")
+            "events": DataMocks().get_data("events")
         })
 
     def post(self):
         data = request.get_json()
-        event = filter(lambda found_event: found_event["name"] == data["name"], get_data("events"))
+        event = [found_event for found_event in events if found_event.name == data["name"]]
         if not event:
             event = Event(id=uuid.uuid4(), name=data["name"], address=data["address"], start_date=data["start_date"],
                           end_date=data["end_date"], user=data["user"], description=data["description"],
@@ -125,7 +123,7 @@ class Events(Resource):
 
 class EventList(Resource):
     def get(self, event_id):
-        event = filter(lambda found_event: str(found_event["id"]) == str(event_id), get_data("events"))
+        event = [found_event for found_event in events if str(found_event.id) == str(event_id)]
         if not event:
             resp = jsonify({"message": "Event Not Found, Fetch Failed", "status": 404})
             resp.status_code = 404
@@ -134,55 +132,58 @@ class EventList(Resource):
         return jsonify({
             "message": "Event Fetch Successfully",
             "status": 200,
-            "event": event
+            "event": event_parser(event[0])
         })
 
     def put(self, event_id):
         data = request.get_json()
-        event = filter(lambda found_event: str(found_event["id"]) == str(event_id), get_data("events"))
+        event = [found_event for found_event in events if str(found_event.id) == str(event_id)]
         if not event:
             resp = jsonify({"message": "Event Not Found, Update Failed", "status": 404})
             resp.status_code = 404
             return resp
 
         event = event[0]
-        if "name" in data:
-            event["name"] = data["name"]
-        if "address" in data:
-            event["address"] = data["address"]
-        if "start_date" in data:
-            event["start_date"] = data["start_date"]
-        if "end_date" in data:
-            event["end_date"] = data["end_date"]
-        if "user" in data:
-            event["user"] = data["user"]
-        if "description" in data:
-            event["description"] = data["description"]
-        if "category" in data:
-            event["category"] = data["category"]
-        event["id"] = event_id
 
-        new_events = filter(lambda found_event: found_event["id"] != event_id, get_data("events"))
-        new_events.append(event)
+        if "name" in data:
+            event.name = data["name"]
+        if "address" in data:
+            event.address = data["address"]
+        if "start_date" in data:
+            event.start_date = data["start_date"]
+        if "end_date" in data:
+            event.end_date = data["end_date"]
+        if "user" in data:
+            event.user = data["user"]
+        if "description" in data:
+            event.description = data["description"]
+        if "category" in data:
+            event.category = data["category"]
+        event.id = event_id
+
+        updated_events = [temp_event for temp_event in DataMocks.events if str(temp_event.id) != str(event_id)]
+        updated_events.append(event)
+
+        data_mocks = DataMocks()
+        data_mocks.update_events(updated_events)
 
         return jsonify({
             "message": "Event Updated Successfully",
             "status": 201,
-            "event": event
+            "event": event_parser(event)
         })
 
     def delete(self, event_id):
-        event = filter(lambda found_event: str(found_event["id"]) == str(event_id), get_data("events"))
-        if not event:
+        event_list = [temp_event for temp_event in DataMocks.events if str(temp_event.id) == event_id]
+        if not event_list:
             response = jsonify({"message": "Event ID Not Found, Deletion Failed"})
             response.status_code = 404
             return response
 
-        print len(users)
-
-        usersss = [event.id for event in events if str(event.id) != str(event_id)]
-
-        print usersss
+        updated_events = [event_to_remove for event_to_remove in DataMocks.events
+                          if str(event_to_remove.id) != str(event_id)]
+        data_mocks = DataMocks()
+        data_mocks.update_events(updated_events)
 
         response = jsonify({"message": "Event Deleted Successfully", "status": 200})
         response.status_code = 200
