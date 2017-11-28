@@ -2,7 +2,7 @@ import json
 import unittest
 
 import app
-from database.data_mocks import users
+from database.data_mocks import DataMocks
 
 BASE_URL = "http://localhost:5000"
 
@@ -21,11 +21,11 @@ class UsersTester(unittest.TestCase):
         }
 
         # testing if it returns correct number of users in our list
-        self.assertEqual(len(users), 6)
+        self.assertEqual(len(DataMocks.users), 6)
         response = self.app.post("{}/api/v1/auth/register".format(BASE_URL),
                                  data=json.dumps(user), content_type='application/json')
         # testing if it returns correct number after inserting
-        self.assertEqual(len(users), 7)
+        self.assertEqual(len(DataMocks.users), 7)
         # testing if adding event is successful
         self.assertEqual(response.status_code, 201)
 
@@ -38,12 +38,12 @@ class UsersTester(unittest.TestCase):
         }
 
         # testing if it returns correct number of users in our list
-        self.assertEqual(len(users), 6)
+        self.assertEqual(len(DataMocks.users), 6)
         response = self.app.post("{}/api/v1/auth/register".format(BASE_URL),
                                  data=json.dumps(user), content_type='application/json')
 
         # testing if it returns the same number after failed registration
-        self.assertEqual(len(users), 6)
+        self.assertEqual(len(DataMocks.users), 6)
 
         # testing if adding event is successful
         self.assertEqual(response.status_code, 400)
