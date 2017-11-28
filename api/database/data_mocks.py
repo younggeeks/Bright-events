@@ -1,5 +1,5 @@
+from database.models import User, Event
 from helpers import user_parser, event_parser
-from models import User, Event
 
 
 class DataMocks:
