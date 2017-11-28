@@ -2,7 +2,10 @@ from helpers import user_parser, event_parser
 from models import User, Event
 
 
-class DataMocks():
+class DataMocks:
+
+    def __init__(self):
+        pass
 
     users = [
         User(id=2, full_name="samwel Charles", email="younggeeks101@gmail.com", password="secret"),
@@ -46,29 +49,49 @@ class DataMocks():
 
     @staticmethod
     def update_users(new_list):
+        """
+        Method that will update our users List , When called It will replace current list with new list
+        which was passed as an argument , It'll be called when update or delete is called
+        :param new_list:
+        :return:
+        """
         DataMocks.users = new_list
-        print len(DataMocks.users)
 
     @staticmethod
     def update_events(new_events):
+        """
+        Method that will update our events List , When called It will replace current list with new list
+        which was passed as an argument , It'll be called when update or delete is called
+        :param new_events:
+        :return:
+        """
         DataMocks.events = new_events
-        print len(DataMocks.events)
 
-    # helper function that converts List of  Models to List of Dictionaries
-    def get_data(self, data=None):
-        if self == 'users':
+    @staticmethod
+    def get_data(data_type, data=None):
+        """
+        Helper function which will be responsible for converting(parsing) list of either User or Data models
+        to list of dictionaries, caller will pass in string argument(data_type) with value of either
+        "users" or "events" and optional data argument , if data argument is not specified it will be
+        defaulted to None , meaning function will convert users or events list from our dummy data , if data
+        argument is passed, data that will be passed will be parsed accordingly .
+        :param data_type:
+        :param data:
+        :return parsed_dictionary:
+        """
+        if data_type == 'users':
             dict_users = []
             if data is not None:
                 for user in data:
                     dict_users.append(user_parser(user))
                 return dict_users
             else:
-                for user in self.users:
+                for user in DataMocks.users:
                     dict_users.append(user_parser(user))
 
                 return dict_users
         else:
             events_list = []
-            for event in self.events:
+            for event in DataMocks.events:
                 events_list.append(event_parser(event))
             return events_list
