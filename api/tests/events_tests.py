@@ -1,9 +1,8 @@
 import json
 import unittest
+from database.data_mocks import DataMocks
 import app
-from data_mocks import events
-
-BASE_URL = "http://localhost:5000"
+from settings import BASE_URL
 
 
 class UsersTester(unittest.TestCase):
@@ -34,7 +33,7 @@ class EventTester(unittest.TestCase):
         }
 
         # testing if it returns number of events in our list
-        self.assertEqual(len(events), 4)
+        self.assertEqual(len(DataMocks.events), 4)
         response = self.app.post("{}/api/v1/events".format(BASE_URL),
                                  data=json.dumps(event), content_type='application/json')
 
@@ -42,7 +41,7 @@ class EventTester(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
 
         # testing if adding new user increases length of out list
-        self.assertEqual(len(events), 5)
+        self.assertEqual(len(DataMocks.events), 5)
 
     def test_duplicate_event_name(self):
         event = {

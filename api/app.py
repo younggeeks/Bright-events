@@ -1,14 +1,16 @@
-from flask import Flask, request, jsonify
-from models import User, Event
-from flask_restful import Resource, Api, reqparse
-from helpers import event_parser, user_parser, failed_login
-from data_mocks import DataMocks
 import uuid
+
+from flask import Flask, request, jsonify
+from flask_restful import Resource, Api, reqparse
+
+from database.data_mocks import DataMocks
+from database.models import User, Event
+from helpers import event_parser, user_parser, failed_login
+
 app = Flask(__name__)
 api = Api(app)
 
 events = DataMocks().events
-
 
 
 class Register(Resource):

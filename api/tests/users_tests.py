@@ -1,7 +1,8 @@
 import json
 import unittest
+
 import app
-from data_mocks import users
+from database.data_mocks import users
 
 BASE_URL = "http://localhost:5000"
 
