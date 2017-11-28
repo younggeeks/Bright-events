@@ -85,15 +85,17 @@ class PasswordReset(Resource):
                                        " Reset Failed".format(data["email"])})
             resp.status_code = 401
             return resp
-        #
-        # user = user[0]
-        # user["password"] = data["password"]
-        # new_users = filter(lambda ne: found_user["email"] != data["email"], get_data("users"))
-        # new_users.append(user)
 
-        # in real data base we could update the existing list with new user details
+        user = user[0]
+        user.password = data["password"]
 
-        resp = jsonify({"message": "Password Reset Is Successful", "event": user})
+        updated_users = [temp_user for temp_user in DataMocks.users if str(temp_user.email) != str(data["email"])]
+        updated_users.append(user)
+
+        data_mocks = DataMocks()
+        data_mocks.update_users(updated_users)
+
+        resp = jsonify({"message": "Password Reset Is Successful"})
         resp.status_code = 201
         return resp
 
@@ -194,20 +196,18 @@ class EventList(Resource):
 
 class Attendees(Resource):
     def get(self, event_id):
-        event = filter(lambda found_event: str(found_event["id"]) == str(event_id), get_data("events"))
+        matching_events = [found_event for found_event in events if str(found_event.id) == str(event_id)]
 
-        if not event:
-            resp = jsonify({
-                "message": "Event Not found, Retrieval Failed"
-            })
+        if not matching_events:
+            resp = jsonify({"message": "Event Not found, Retrieval Failed"})
             resp.status_code = 404
             return resp
 
-        guests = filter(lambda found_event: str(found_event["event_id"]) == str(event_id), rsvps)
+        guests = [event for event in DataMocks.rsvps if str(event["event_id"]) == str(event_id)]
 
         if guests:
             guests = guests[0]
-            rsvp_guests = get_data("users", guests["users"])
+            rsvp_guests = DataMocks.get_data("users", guests["users"])
             return jsonify({
                 "message": "Successfully Fetched Attendees",
                 "status": 200,
@@ -215,7 +215,7 @@ class Attendees(Resource):
             })
         else:
             return jsonify({
-                "message": "Currently there are no guests registered for {}".format(event[0]["name"]),
+                "message": "Currently there are no guests registered for {}".format(matching_events[0]["name"]),
                 "status": 200,
             })
 
@@ -223,30 +223,33 @@ class Attendees(Resource):
 class RSVP(Resource):
     def post(self, event_id):
         data = request.get_json()
-        event = filter(lambda found_event: str(found_event["id"]) == str(event_id), get_data("events"))
+        event = [temp_event for temp_event in events if str(temp_event.id) == str(event_id)]
         if not event:
             response = jsonify({"message": "Event Not found, RSVP Failed"})
             response.status_code = 404
             return response
-
-        user = filter(lambda found_user: str(found_user["id"]) == str(data["user_id"]), get_data("users"))
+        user = [temp_user for temp_user in DataMocks.users if str(temp_user.id) == str(data["user_id"])]
         if not user:
             response = jsonify({"message": "User Not found, RSVP Failed"})
             response.status_code = 404
             return response
         # filter method above returns an array so we pass in index 0 to get the first one
         user = user[0]
+        # checking if event exists in rsvp array
+        rsvp_events = filter(lambda found_event: str(found_event["event_id"]) == str(event_id), DataMocks.rsvps)
 
-        rsvp_events = filter(lambda found_event: str(found_event["event_id"]) == str(event_id), rsvps)
-        new_user = User(id=user["id"], full_name=user["full_name"], email=user["email"], password=user["password"])
+        new_user = User(id=user.id, full_name=user.full_name, email=user.email, password=user.password)
+        # if event has at least one guest  we fetch guests to check if our current guest has already rsvp'ed
         if rsvp_events:
+            # we get all guests from that event
             event_guests = filter(lambda found_user: str(found_user["id"]) == str(data["user_id"]),
-                                  get_data("users", rsvp_events[0]["users"]))
+                                  DataMocks.get_data("users", rsvp_events[0]["users"]))
 
-            existing_users = filter(lambda found_user: str(found_user["id"]) == str(user["id"]), event_guests)
+            # we check to see the user who wants to rsvp is existing guest
+            existing_users = filter(lambda found_user: str(found_user["id"]) == str(user.id), event_guests)
             if existing_users:
                 return jsonify({
-                    "message": "Your name is already in guest list of  {}".format(event[0]["name"]),
+                    "message": "Your name is already in guest list of  {}".format(event[0].name),
                     "status": 400
                 })
             rsvp_events[0]["users"].append(new_user)
@@ -258,7 +261,6 @@ class RSVP(Resource):
                     "users": [new_user]
                 }
             )
-        # event is found we can add event_id and user_id to user_event_table
         return jsonify({
             "message": "You've successfully RSVP'ed to {}".format(event[0]["name"]),
             "status": 200

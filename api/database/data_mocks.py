@@ -32,7 +32,7 @@ class DataMocks:
     ]
 
     events = [
-        Event(id=9494, name="Angular Conference 2018", address="riverroad, Nairobi",
+        Event(id=9494, name="Angular Conference 2018", address="Riverroad, Nairobi",
               start_date="1/3/2018", end_date="2/3/2018", user="Samwel Charles", description=
               "Come and Meet All These awesome developers and up your game", category="Meetup"),
         Event(id=894, name="Women Developers Pary", address="kirinyaga, Kenya",
