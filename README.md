@@ -1,4 +1,4 @@
-# Bright Events [![Build Status](https://travis-ci.org/younggeeks/Bright-events.svg?branch=master)](https://travis-ci.org/younggeeks/Bright-events)  [![Coverage Status](https://coveralls.io/repos/github/younggeeks/Bright-events/badge.svg?branch=master)](https://coveralls.io/github/younggeeks/Bright-events?branch=master)  [![Maintainability](https://api.codeclimate.com/v1/badges/1416fa108e68305d492e/maintainability)](https://codeclimate.com/github/younggeeks/Bright-events/maintainability)
+# Bright Events [![Build Status](https://travis-ci.org/younggeeks/Bright-events.svg?branch=master)](https://travis-ci.org/younggeeks/Bright-events)  [![Coverage Status](https://coveralls.io/repos/github/younggeeks/Bright-events/badge.svg?branch=master)](https://coveralls.io/github/younggeeks/Bright-events?branch=master) [![Test Coverage](https://api.codeclimate.com/v1/badges/1416fa108e68305d492e/test_coverage)](https://codeclimate.com/github/younggeeks/Bright-events/test_coverage)  [![Maintainability](https://api.codeclimate.com/v1/badges/1416fa108e68305d492e/maintainability)](https://codeclimate.com/github/younggeeks/Bright-events/maintainability)
               
 Bright events provides a platform for event organizers to create and manage different types of events while making them easily accessible to target markets
 
@@ -14,14 +14,12 @@ Bright events provides a platform for event organizers to create and manage diff
 ## Working Demo of API Can be accessed at:
    [Heroku Api Demo ](https://bright-event.herokuapp.com/api/v1/events)
 
-
-
-### Installation
-```sh
+Installation
+```
 $ git clone https://github.com/younggeeks/Bright-events
 $ cd Bright-events/api
 ```
-Create a virtualenv, and activate this:
+Create a virtualenv, and activate:
 ```
 $ virtualenv env 
 $ source env/bin/activate   
@@ -34,13 +32,7 @@ Then, run the application:
 ```
 $ python app.py
 ```
-To see your application, access this url in your browser:
-http://localhost:5000
-
-```
-
- 
-
+To see your application, access this url in your browser: http://localhost:5000
 
 ### Tech used to make this:
 
