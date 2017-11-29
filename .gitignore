@@ -4,3 +4,7 @@
 .idea/inspectionProfiles/
 .idea/misc.xml
 .idea/workspace.xml
+*.pyc
+*~
+*.swp
+api/env/
