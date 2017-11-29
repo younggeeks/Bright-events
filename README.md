@@ -14,13 +14,26 @@ Bright events provides a platform for event organizers to create and manage diff
 ## Working Demo of API Can be accessed at:
    [Heroku Api Demo ](https://bright-event.herokuapp.com/api/v1/events)
 
-
-
-Here's How to get started  :+1:
-
-```perl
-git clone git@github.com:younggeeks/Bright-events.git
+Installation
 ```
+$ git clone https://github.com/younggeeks/Bright-events
+$ cd Bright-events/api
+```
+Create a virtualenv, and activate:
+```
+$ virtualenv env 
+$ source env/bin/activate   
+```
+Run the following command to install the dependencies:
+```
+$ pip install -r requirements.txt
+```
+Then, run the application:
+```
+$ python app.py
+```
+To see your application, access this url in your browser: http://localhost:5000
+
 
 
 
