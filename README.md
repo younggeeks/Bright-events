@@ -41,6 +41,26 @@ http://localhost:5000
  
 
 
+Installation
+```
+$ git clone https://github.com/younggeeks/Bright-events
+$ cd Bright-events/api
+```
+Create a virtualenv, and activate:
+```
+$ virtualenv env 
+$ source env/bin/activate   
+```
+Run the following command to install the dependencies:
+```
+$ pip install -r requirements.txt
+```
+Then, run the application:
+```
+$ python app.py
+```
+To see your application, access this url in your browser: http://localhost:5000
+
 
 ### Tech used to make this:
 

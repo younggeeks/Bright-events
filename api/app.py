@@ -75,15 +75,6 @@ class Logout(Resource):
         return resp
 
 
-class SearchEvent(Resource):
-    def get(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('query', type=str, help='Please Specify query ')
-        args = parser.parse_args()
-
-        print args
-
-
 class PasswordReset(Resource):
     def post(self):
         data = request.get_json()
@@ -138,7 +129,7 @@ class Events(Resource):
 
 class EventList(Resource):
     def get(self, event_id):
-        event = [found_event for found_event in events if str(found_event.id) == str(event_id)]
+        event = [found_event for found_event in DataMocks.events if str(found_event.id) == str(event_id)]
         if not event:
             resp = jsonify({"message": "Event Not Found, Fetch Failed", "status": 404})
             resp.status_code = 404
@@ -152,7 +143,7 @@ class EventList(Resource):
 
     def put(self, event_id):
         data = request.get_json()
-        event = [found_event for found_event in events if str(found_event.id) == str(event_id)]
+        event = [found_event for found_event in DataMocks.events if str(found_event.id) == str(event_id)]
         if not event:
             resp = jsonify({"message": "Event Not Found, Update Failed", "status": 404})
             resp.status_code = 404
@@ -299,7 +290,6 @@ api.add_resource(Events, '/api/v1/events')
 api.add_resource(RSVP, '/api/v1/events/<event_id>/rsvp')
 api.add_resource(EventList, '/api/v1/events/<event_id>')
 api.add_resource(Attendees, '/api/v1/events/<event_id>/guests')
-api.add_resource(SearchEvent, '/api/v1/events/search')
 
 # routes for Authentication
 api.add_resource(Register, '/api/v1/auth/register')
