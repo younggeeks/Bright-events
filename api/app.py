@@ -13,13 +13,17 @@ api = Api(app)
 events = DataMocks().events
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return jsonify(error=404, text=str(e)), 404
+
+
 class Register(Resource):
     def post(self):
         data = request.get_json()
         user = [user for user in DataMocks.users if user.email == data["email"]]
-        print user
         if not user:
-            new_user = User(id=data["id"], full_name=data["full_name"],
+            new_user = User(id=uuid.uuid4(), full_name=data["full_name"],
                             email=data["email"], password=data["password"])
             DataMocks.users.append(new_user)
             response = jsonify(
@@ -31,7 +35,7 @@ class Register(Resource):
         resp = jsonify(
             {"message": "Account With Email {} Already Exists".format(data["email"])})
         resp.status_code = 400
-        
+
         return resp
 
 
@@ -110,7 +114,7 @@ class Events(Resource):
 
     def post(self):
         data = request.get_json()
-        event = [found_event for found_event in events if found_event.name == data["name"]]
+        event = [found_event for found_event in DataMocks.events if found_event.name == data["name"]]
         if not event:
             event = Event(id=uuid.uuid4(), name=data["name"],
                           address=data["address"], start_date=data["start_date"],
@@ -206,7 +210,7 @@ class Attendees(Resource):
         :param event_id:
         :return List<attendees>:
         """
-        matching_events = [found_event for found_event in events if str(found_event.id) == str(event_id)]
+        matching_events = [found_event for found_event in DataMocks.events if str(found_event.id) == str(event_id)]
 
         if not matching_events:
             resp = jsonify({"message": "Event Not found, Retrieval Failed"})
@@ -234,6 +238,7 @@ class RSVP(Resource):
     """
     Handle Subscription to an event
     """
+
     def post(self, event_id):
         """
         Inputs user_id and event_id , Before user can rsvp we check to see if event exists and if user exists
@@ -242,7 +247,7 @@ class RSVP(Resource):
         :param event_id
         """
         data = request.get_json()
-        event = [temp_event for temp_event in events if str(temp_event.id) == str(event_id)]
+        event = [temp_event for temp_event in DataMocks.events if str(temp_event.id) == str(event_id)]
         if not event:
             response = jsonify({"message": "Event Not found, RSVP Failed"})
             response.status_code = 404
@@ -290,6 +295,7 @@ api.add_resource(Events, '/api/v1/events')
 api.add_resource(RSVP, '/api/v1/events/<event_id>/rsvp')
 api.add_resource(EventList, '/api/v1/events/<event_id>')
 api.add_resource(Attendees, '/api/v1/events/<event_id>/guests')
+# api.add_resource(Charts, '/api/v1/events/<user_id>/charts')
 
 # routes for Authentication
 api.add_resource(Register, '/api/v1/auth/register')
