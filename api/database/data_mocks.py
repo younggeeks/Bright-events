@@ -36,14 +36,14 @@ class DataMocks:
               start_date="1/3/2018", end_date="2/3/2018", user="samwel", description=
               "Come and Meet All These awesome developers and up your game", category="Meetup"),
         Event(id=894, name="Women Developers Pary", address="kirinyaga, Kenya",
-              start_date="9/13/2019", end_date="9/15/2019", user="samwel", description=
+              start_date="9/13/2019", end_date="9/15/2019", user="atanasi", description=
               "Tech ladies , get your geek on , we'll be meeting and cofee will be free", category="Meetup"),
         Event(id=987, name="Acoustic Night", address="Magomeni, Dar es salaam",
               start_date="14/3/2019", end_date="2/3/2018", user="juma", description=
               "Come with your Guitar we are going to rock the night away with rock and roll on acoustic",
               category="Music"),
         Event(id=5221, name="Geeks General Meeting", address="Chanika, Dar es salaam",
-              start_date="2/3/2019", end_date="4/8/2019", user="atanasi", description=
+              start_date="2/3/2019", end_date="4/8/2019", user="samwel", description=
               "Come one come all, let us meet and discuss matters that patterns to our youth", category="Religion"),
     ]
 
@@ -92,6 +92,11 @@ class DataMocks:
                 return dict_users
         else:
             events_list = []
-            for event in DataMocks.events:
-                events_list.append(event_parser(event))
-            return events_list
+            if data is not None:
+                for event in data:
+                    events_list.append(event_parser(event))
+                return events_list
+            else:
+                for event in DataMocks.events:
+                    events_list.append(event_parser(event))
+                return events_list
