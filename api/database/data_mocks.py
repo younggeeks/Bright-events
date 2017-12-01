@@ -32,17 +32,17 @@ class DataMocks:
     ]
 
     events = [
-        Event(id=9494, name="Angular Conference 2018", address="Riverroad, Nairobi",
+        Event(id=9494, price = 89389, name="Angular Conference 2018", address="Riverroad, Nairobi",
               start_date="1/3/2018", end_date="2/3/2018", user="samwel", description=
               "Come and Meet All These awesome developers and up your game", category="Meetup"),
-        Event(id=894, name="Women Developers Pary", address="kirinyaga, Kenya",
+        Event(id=894, name="Women Developers Pary", price = 100, address="kirinyaga, Kenya",
               start_date="9/13/2019", end_date="9/15/2019", user="atanasi", description=
               "Tech ladies , get your geek on , we'll be meeting and cofee will be free", category="Meetup"),
-        Event(id=987, name="Acoustic Night", address="Magomeni, Dar es salaam",
+        Event(id=987, name="Acoustic Night", price = 2000, address="Magomeni, Dar es salaam",
               start_date="14/3/2019", end_date="2/3/2018", user="juma", description=
               "Come with your Guitar we are going to rock the night away with rock and roll on acoustic",
               category="Music"),
-        Event(id=5221, name="Geeks General Meeting", address="Chanika, Dar es salaam",
+        Event(id=5221, name="Geeks General Meeting", price = 10009, address="Chanika, Dar es salaam",
               start_date="2/3/2019", end_date="4/8/2019", user="samwel", description=
               "Come one come all, let us meet and discuss matters that patterns to our youth", category="Religion"),
     ]

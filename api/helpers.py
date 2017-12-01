@@ -10,6 +10,7 @@ def event_parser(event):
         "start_date": event.start_date,
         "end_date": event.end_date,
         "user": event.user,
+        "price": event.price,
         "description": event.description,
         "category": event.category
     }

@@ -113,7 +113,7 @@ class Events(Resource):
         data = request.get_json()
         event = [found_event for found_event in DataMocks.events if found_event.name == data["name"]]
         if not event:
-            event = Event(id=uuid.uuid4(), name=data["name"],
+            event = Event(id=uuid.uuid4(), price=data["price"], name=data["name"],
                           address=data["address"], start_date=data["start_date"],
                           end_date=data["end_date"], user=data["user"],
                           description=data["description"],
@@ -184,6 +184,8 @@ class EventList(Resource):
             event.description = data["description"]
         if "category" in data:
             event.category = data["category"]
+        if "price" in data:
+            event.price = data["price"]
         event.id = event_id
 
         updated_events = [temp_event for temp_event in
@@ -195,7 +197,7 @@ class EventList(Resource):
 
         return jsonify({
             "message": "Event Updated Successfully",
-            "status": 201,
+            "status": 200,
             "event": event_parser(event)
         })
 

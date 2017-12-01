@@ -21,7 +21,7 @@ class Event:
     """
     Model class for Event
     """
-    def __init__(self, id,  name, address, start_date, end_date, user, description, category):
+    def __init__(self, id, price,  name, address, start_date, end_date, user, description, category):
         """
         constructor which will be called every time User object is instantiated
         :param id:
@@ -41,6 +41,7 @@ class Event:
         self.user = user
         self.description = description
         self.category = category
+        self.price = price
 
 
 
