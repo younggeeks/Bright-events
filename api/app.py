@@ -10,9 +10,6 @@ from helpers import event_parser, user_parser, failed_login
 app = Flask(__name__)
 api = Api(app)
 
-events = DataMocks().events
-
-
 @app.errorhandler(404)
 def page_not_found(e):
     return jsonify(error=404, text=str(e)), 404
@@ -121,7 +118,7 @@ class Events(Resource):
                           end_date=data["end_date"], user=data["user"],
                           description=data["description"],
                           category=data["category"])
-            events.append(event)
+            DataMocks.events.append(event)
             resp = jsonify({"message": "Event Successfully Created!", "event": event_parser(event)})
             resp.status_code = 201
             return resp
@@ -129,6 +126,23 @@ class Events(Resource):
             resp = jsonify({"message": "Event Name Must Be unique"})
             resp.status_code = 422
             return resp
+
+
+class UserEvents(Resource):
+    def get(self, user):
+        found_users = [found_user for found_user in DataMocks.users if found_user.full_name == user]
+
+        if not found_users:
+            resp = jsonify({"message": "User Not Found, Fetch Failed"})
+            resp.status_code = 404
+            return resp
+
+        user_events = [found_event for found_event in DataMocks.events if str(found_event.user) == str(user) ]
+
+        resp = jsonify({"message": "Successfully Fetched Events", "events": DataMocks.get_data("events", data=user_events) })
+        resp.status_code = 200
+        return resp
+
 
 
 class EventList(Resource):
@@ -144,6 +158,7 @@ class EventList(Resource):
             "status": 200,
             "event": event_parser(event[0])
         })
+
 
     def put(self, event_id):
         data = request.get_json()
@@ -295,6 +310,7 @@ api.add_resource(Events, '/api/v1/events')
 api.add_resource(RSVP, '/api/v1/events/<event_id>/rsvp')
 api.add_resource(EventList, '/api/v1/events/<event_id>')
 api.add_resource(Attendees, '/api/v1/events/<event_id>/guests')
+api.add_resource(UserEvents, '/api/v1/<user>/events')
 # api.add_resource(Charts, '/api/v1/events/<user_id>/charts')
 
 # routes for Authentication
