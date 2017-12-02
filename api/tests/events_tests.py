@@ -111,13 +111,13 @@ class EventTester(unittest.TestCase):
         response = self.app.post("{}/api/v1/events/{}/rsvp".format(BASE_URL, event_id))
         self.assertEqual(response.status_code, 404)
 
-    def test_irsvp_correct_id(self):
-        event_id = "894"
+    def test_zrsvp_correct_id(self):
+        event_id = 5221
         data = {
-            "user_id": 89787
+            "user_id": 4
         }
         response = self.app.post("{}/api/v1/events/{}/rsvp".format(BASE_URL, event_id), data=json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
 
     def test_irsvp_own_event(self):
         event_id = 894
@@ -156,6 +156,11 @@ class EventTester(unittest.TestCase):
         event_id = 9949454
         response = self.app.get("{}/api/v1/events/{}/guests".format(BASE_URL, event_id))
         self.assertEqual(response.status_code, 404)
+
+    def test_lretrieve_guest_ok_but_none(self):
+        event_id = 5221
+        response = self.app.get("{}/api/v1/events/{}/guests".format(BASE_URL, event_id))
+        self.assertEqual(response.status_code, 200)
 
     def test_helper_methods(self):
         events = DataMocks.get_data("events")
@@ -200,6 +205,17 @@ class EventTester(unittest.TestCase):
         event_id = 9494
         response = self.app.get("{}/api/v1/events/{}/guests".format(BASE_URL, event_id))
         self.assertEqual(response.status_code, 200)
+
+    def test_fetch_by_category_success(self):
+        category = "Meetup"
+        response = self.app.get("{}/api/v1/category/{}/events".format(BASE_URL, category))
+        self.assertEqual(response.status_code, 200)
+
+    def test_fetch_by_category_failed(self):
+        category = "Meetuep"
+        response = self.app.get("{}/api/v1/category/{}/events".format(BASE_URL, category))
+        self.assertEqual(response.status_code, 404)
+
 
 
 
