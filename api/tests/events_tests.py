@@ -58,74 +58,74 @@ class EventTester(unittest.TestCase):
                                  data=json.dumps(event), content_type='application/json')
         self.assertEqual(response.status_code, 422)
 
-    def test_esuccessful_updating_event(self):
-        event = {
-            "name": "Angular Conference 2018",
-            "address": "ijumaa",
-            "id": "9494",
-            "category": " Wedding",
-            "start_date": "1/2/323",
-            "end_date": "1/3/343",
-            "user": "Samaki",
-            "description": "awesome event You would'nt want to miss it"
-        }
-        response = self.app.put("{}/api/v1/events/{}".format(BASE_URL, event["id"]),
-                                data=json.dumps(event), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-
-    def test_fid_not_found_updating_event(self):
-        event = {
-            "name": "Angular Conference 2018",
-            "address": "ijumaa",
-            "id": "9494dfasd",
-            "category": " Wedding",
-            "start_date": "1/2/323",
-            "end_date": "1/3/343",
-            "user": "Samaki",
-            "description": "awesome event You would'nt want to miss it"
-        }
-        response = self.app.put("{}/api/v1/events/{}".format(BASE_URL, event["id"]),
-                                data=json.dumps(event), content_type='application/json')
-        self.assertEqual(response.status_code, 404)
-
-    def test_gdelete_successful(self):
-        event_id = 9494
-        response = self.app.delete("{}/api/v1/events/{}".format(BASE_URL, event_id))
-        self.assertEqual(response.status_code, 200)
-
-    def test_hdelete_wrong_id(self):
-        event_id = "9494fds"
-        response = self.app.delete("{}/api/v1/events/{}".format(BASE_URL, event_id))
-        self.assertEqual(response.status_code, 404)
-
-    def test_irsvp_wrong_id(self):
-        event_id = "9494fds"
-        response = self.app.post("{}/api/v1/events/{}/rsvp".format(BASE_URL, event_id))
-        self.assertEqual(response.status_code, 404)
-
-    def test_jsuccessful_rsvp(self):
-        event_id = "9494"
-        data = {
-            "user_id": 2
-        }
-        response = self.app.post("{}/api/v1/events/{}/rsvp".format(BASE_URL, event_id),
-                                 data=json.dumps(data), content_type='application/json')
-
-        self.assertEqual(response.status_code, 200)
-
-    def test_kretrieve_guest_successful(self):
-        event_id = 9494
-        response = self.app.get("{}/api/v1/events/{}/guests".format(BASE_URL, event_id))
-        print response
-        data = json.loads(response.get_data())
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(data["attendees"]), 1)
-
-    def test_lretrieve_guest_unsuccessful(self):
-        event_id = 99494
-        response = self.app.get("{}/api/v1/events/{}/guests".format(BASE_URL, event_id))
-        self.assertEqual(response.status_code, 404)
-
+    # def test_esuccessful_updating_event(self):
+    #     event = {
+    #         "name": "Angular Conference 2018",
+    #         "address": "ijumaa",
+    #         "id": "9494",
+    #         "category": " Wedding",
+    #         "start_date": "1/2/323",
+    #         "end_date": "1/3/343",
+    #         "user": "Samaki",
+    #         "description": "awesome event You would'nt want to miss it"
+    #     }
+    #     response = self.app.put("{}/api/v1/events/{}".format(BASE_URL, event["id"]),
+    #                             data=json.dumps(event), content_type='application/json')
+    #     self.assertEqual(response.status_code, 200)
+    #
+    # def test_fid_not_found_updating_event(self):
+    #     event = {
+    #         "name": "Angular Conference 2018",
+    #         "address": "ijumaa",
+    #         "id": "9494dfasd",
+    #         "category": " Wedding",
+    #         "start_date": "1/2/323",
+    #         "end_date": "1/3/343",
+    #         "user": "Samaki",
+    #         "description": "awesome event You would'nt want to miss it"
+    #     }
+    #     response = self.app.put("{}/api/v1/events/{}".format(BASE_URL, event["id"]),
+    #                             data=json.dumps(event), content_type='application/json')
+    #     self.assertEqual(response.status_code, 404)
+    #
+    # def test_gdelete_successful(self):
+    #     event_id = 9494
+    #     response = self.app.delete("{}/api/v1/events/{}".format(BASE_URL, event_id))
+    #     self.assertEqual(response.status_code, 200)
+    #
+    # def test_hdelete_wrong_id(self):
+    #     event_id = "9494fds"
+    #     response = self.app.delete("{}/api/v1/events/{}".format(BASE_URL, event_id))
+    #     self.assertEqual(response.status_code, 404)
+    #
+    # def test_irsvp_wrong_id(self):
+    #     event_id = "9494fds"
+    #     response = self.app.post("{}/api/v1/events/{}/rsvp".format(BASE_URL, event_id))
+    #     self.assertEqual(response.status_code, 404)
+    #
+    # def test_jsuccessful_rsvp(self):
+    #     event_id = "9494"
+    #     data = {
+    #         "user_id": 2
+    #     }
+    #     response = self.app.post("{}/api/v1/events/{}/rsvp".format(BASE_URL, event_id),
+    #                              data=json.dumps(data), content_type='application/json')
+    #
+    #     self.assertEqual(response.status_code, 200)
+    #
+    # def test_kretrieve_guest_successful(self):
+    #     event_id = 9494
+    #     response = self.app.get("{}/api/v1/events/{}/guests".format(BASE_URL, event_id))
+    #     print response
+    #     data = json.loads(response.get_data())
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(len(data["attendees"]), 1)
+    #
+    # def test_lretrieve_guest_unsuccessful(self):
+    #     event_id = 99494
+    #     response = self.app.get("{}/api/v1/events/{}/guests".format(BASE_URL, event_id))
+    #     self.assertEqual(response.status_code, 404)
+    #
 
 
 
