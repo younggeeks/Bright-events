@@ -1,7 +1,7 @@
 import uuid
 from collections import Counter
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect
 from flask_restful import Resource, Api, reqparse
 
 from database.data_mocks import DataMocks
@@ -11,9 +11,15 @@ from helpers import event_parser, user_parser, failed_login
 app = Flask(__name__)
 api = Api(app)
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     return jsonify(error=404, text=str(e)), 404
+
+
+@app.route("/", methods=["GET"])
+def index():
+    return redirect("https://bright-event.herokuapp.com/api/v1/events")
 
 
 class Register(Resource):
@@ -138,12 +144,12 @@ class UserEvents(Resource):
             resp.status_code = 404
             return resp
 
-        user_events = [found_event for found_event in DataMocks.events if str(found_event.user) == str(user) ]
+        user_events = [found_event for found_event in DataMocks.events if str(found_event.user) == str(user)]
 
-        resp = jsonify({"message": "Successfully Fetched Events", "events": DataMocks.get_data("events", data=user_events) })
+        resp = jsonify(
+            {"message": "Successfully Fetched Events", "events": DataMocks.get_data("events", data=user_events)})
         resp.status_code = 200
         return resp
-
 
 
 class EventList(Resource):
@@ -159,7 +165,6 @@ class EventList(Resource):
             "status": 200,
             "event": event_parser(event[0])
         })
-
 
     def put(self, event_id):
         data = request.get_json()
@@ -286,9 +291,6 @@ class RSVP(Resource):
             response.status_code = 400
             return response
 
-
-
-
         new_user = User(id=user.id, full_name=user.full_name, email=user.email, password=user.password)
         # if event has at least one guest  we fetch guests to check if our current guest has already rsvp'ed
         if rsvp_events:
@@ -318,8 +320,9 @@ class RSVP(Resource):
 
 
 class MyRsvp(Resource):
-    def get(self,user):
+    def get(self, user):
         pass
+
 
 class Reports(Resource):
     def get(self, user):
@@ -331,7 +334,7 @@ class Reports(Resource):
             counter[event.category] += 1
 
         resp = {
-            "categories":counter.keys(),
+            "categories": counter.keys(),
             "count": counter.values()
         }
 
