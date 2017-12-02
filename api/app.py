@@ -328,8 +328,7 @@ class Reports(Resource):
     def get(self, user):
         my_events = [event for event in DataMocks.events if event.user == user]
         counter = Counter()
-        print my_events
-
+    
         for event in my_events:
             counter[event.category] += 1
 
