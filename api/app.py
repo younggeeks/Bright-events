@@ -281,19 +281,20 @@ class RSVP(Resource):
             response.status_code = 404
             return response
         user = user[0]
-        # checking if event exists in rsvp array
-        rsvp_events = [found_event for found_event in DataMocks.rsvps if str(found_event["event_id"]) == str(event_id)]
 
         if event[0].user == user.full_name:
             response = jsonify({"message": "You can not RSVP To your own event", "owner": True})
             response.status_code = 400
             return response
 
-        new_user = User(id=user.id, full_name=user.full_name, email=user.email, password=user.password)
+        # checking if event exists in rsvp array
+        rsvp_events = [found_event for found_event in DataMocks.rsvps if str(found_event["event_id"]) == str(event_id)]
+
+        # new_user = User(id=user.id, full_name=user.full_name, email=user.email, password=user.password)
         # if event has at least one guest  we fetch guests to check if our current guest has already rsvp'ed
         if rsvp_events:
             # we get all guests from that event
-            event_guests = [guest for guest in rsvp_events[0]["users"] if str(guest.id) == str(data["user_id"])]
+            event_guests = [guest for guest in rsvp_events[0]["users"] if str(guest.id) == str(user.id)]
 
             # we check to see the user who wants to rsvp is existing guest
             existing_users = [found_user for found_user in event_guests if str(found_user.id) == str(user.id)]
@@ -302,13 +303,14 @@ class RSVP(Resource):
                     "message": "Your name is already in guest list of  {}".format(event[0].name),
                     "status": 400
                 })
-            rsvp_events[0]["users"].append(new_user)
+            rsvp_events[0]["users"].append(user)
 
         else:
-            rsvp_events.append(
+
+            DataMocks.rsvps.append(
                 {
                     "event_id": event_id,
-                    "users": [new_user]
+                    "users": [user]
                 }
             )
         return jsonify({
