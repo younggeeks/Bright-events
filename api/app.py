@@ -239,10 +239,7 @@ class Attendees(Resource):
             resp = jsonify({"message": "Event Not found, Retrieval Failed"})
             resp.status_code = 404
             return resp
-
         guests = [event for event in DataMocks.rsvps if str(event["event_id"]) == str(event_id)]
-
-        print guests
         if guests:
             guests = guests[0]
             rsvp_guests = DataMocks.get_data("users", guests["users"])

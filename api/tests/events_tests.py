@@ -18,7 +18,7 @@ class EventTester(unittest.TestCase):
         response = self.app.get("{}/api/v1/events".format(BASE_URL))
         data = json.loads(response.get_data())
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(data["events"]), 4)
+        self.assertEqual(len(data["events"]), 5)
 
     def test_afetch_reports(self):
         user = "sam"
@@ -39,7 +39,7 @@ class EventTester(unittest.TestCase):
         }
 
         # testing if it returns number of events in our list
-        self.assertEqual(len(DataMocks.events), 4)
+        self.assertEqual(len(DataMocks.events), 5)
         response = self.app.post("{}/api/v1/events".format(BASE_URL),
                                  data=json.dumps(event), content_type='application/json')
 
@@ -47,11 +47,11 @@ class EventTester(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
 
         # testing if adding new user increases length of out list
-        self.assertEqual(len(DataMocks.events), 5)
+        self.assertEqual(len(DataMocks.events), 6)
 
     def test_cduplicate_event_name(self):
         event = {
-            "name": "Angular Conference 2018",
+            "name": "Mobile Museum of Art",
             "address": "nairobi",
             "start_date": "4/2/201",
             "end_date": "3/34/3434",
@@ -164,7 +164,7 @@ class EventTester(unittest.TestCase):
 
     def test_helper_methods(self):
         events = DataMocks.get_data("events")
-        self.assertEqual(len(events), 4)
+        self.assertEqual(len(events), 5)
         users = DataMocks.get_data("users")
         self.assertEqual(len(users), 6)
 

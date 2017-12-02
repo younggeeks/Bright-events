@@ -32,19 +32,34 @@ class DataMocks:
     ]
 
     events = [
-        Event(id=9494, price=89389, name="Angular Conference 2018", address="Riverroad, Nairobi",
+        Event(id=9494, price=89389, name="WOMEN WHO CODE", address="Riverroad, Nairobi",
               start_date="2017-12-16", end_date="2017-12-16", user="sam", description=
-              "Come and Meet All These awesome developers and up your game", category="Meetup"),
-        Event(id=894, name="Women Developers Pary", price=100, address="kirinyaga, Kenya",
+              "Women Who Code presents a Hackathon designed to showcase women as they take on tech. Join our "
+              "community of changemakers for Nairobi Hackathon October 13-15, 2017 to make something great. A "
+              "Hackathon like no other the WWCode ",
+              category="Hackathon"),
+        Event(id=894, name="Mobile Museum of Art", price=100, address="kirinyaga, Kenya",
               start_date="2017-12-16", end_date="2017-12-16", user="sam", description=
-              "Tech ladies , get your geek on , we'll be meeting and cofee will be free", category="Meetup"),
-        Event(id=987, name="Acoustic Night", price=2000, address="Magomeni, Dar es salaam",
+              "Did you know there are 17 museums in Mobile? Let's go visit all of them! We'll start with the Mobile "
+              "Museum of Art for their free admission special. MMOFA is celebrating the opening of new art "
+              "exhibits. They will have a free concert outdoors", category="Meetup"),
+        Event(id=987, name="Fitness boot camp", price=2000, address="Magomeni, Dar es salaam",
               start_date="2017-12-16", end_date="2017-12-16", user="sam", description=
-              "Come with your Guitar we are going to rock the night away with rock and roll on acoustic",
-              category="Music"),
-        Event(id=5221, name="Geeks General Meeting", price=10009, address="Chanika, Dar es salaam",
+              "A fitness boot camp is a type of group physical training program conducted by gyms, personal trainers,"
+              "and former military personnel. These programs are designed to build strength and fitness through a "
+              "variety "
+              " of intense group intervals over a 1-hour period of time",
+              category="Bootcamps"),
+        Event(id=5221, name="2017 Tech Bootcamp", price=10009, address="Chanika, Dar es salaam",
               start_date="2017-12-16", end_date="2017-12-16", user="sam", description=
-              "Come one come all, let us meet and discuss matters that patterns to our youth", category="Religion"),
+              "We will be holding a one-week intensive hands-on Kids Tech Bootcamp during the April holidays. "
+              "Training will be on: Electronics and Robotics; Web Programming and Design; Minecraft 3D game modding; "
+              , category="Code Camps"),
+        Event(id=5879, name="Fit Kenyan Bootcamp", price=10009, address="Mombasa, Kenya",
+              start_date="2017-12-16", end_date="2017-12-16", user="sam", description=
+              "Fit Kenyan Bootcamp has transformed, inspired and made people sweat since 2013! FKB was founded with "
+              "the main aim to create an affordable work out regime with the concept to make use of our beautiful "
+              , category="Code Camps"),
     ]
 
     @staticmethod
