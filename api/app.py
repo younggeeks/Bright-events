@@ -242,6 +242,7 @@ class Attendees(Resource):
 
         guests = [event for event in DataMocks.rsvps if str(event["event_id"]) == str(event_id)]
 
+        print guests
         if guests:
             guests = guests[0]
             rsvp_guests = DataMocks.get_data("users", guests["users"])
@@ -264,6 +265,7 @@ class RSVP(Resource):
     """
 
     def post(self, event_id):
+
         """
         Inputs user_id and event_id , Before user can rsvp we check to see if event exists and if user exists
         if not 404 status code is set and error is returned , other wise user can rsvp to an event
@@ -277,12 +279,11 @@ class RSVP(Resource):
             response.status_code = 404
             return response
         user = [temp_user for temp_user in DataMocks.users if str(temp_user.id) == str(data["user_id"])]
-        user = user[0]
         if not user:
             response = jsonify({"message": "User Not found, RSVP Failed"})
             response.status_code = 404
             return response
-
+        user = user[0]
         # checking if event exists in rsvp array
         rsvp_events = [found_event for found_event in DataMocks.rsvps if str(found_event["event_id"]) == str(event_id)]
 
@@ -319,24 +320,16 @@ class RSVP(Resource):
         })
 
 
-class MyRsvp(Resource):
-    def get(self, user):
-        pass
-
-
 class Reports(Resource):
     def get(self, user):
         my_events = [event for event in DataMocks.events if event.user == user]
         counter = Counter()
-    
         for event in my_events:
             counter[event.category] += 1
-
         resp = {
             "categories": counter.keys(),
             "count": counter.values()
         }
-
         return resp
 
 
