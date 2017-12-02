@@ -1,4 +1,5 @@
 import uuid
+from collections import Counter
 
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api, reqparse
@@ -106,7 +107,7 @@ class Events(Resource):
         return jsonify({
             "message": "successfully Fetched Events",
             "status": 200,
-            "events": DataMocks().get_data("events")
+            "events": DataMocks.get_data("events", data=DataMocks.events)
         })
 
     def post(self):
@@ -124,7 +125,7 @@ class Events(Resource):
             return resp
         else:
             resp = jsonify({"message": "Event Name Must Be unique"})
-            resp.status_code = 422
+            resp.status_code = 400
             return resp
 
 
@@ -246,8 +247,9 @@ class Attendees(Resource):
             })
 
         return jsonify({
-            "message": "Currently there are no guests registered for {}".format(matching_events[0]["name"]),
+            "message": "Currently there are no guests registered for {}".format(matching_events[0].name),
             "status": 200,
+            "attendees": None
         })
 
 
@@ -279,6 +281,14 @@ class RSVP(Resource):
         # checking if event exists in rsvp array
         rsvp_events = [found_event for found_event in DataMocks.rsvps if str(found_event["event_id"]) == str(event_id)]
 
+        if event[0].user == user.full_name:
+            response = jsonify({"message": "You can not RSVP To your own event", "owner": True})
+            response.status_code = 400
+            return response
+
+
+
+
         new_user = User(id=user.id, full_name=user.full_name, email=user.email, password=user.password)
         # if event has at least one guest  we fetch guests to check if our current guest has already rsvp'ed
         if rsvp_events:
@@ -307,13 +317,34 @@ class RSVP(Resource):
         })
 
 
+class MyRsvp(Resource):
+    def get(self,user):
+        pass
+
+class Reports(Resource):
+    def get(self, user):
+        my_events = [event for event in DataMocks.events if event.user == user]
+        counter = Counter()
+        print my_events
+
+        for event in my_events:
+            counter[event.category] += 1
+
+        resp = {
+            "categories":counter.keys(),
+            "count": counter.values()
+        }
+
+        return resp
+
+
 # routes for events managements
 api.add_resource(Events, '/api/v1/events')
 api.add_resource(RSVP, '/api/v1/events/<event_id>/rsvp')
 api.add_resource(EventList, '/api/v1/events/<event_id>')
 api.add_resource(Attendees, '/api/v1/events/<event_id>/guests')
 api.add_resource(UserEvents, '/api/v1/<user>/events')
-# api.add_resource(Charts, '/api/v1/events/<user_id>/charts')
+api.add_resource(Reports, '/api/v1/events/<user>/charts')
 
 # routes for Authentication
 api.add_resource(Register, '/api/v1/auth/register')
