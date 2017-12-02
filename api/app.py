@@ -320,6 +320,29 @@ class RSVP(Resource):
         })
 
 
+class GetEventByCategory(Resource):
+    def get(self, category):
+        """
+        Fetching Events by CAtegory
+        :param category:
+        :return:
+        """
+        found_events = [event for event in DataMocks.events if event.category == category]
+
+        if not found_events:
+            response = jsonify({"message": "Category Not found, Fetching Events Failed"})
+            response.status_code = 404
+            return response
+
+        response = jsonify(
+            {
+                "message": "Successfully Fetched events",
+                "events": DataMocks.get_data("events", found_events)
+            })
+        response.status_code = 200
+        return response
+
+
 class Reports(Resource):
     def get(self, user):
         my_events = [event for event in DataMocks.events if event.user == user]
@@ -340,6 +363,7 @@ api.add_resource(EventList, '/api/v1/events/<event_id>')
 api.add_resource(Attendees, '/api/v1/events/<event_id>/guests')
 api.add_resource(UserEvents, '/api/v1/<user>/events')
 api.add_resource(Reports, '/api/v1/events/<user>/charts')
+api.add_resource(GetEventByCategory, '/api/v1/category/<category>/events')
 
 # routes for Authentication
 api.add_resource(Register, '/api/v1/auth/register')
