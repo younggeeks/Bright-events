@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from models import User, Event
 from flask_restful import Resource, Api, reqparse
 from helpers import event_parser, user_parser, failed_login
@@ -7,6 +7,11 @@ import uuid
 
 app = Flask(__name__)
 api = Api(app)
+
+
+@app.route("/")
+def docs():
+    return render_template("api_docs.html")
 
 
 class Register(Resource):
