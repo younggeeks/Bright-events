@@ -12,7 +12,6 @@ def create_app(environment):
     app.config.from_object(env_config[environment])
     app.config.from_pyfile("config.py")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config["DEBUG"] = True
     db.init_app(app)
-    print(os.getenv("SECRET"))
+    print(os.getenv("POSTGRES_DATABASE_URI"))
     return app

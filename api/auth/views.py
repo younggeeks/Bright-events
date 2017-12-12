@@ -6,7 +6,7 @@ import jwt
 from flask import Blueprint, request, jsonify
 from flask_restplus import Api, Resource
 from werkzeug.security import generate_password_hash, check_password_hash
-from api.models import User
+from api.models import User, BlacklistToken
 
 auth = Blueprint("auth", __name__, url_prefix="/api/v1/auth")
 
@@ -80,7 +80,7 @@ class Login(Resource):
             response = jsonify({
                 "message": "Login Failed, Please check your input"
             })
-            response.status_code = 422  
+            response.status_code = 422
             return response
 
         else:
@@ -89,3 +89,42 @@ class Login(Resource):
             })
             response.status_code = 400
             return response
+
+
+@api.route("/logout")
+class Logout(Resource):
+    def post(self):
+        bearer_token = request.headers.get("Authorization")
+        if not bearer_token:
+            response = jsonify({
+                "message": "Token is missing from your header"
+            })
+            response.status_code = 401
+            return response
+
+        token = bearer_token.replace("Bearer ", "")
+        decoded_token = User.decode_token(token)
+
+        if isinstance(decoded_token, int):
+            already_blacklisted = BlacklistToken.query.filter_by(token=token).first()
+
+            if already_blacklisted:
+                response = jsonify({
+                    "message": "User is already signed out"
+                })
+                response.status_code = 401
+                return response
+
+            blacklist = BlacklistToken(token=token)
+            blacklist.save()
+
+            response = jsonify({
+                "message": "Logout Successfully"
+            })
+            response.status_code = 200
+            return response
+        response = jsonify({
+            "message": decoded_token
+        })
+        response.status_code = 200
+        return response
