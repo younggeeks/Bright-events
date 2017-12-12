@@ -16,7 +16,7 @@ class User(db.Model):
     password = db.Column(db.String(250))
     email = db.Column(db.String(80), unique=True)
     events = db.relationship("Event", back_populates="user")
-    # rsvps = db.relationship("Event", secondary=events_subscriptions, back_populates="guests")
+    # rsvps = db.relationship("Event", secondary="subscriptions", back_populates="guests")
     __tablename__ = "users"
 
     def save(self):
@@ -55,7 +55,7 @@ class User(db.Model):
         except jwt.ExpiredSignatureError:
             return "Token Expired , Please Login Again"
         except jwt.InvalidTokenError:
-            return "Invalid Toke , Please Login again"
+            return "Invalid Token , Please Login again"
 
 
 class Category(db.Model):
@@ -63,6 +63,21 @@ class Category(db.Model):
     name = db.Column(db.String, nullable=False)
     events = db.relationship("Event", back_populates="category")
     __tablename__ = "categories"
+
+
+class BlacklistToken(db.Model):
+    __tablename__ = "blacklist_tokens"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    token = db.Column(db.String(500), unique=True, nullable=False)
+    blacklisted_on = db.Column(db.DateTime, nullable=False)
+
+    def __init__(self, token):
+        self.token = token
+        self.blacklisted_on = datetime.datetime.now()
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
 
 class Event(db.Model):
@@ -77,6 +92,6 @@ class Event(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     user = db.relationship("User", back_populates="events")
     category = db.relationship("Category", back_populates="events")
-    # guests = db.relationship("User", secondary=events_subscriptions, back_populates="rsvps")
+    # guests = db.relationship("User", secondary="subscriptions", back_populates="rsvps")
 
     __tablename__ = "events"
