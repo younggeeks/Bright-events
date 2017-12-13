@@ -3,8 +3,9 @@ import uuid
 import os
 
 import jwt
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, url_for
 from flask_restplus import Api, Resource
+from itsdangerous import URLSafeTimedSerializer
 from werkzeug.security import generate_password_hash, check_password_hash
 from api.models import User, BlacklistToken
 
@@ -128,3 +129,148 @@ class Logout(Resource):
         })
         response.status_code = 200
         return response
+
+
+@api.route("/reset")
+class PasswordReset(Resource):
+    def post(self):
+        data = request.get_json()
+        if "email" in data and data["email"] != "":
+            user = User.query.filter_by(email=data["email"]).first()
+            if not user:
+                response = jsonify({
+                    "message": "Email not found , Password reset Failed"
+                })
+                response.status_code = 404
+                return response
+
+            password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
+            reset_url = url_for("auth.password_reset_token",
+                                token=password_reset_serializer.dumps(data["email"],
+                                                                      salt=os.getenv("RESET_SALT")),
+                                _external=True)
+
+            response = jsonify({
+                "message": "Password Reset Link Successfully Generated",
+                "link": reset_url
+            })
+            response.status_code = 400
+            return response
+        else:
+            response = jsonify({
+                "message": "Password Reset failed, Please check your input"
+            })
+            response.status_code = 400
+            return response
+
+
+@api.route("/reset-password/<token>")
+class PasswordResetToken(Resource):
+    def get(self, token):
+        if token:
+            try:
+                password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
+                password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT"), max_age=3600)
+
+                response = jsonify({
+                    "message": "Password Reset Link Verified Successfully",
+                    "verified": True,
+                    "token": token
+                })
+                response.status_code = 400
+                return response
+            except Exception as e:
+                response = jsonify({
+                    "message": "Password Reset Link is invalid, or Expired"
+                })
+                response.status_code = 400
+                return response
+
+        else:
+            response = jsonify({
+                "message": "Password Reset failed, Please check your input"
+            })
+            response.status_code = 400
+            return response
+
+
+@api.route("/reset-password/<token>")
+class PasswordResetToken(Resource):
+    def get(self, token):
+        if token:
+            try:
+                password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
+                password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT"), max_age=3600)
+
+                response = jsonify({
+                    "message": "Password Reset Link Verified Successfully",
+                    "verified": True,
+                    "token": token
+                })
+                response.status_code = 200
+                return response
+            except Exception as e:
+                response = jsonify({
+                    "message": "Password Reset Link is invalid, or Expired"
+                })
+                response.status_code = 400
+                return response
+
+        else:
+            response = jsonify({
+                "message": "Password Reset failed, Please check your input"
+            })
+            response.status_code = 400
+            return response
+
+    def post(self, token):
+        data = request.get_json()
+        if token:
+            try:
+                password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
+                email = password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT"), max_age=3600)
+
+                if "password" in data and "password_confirmation" in data:
+                    if data["password"] != "" and data["password_confirmation"] != "":
+                        if data["password"] == data["password_confirmation"]:
+                            hashed_password = generate_password_hash(data["password"])
+                            user = User.query.filter_by(email=email).first()
+                            user.password = hashed_password
+                            user.save()
+                            response = jsonify({
+                                "message": "Password Reset Successfully"
+                            })
+                            response.status_code = 200
+                            return response
+
+                        else:
+                            response = jsonify({
+                                "message": "Password and Password confirmation do not match"
+                            })
+                            response.status_code = 400
+                            return response
+                    else:
+                        response = jsonify({
+                            "message": "Password Reset Failed, All fields are required"
+                        })
+                        response.status_code = 400
+                        return response
+                else:
+                    response = jsonify({
+                        "message": "Password Reset Failed, Please check your input"
+                    })
+                    response.status_code = 400
+                    return response
+            except Exception as e:
+                response = jsonify({
+                    "message": "Password Reset Link is invalid, or Expired"
+                })
+                response.status_code = 400
+                return response
+
+        else:
+            response = jsonify({
+                "message": "Password Reset failed, Please check your input"
+            })
+            response.status_code = 400
+            return response
