@@ -7,7 +7,7 @@ events = Blueprint("events", __name__, url_prefix="/api/v1/events")
 
 
 api = Api(events, version='1.0', title='Bright Events API',
-          description='Awesome Api for managing events', catch_all_404s=True, doc=True
+          description='Awesome Api for managing events', catch_all_404s=True
           )
 
 from api.models import Event, User
@@ -48,7 +48,6 @@ def protected_route(f):
 
 
 @api.route("")
-@api.doc
 class EventList(Resource):
     def get(self):
         all_events = Event.query.all()
@@ -87,3 +86,54 @@ class EventList(Resource):
             })
             response.status_code = 400
             return response
+
+
+@api.route("/<event_id>")
+class Events(Resource):
+    @protected_route
+    def put(self, event_id):
+        event = Event.query.filter_by(id=event_id).first()
+        if event.user_id != g.user.id:
+            response = jsonify({
+                "message": "You can only Update Events You Created"
+            })
+            response.status_code = 403
+            return response
+        if not event:
+            response = jsonify({
+                "message": "Event With ID {} is not found".format(event_id)
+            })
+            response.status_code = 404
+            return response
+        data = request.get_json()
+        if not data:
+            response = jsonify({
+                "message": "Update Failed, Please check your input"
+            })
+            response.status_code = 400
+            return response
+
+        if "name" in data:
+            event.name = data["name"]
+        if "address" in data:
+            event.address = data["address"]
+        if "start_date" in data:
+            event.start_date = data["start_date"]
+        if "end_date" in data:
+            event.end_date = data["end_date"]
+        if "user_id" in data:
+            event.user_id = data["user_id"]
+        if "description" in data:
+            event.description = data["description"]
+        if "category_id" in data:
+            event.category_id = data["category_id"]
+        if "price" in data:
+            event.price = data["price"]
+
+        event.save()
+        response = jsonify({"message": "Event Updated Successfully"})
+        response.status_code = 200
+        return response
+
+
+
