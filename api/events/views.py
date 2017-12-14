@@ -5,7 +5,6 @@ from flask_restplus import Api, Resource
 
 events = Blueprint("events", __name__, url_prefix="/api/v1/events")
 
-
 api = Api(events, version='1.0', title='Bright Events API',
           description='Awesome Api for managing events', catch_all_404s=True
           )
@@ -128,10 +127,77 @@ class Events(Resource):
         if "category_id" in data:
             event.category_id = data["category_id"]
         if "price" in data:
-            event.price = data["price"]
+            event.price = data['price']
 
         event.save()
         response = jsonify({"message": "Event Updated Successfully"})
+        response.status_code = 200
+        return response
+
+    @protected_route
+    def delete(self, event_id):
+        event = Event.query.filter_by(id=event_id).first()
+        if not event:
+            response = jsonify({
+                "message": "Event With ID {} is not found".format(event_id)
+            })
+            response.status_code = 404
+            return response
+        if event.user_id != g.user.id:
+            response = jsonify({
+                "message": "You can only Delete Events You Created"
+            })
+            response.status_code = 403
+            return response
+
+        event.delete()
+        response = jsonify({
+            "message": "Event Deletion Successfully"
+        })
+        response.status_code = 200
+        return response
+
+
+@api.route("/<event_id>/rsvp")
+class RSVP(Resource):
+    @protected_route
+    def post(self, event_id):
+        data = request.get_json()
+        if "user_id" not in data:
+            response = jsonify({
+                "message": "RSVP Failed, Please check your input"
+            })
+            response.status_code = 400
+            return response
+        event = Event.query.filter_by(id=event_id).first()
+        if not event:
+            response = jsonify({
+                "message": "Event With ID {} is not found".format(event_id)
+            })
+            response.status_code = 404
+            return response
+
+        guest = g.user
+        if not guest:
+            response = jsonify({
+                "message": "User Not Found, RSVP Failed"
+            })
+            response.status_code = 404
+            return response
+
+        existing_user = [user for user in event.rsvps if user.id == guest.id]
+        if existing_user:
+            response = jsonify({
+                "message": "Your Name is already in {}'s Guest List".format(event.name)
+            })
+            response.status_code = 404
+            return response
+
+        event.rsvps.append(guest)
+        event.save()
+        response = jsonify({
+            "message": "RSVP successfully"
+        })
         response.status_code = 200
         return response
 

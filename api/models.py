@@ -4,9 +4,10 @@ import os
 from api import db
 import datetime
 
-events_subscriptions = db.Table("subscriptions",
-                                db.Column("id", db.Integer, db.ForeignKey("users.id")),
-                                db.Column("id", db.Integer, db.ForeignKey("events.id")))
+rsvps = db.Table('rsvps',
+                 db.Column('user_id', db.Integer, db.ForeignKey('users.id'), nullable=False),
+                 db.Column('event_id', db.Integer, db.ForeignKey('events.id'), nullable=False),
+                 db.PrimaryKeyConstraint('user_id', 'event_id'))
 
 
 class User(db.Model):
@@ -16,7 +17,7 @@ class User(db.Model):
     password = db.Column(db.String(250))
     email = db.Column(db.String(80), unique=True)
     events = db.relationship("Event", back_populates="user")
-    # rsvps = db.relationship("Event", secondary="subscriptions", back_populates="guests")
+
     __tablename__ = "users"
 
     def save(self):
@@ -93,6 +94,7 @@ class Event(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     user = db.relationship("User", back_populates="events")
     category = db.relationship("Category", back_populates="events")
+    rsvps = db.relationship('User', secondary=rsvps, backref='users')
 
     # guests = db.relationship("User", secondary="subscriptions", back_populates="rsvps")
 
