@@ -82,16 +82,22 @@ class BlacklistToken(db.Model):
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
+    name = db.Column(db.String(100), unique=True)
     address = db.Column(db.String)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow())
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
+    price = db.Column(db.String(50))
     description = db.Column(db.String(200))
     category_id = db.Column(db.Integer, db.ForeignKey("categories.id"))
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     user = db.relationship("User", back_populates="events")
     category = db.relationship("Category", back_populates="events")
+
     # guests = db.relationship("User", secondary="subscriptions", back_populates="rsvps")
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
     __tablename__ = "events"
