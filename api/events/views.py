@@ -1,7 +1,7 @@
 from functools import wraps
 
 from flask import Blueprint, request, jsonify, g
-from flask_restplus import Api, Resource
+from flask_restplus import Api, Resource, reqparse
 
 events = Blueprint("events", __name__, url_prefix="/api/v1/events")
 
@@ -232,4 +232,36 @@ class Guests(Resource):
         })
         response.status_code = 200
         return response
+
+
+@api.route("/search")
+class Search(Resource):
+    def get(self):
+        parser = api.parser()
+        parser.add_argument('q', type=str,  help='Event Name', location='args')
+        args = parser.parse_args()
+        if not args['q']:
+            response = jsonify({
+                "message": "Query Not Specified, Search Failed"
+            })
+            response.status_code = 400
+            return response
+
+        found_events = Event.query.filter(Event.name.ilike('%{}%'.format(args['q']))).all()
+
+        if found_events and len(found_events) > 0:
+            response = jsonify({
+                "message": "Successfully Retrieved Events Matching {}".format(args['q']),
+                "guests": response_helpers.parse_list("events", found_events)
+            })
+            response.status_code = 200
+            return response
+        else:
+            response = jsonify({
+                "message": "Event with name Matching {} Was not found".format(args['q'])
+            })
+            response.status_code = 404
+            return response
+
+
 
