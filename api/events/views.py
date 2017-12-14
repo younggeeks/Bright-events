@@ -1,13 +1,17 @@
 from functools import wraps
 
-from flask import Blueprint, request, jsonify, g, abort
+from flask import Blueprint, request, jsonify, g
 from flask_restplus import Api, Resource
 
 events = Blueprint("events", __name__, url_prefix="/api/v1/events")
 
-api = Api(events, catch_all_404s=True)
+
+api = Api(events, version='1.0', title='Bright Events API',
+          description='Awesome Api for managing events', catch_all_404s=True, doc=True
+          )
 
 from api.models import Event, User
+from api import response_helpers
 
 
 def protected_route(f):
@@ -44,9 +48,17 @@ def protected_route(f):
 
 
 @api.route("")
+@api.doc
 class EventList(Resource):
     def get(self):
-        pass
+        all_events = Event.query.all()
+        print(response_helpers.event_parser(all_events[0]))
+        response = jsonify({
+            "message": "Events Retrieved Successfully",
+            "events": response_helpers.parse_list("events", all_events)
+        })
+        response.status_code = 200
+        return response
 
     @protected_route
     def post(self):

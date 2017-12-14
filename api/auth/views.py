@@ -2,7 +2,6 @@ import uuid
 
 import os
 
-import jwt
 from flask import Blueprint, request, jsonify, url_for
 from flask_restplus import Api, Resource
 from itsdangerous import URLSafeTimedSerializer
