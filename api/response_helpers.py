@@ -19,7 +19,7 @@ def event_parser(event):
 def user_parser(user):
     new_user = {
         "id": user.id,
-        "full_name": user.full_name,
+        "name": user.name,
         "email": user.email,
         "password": user.password
     }

@@ -178,9 +178,10 @@ class RSVP(Resource):
             return response
 
         guest = g.user
-        if not guest:
+
+        if event.user_id == guest.id:
             response = jsonify({
-                "message": "User Not Found, RSVP Failed"
+                "message": "You can not RSVP To your own event"
             })
             response.status_code = 404
             return response
@@ -202,4 +203,33 @@ class RSVP(Resource):
         return response
 
 
+@api.route("/<event_id>/guests")
+class Guests(Resource):
+    @protected_route
+    def get(self, event_id):
+        event = Event.query.filter_by(id=event_id).first()
+        if not event:
+            response = jsonify({
+                "message": "Event With ID {} is not found".format(event_id)
+            })
+            response.status_code = 404
+            return response
+
+        user = g.user
+
+        if event.user_id != user.id:
+            response = jsonify({
+                "message": "You can only See the guests of the event you created"
+            })
+            response.status_code = 403
+            return response
+
+        guests = response_helpers.parse_list("users", event.rsvps)
+
+        response = jsonify({
+            "message": "Successfully Retrieved Event Guests",
+            "guests": guests
+        })
+        response.status_code = 200
+        return response
 
