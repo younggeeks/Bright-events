@@ -1,7 +1,7 @@
 from functools import wraps
 
-from flask import Blueprint, request, jsonify, g
-from flask_restplus import Api, Resource, reqparse
+from flask import Blueprint, request, jsonify, g, abort
+from flask_restplus import Api, Resource
 
 events = Blueprint("events", __name__, url_prefix="/api/v1/events")
 
@@ -11,6 +11,40 @@ api = Api(events, version='1.0', title='Bright Events API',
 
 from api.models import Event, User
 from api import response_helpers
+
+
+def search(search_type):
+    parser = api.parser()
+    parser.add_argument('q', type=str, help='Event Name', location='args')
+    args = parser.parse_args()
+    if not args['q']:
+        response = jsonify({
+            "message": "Query Not Specified, Search Failed"
+        })
+        response.status_code = 400
+        return response
+    if search_type == "name":
+        found_events = Event.query.filter(Event.name.ilike('%{}%'.format(args['q']))).all()
+    elif search_type == "location":
+        found_events = Event.query.filter(Event.address.ilike('%{}%'.format(args['q']))).all()
+    elif search_type == "category":
+        found_events = Event.query.filter(Event.category.name.ilike('%{}%'.format(args['q']))).all()
+    else:
+        found_events = Event.query.filter(Event.name.ilike('%{}%'.format(args['q']))).all()
+
+    if found_events and len(found_events) > 0:
+        response = jsonify({
+            "message": "Successfully Retrieved Events Matching {}".format(args['q']),
+            "guests": response_helpers.parse_list("events", found_events)
+        })
+        response.status_code = 200
+        return response
+    else:
+        response = jsonify({
+            "message": "Event Matching {} Was not found".format(args['q'])
+        })
+        response.status_code = 404
+        return response
 
 
 def protected_route(f):
@@ -237,31 +271,11 @@ class Guests(Resource):
 @api.route("/search")
 class Search(Resource):
     def get(self):
-        parser = api.parser()
-        parser.add_argument('q', type=str,  help='Event Name', location='args')
-        args = parser.parse_args()
-        if not args['q']:
-            response = jsonify({
-                "message": "Query Not Specified, Search Failed"
-            })
-            response.status_code = 400
-            return response
-
-        found_events = Event.query.filter(Event.name.ilike('%{}%'.format(args['q']))).all()
-
-        if found_events and len(found_events) > 0:
-            response = jsonify({
-                "message": "Successfully Retrieved Events Matching {}".format(args['q']),
-                "guests": response_helpers.parse_list("events", found_events)
-            })
-            response.status_code = 200
-            return response
-        else:
-            response = jsonify({
-                "message": "Event with name Matching {} Was not found".format(args['q'])
-            })
-            response.status_code = 404
-            return response
+        return search("name")
 
 
+@api.route("/location")
+class SearchLocation(Resource):
+    def get(self):
+        return search("location")
 
