@@ -4,10 +4,9 @@
 .idea/inspectionProfiles/
 .idea/misc.xml
 .idea/workspace.xml
-<<<<<<< HEAD
 *.pyc
 *~
 *.swp
-=======
->>>>>>> develop
-api/env/
+env/
+migrations/
+instance/
