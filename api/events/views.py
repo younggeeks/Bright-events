@@ -1,7 +1,8 @@
 from functools import wraps
 
-from flask import Blueprint, request, jsonify, g, abort
+from flask import Blueprint, request, jsonify, g, abort, url_for
 from flask_restplus import Api, Resource
+from sqlalchemy import asc
 
 events = Blueprint("events", __name__, url_prefix="/api/v1/events")
 
@@ -279,3 +280,36 @@ class SearchLocation(Resource):
     def get(self):
         return search("location")
 
+
+@api.route("/filter")
+class Paginate(Resource):
+    # TODO add start and end links to pagination
+    def get(self):
+        if "limit" in request.args and request.args.get("limit"):
+            limit = int(request.args.get('limit', 3))
+        else:
+            limit = 3
+        if "offset" in request.args and request.args.get("offset"):
+            offset = max(0, int(request.args.get("offset")))
+        else:
+            offset = 0
+
+        ordered_events = Event.query.order_by(asc(Event.id)).all()
+        next_offset = offset + limit
+        maximum_index = len(ordered_events) - 1
+        if offset > maximum_index:
+            last_id = ordered_events[maximum_index].id
+            next_offset = offset
+        else:
+            last_id = ordered_events[offset].id
+
+        all_events = Event.query.filter(Event.id >= last_id).limit(limit).all()
+
+        next_url = url_for("events.paginate", limit=limit, offset=next_offset)
+        prev_url = url_for("events.paginate", limit=limit, offset=max(0, next_offset-limit))
+
+        return jsonify({
+            "events": response_helpers.parse_list("events", all_events),
+            "prev_url": prev_url,
+            "next_url": next_url
+        })
