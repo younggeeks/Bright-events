@@ -6,6 +6,7 @@ from flask_script import Manager
 from api import create_app, db
 
 from api import models
+
 app = create_app(os.getenv("ENV_SETTINGS"))
 
 migrate = Migrate(app, db)

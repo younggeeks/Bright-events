@@ -18,9 +18,14 @@ class Register(Resource):
     """
     New User Registration
     """
-
     def post(self):
         data = request.get_json()
+        if "email" not in data or "name" not in data or "password" not in data:
+            response = jsonify({
+                "message": "Registration Failed, Please check your input"
+            })
+            response.status_code = 400
+            return response
         new_user = User.query.filter_by(email=data["email"]).first()
         if not new_user:
             try:
@@ -50,7 +55,6 @@ class Register(Resource):
 @api.route("/login")
 class Login(Resource):
     """User Authentication using Email and password"""
-
     def post(self):
         credentials = request.get_json()
         if "email" in credentials and "password" in credentials:
@@ -58,30 +62,30 @@ class Login(Resource):
                 response = jsonify({
                     "message": "Email and password fields are required to login"
                 })
-                response.status_code = 422
+                response.status_code = 400
                 return response
-            user = User.query.filter_by(email=credentials["email"]).first()
 
+            user = User.query.filter_by(email=credentials["email"]).first()
             if not user:
                 response = jsonify({
                     "message": "Wrong Combination of Email and password, Login Failed"
                 })
-                response.status_code = 422
+                response.status_code = 401
                 return response
             if check_password_hash(user.password, credentials["password"]):
                 token = user.encode_token()
                 response = jsonify({
-                    "message": "Login successfully",
+                    "message": "Login successful",
                     "token": token.decode("UTF-8")
                 })
                 response.status_code = 200
                 return response
-
-            response = jsonify({
-                "message": "Login Failed, Please check your input"
-            })
-            response.status_code = 422
-            return response
+            else:
+                response = jsonify({
+                    "message": "Wrong Combination of Email and password, Login Failed"
+                })
+                response.status_code = 401
+                return response
 
         else:
             response = jsonify({
@@ -119,18 +123,18 @@ class Logout(Resource):
             blacklist.save()
 
             response = jsonify({
-                "message": "Logout Successfully"
+                "message": "Logout Successful"
             })
             response.status_code = 200
             return response
         response = jsonify({
             "message": decoded_token
         })
-        response.status_code = 200
+        response.status_code = 400
         return response
 
 
-@api.route("/reset")
+@api.route("/reset-password")
 class PasswordReset(Resource):
     def post(self):
         data = request.get_json()
@@ -153,7 +157,7 @@ class PasswordReset(Resource):
                 "message": "Password Reset Link Successfully Generated",
                 "link": reset_url
             })
-            response.status_code = 400
+            response.status_code = 200
             return response
         else:
             response = jsonify({
@@ -163,43 +167,15 @@ class PasswordReset(Resource):
             return response
 
 
-@api.route("/reset-password/<token>")
+@api.route("/reset-password/verify/<token>")
 class PasswordResetToken(Resource):
     def get(self, token):
         if token:
             try:
                 password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
-                password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT"), max_age=3600)
+                email = password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT"), max_age=3600)
 
-                response = jsonify({
-                    "message": "Password Reset Link Verified Successfully",
-                    "verified": True,
-                    "token": token
-                })
-                response.status_code = 400
-                return response
-            except Exception as e:
-                response = jsonify({
-                    "message": "Password Reset Link is invalid, or Expired"
-                })
-                response.status_code = 400
-                return response
-
-        else:
-            response = jsonify({
-                "message": "Password Reset failed, Please check your input"
-            })
-            response.status_code = 400
-            return response
-
-
-@api.route("/reset-password/<token>")
-class PasswordResetToken(Resource):
-    def get(self, token):
-        if token:
-            try:
-                password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
-                password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT"), max_age=3600)
+                token = password_reset_serializer.dumps(email, salt=os.getenv("RESET_SALT_VERIFY"))
 
                 response = jsonify({
                     "message": "Password Reset Link Verified Successfully",
@@ -222,12 +198,43 @@ class PasswordResetToken(Resource):
             response.status_code = 400
             return response
 
+
+@api.route("/reset-password/<token>")
+class PasswordResetToken(Resource):
+    def get(self, token):
+        if token:
+            try:
+                password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
+                password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT_VERIFY"), max_age=3600)
+
+                response = jsonify({
+                    "message": "Password Reset Link Verified Successfully",
+                    "verified": True,
+                    "token": token
+                })
+                response.status_code = 200
+                return response
+            except Exception as e:
+                print(e)
+                response = jsonify({
+                    "message": "Password Reset Link is invalid, or Expired"
+                })
+                response.status_code = 400
+                return response
+
+        else:
+            response = jsonify({
+                "message": "Password Reset failed, Please check your input"
+            })
+            response.status_code = 400
+            return response
+
     def post(self, token):
         data = request.get_json()
         if token:
             try:
                 password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
-                email = password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT"), max_age=3600)
+                email = password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT_VERIFY"), max_age=3600)
 
                 if "password" in data and "password_confirmation" in data:
                     if data["password"] != "" and data["password_confirmation"] != "":
@@ -246,7 +253,7 @@ class PasswordResetToken(Resource):
                             response = jsonify({
                                 "message": "Password and Password confirmation do not match"
                             })
-                            response.status_code = 400
+                            response.status_code = 401
                             return response
                     else:
                         response = jsonify({
@@ -261,6 +268,7 @@ class PasswordResetToken(Resource):
                     response.status_code = 400
                     return response
             except Exception as e:
+                print(e)
                 response = jsonify({
                     "message": "Password Reset Link is invalid, or Expired"
                 })
