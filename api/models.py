@@ -83,7 +83,7 @@ class BlacklistToken(db.Model):
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True)
+    name = db.Column(db.String(100))
     address = db.Column(db.String)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow())
     start_date = db.Column(db.DateTime, nullable=False)
