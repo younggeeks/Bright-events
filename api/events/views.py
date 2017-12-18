@@ -122,7 +122,7 @@ class EventList(Resource):
             return response
 
 
-@api.route("/<event_id>")
+@api.route("/<int:event_id>")
 class Events(Resource):
     @protected_route
     def put(self, event_id):
@@ -169,6 +169,20 @@ class Events(Resource):
         response.status_code = 200
         return response
 
+    def get(self, event_id):
+        event = Event.query.filter_by(id=event_id).first()
+        if not event:
+            response = jsonify({
+                "message": "Event With ID {} is not found".format(event_id)
+            })
+            response.status_code = 404
+            return response
+
+        event = response_helpers.event_parser(event)
+        response = jsonify({"message": "Event Retrieved Successfully", "event": event})
+        response.status_code = 200
+        return response
+
     @protected_route
     def delete(self, event_id):
         event = Event.query.filter_by(id=event_id).first()
@@ -193,7 +207,7 @@ class Events(Resource):
         return response
 
 
-@api.route("/<event_id>/rsvp")
+@api.route("/<int:event_id>/rsvp")
 class RSVP(Resource):
     @protected_route
     def post(self, event_id):
@@ -238,7 +252,7 @@ class RSVP(Resource):
         return response
 
 
-@api.route("/<event_id>/guests")
+@api.route("/<int:event_id>/guests")
 class Guests(Resource):
     @protected_route
     def get(self, event_id):
