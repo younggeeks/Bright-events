@@ -18,6 +18,7 @@ class Register(Resource):
     """
     New User Registration
     """
+
     def post(self):
         data = request.get_json()
         if "email" not in data or "name" not in data or "password" not in data:
@@ -55,6 +56,7 @@ class Register(Resource):
 @api.route("/login")
 class Login(Resource):
     """User Authentication using Email and password"""
+
     def post(self):
         credentials = request.get_json()
         if "email" in credentials and "password" in credentials:
@@ -134,8 +136,8 @@ class Logout(Resource):
         return response
 
 
-@api.route("/reset-password")
-class PasswordReset(Resource):
+@api.route("/reset")
+class PasswordResetLink(Resource):
     def post(self):
         data = request.get_json()
         if "email" in data and data["email"] != "":
@@ -200,7 +202,7 @@ class PasswordResetToken(Resource):
 
 
 @api.route("/reset-password/<token>")
-class PasswordResetToken(Resource):
+class PasswordResetChangePassword(Resource):
     def get(self, token):
         if token:
             try:
