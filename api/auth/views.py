@@ -131,7 +131,7 @@ class Logout(Resource):
 
 
 @api.route("/reset")
-class PasswordReset(Resource):
+class PasswordResetLink(Resource):
     def post(self):
         data = request.get_json()
         if "email" in data and data["email"] != "":
@@ -194,7 +194,7 @@ class PasswordResetToken(Resource):
 
 
 @api.route("/reset-password/<token>")
-class PasswordResetToken(Resource):
+class PasswordResetChangePassword(Resource):
     def get(self, token):
         if token:
             try:
