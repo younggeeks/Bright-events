@@ -96,8 +96,6 @@ class Event(db.Model):
     category = db.relationship("Category", back_populates="events")
     rsvps = db.relationship('User', secondary=rsvps, backref='users')
 
-    # guests = db.relationship("User", secondary="subscriptions", back_populates="rsvps")
-
     def save(self):
         db.session.add(self)
         db.session.commit()
