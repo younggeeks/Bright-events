@@ -3,7 +3,8 @@ import uuid
 import os
 
 from flask import Blueprint, request, jsonify, url_for
-from flask_restplus import Api, Resource
+from flask_restful import Api, Resource
+
 from itsdangerous import URLSafeTimedSerializer
 from werkzeug.security import generate_password_hash, check_password_hash
 from api.models import User, BlacklistToken
@@ -13,7 +14,6 @@ auth = Blueprint("auth", __name__, url_prefix="/api/v1/auth")
 api = Api(auth, catch_all_404s=True)
 
 
-@api.route("/register")
 class Register(Resource):
     """
     New User Registration
@@ -38,8 +38,10 @@ class Register(Resource):
                     "message": "Successfully Registered",
                     "token": token.decode('UTF-8')
                 })
+                response.status_code = 201
                 return response
             except Exception as e:
+                print(e)
                 response = jsonify({
                     "message": "User Registration Failed"
                 })
@@ -53,7 +55,6 @@ class Register(Resource):
             return response
 
 
-@api.route("/login")
 class Login(Resource):
     """User Authentication using Email and password"""
 
@@ -70,12 +71,13 @@ class Login(Resource):
             user = User.query.filter_by(email=credentials["email"]).first()
             if not user:
                 response = jsonify({
-                    "message": "Wrong Combination of Email and password, Login Failed"
+                    "message": "No Account is associated with Email {}, Login Failed".format(credentials["email"])
                 })
                 response.status_code = 401
                 return response
             if check_password_hash(user.password, credentials["password"]):
                 token = user.encode_token()
+                print(token)
                 response = jsonify({
                     "message": "Login successful",
                     "token": token.decode("UTF-8")
@@ -97,7 +99,6 @@ class Login(Resource):
             return response
 
 
-@api.route("/logout")
 class Logout(Resource):
     def post(self):
         bearer_token = request.headers.get("Authorization")
@@ -136,7 +137,6 @@ class Logout(Resource):
         return response
 
 
-@api.route("/reset")
 class PasswordResetLink(Resource):
     def post(self):
         data = request.get_json()
@@ -169,7 +169,6 @@ class PasswordResetLink(Resource):
             return response
 
 
-@api.route("/reset-password/verify/<token>")
 class PasswordResetToken(Resource):
     def get(self, token):
         if token:
@@ -201,7 +200,6 @@ class PasswordResetToken(Resource):
             return response
 
 
-@api.route("/reset-password/<token>")
 class PasswordResetChangePassword(Resource):
     def get(self, token):
         if token:
@@ -283,3 +281,11 @@ class PasswordResetChangePassword(Resource):
             })
             response.status_code = 400
             return response
+
+
+api.add_resource(Register, "/register")
+api.add_resource(Login, "/login")
+api.add_resource(Logout, "/logout")
+api.add_resource(PasswordResetLink, "/reset")
+api.add_resource(PasswordResetToken, "/reset-password/verify/<token>")
+api.add_resource(PasswordResetChangePassword, "/reset-password/<token>")
