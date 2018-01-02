@@ -110,9 +110,9 @@ class Logout(Resource):
             return response
 
         token = bearer_token.replace("Bearer ", "")
-        decoded_token = User.decode_token(token)
+        decode_response = User.decode_token(token)
 
-        if isinstance(decoded_token, int):
+        if isinstance(decode_response, int):
             already_blacklisted = BlacklistToken.query.filter_by(token=token).first()
 
             if already_blacklisted:
@@ -131,7 +131,7 @@ class Logout(Resource):
             response.status_code = 200
             return response
         response = jsonify({
-            "message": decoded_token
+            "message": decode_response
         })
         response.status_code = 400
         return response
@@ -150,7 +150,7 @@ class PasswordResetLink(Resource):
                 return response
 
             password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
-            reset_url = url_for("auth.password_reset_token",
+            reset_url = url_for("auth.passwordresettoken",
                                 token=password_reset_serializer.dumps(data["email"],
                                                                       salt=os.getenv("RESET_SALT")),
                                 _external=True)
@@ -171,30 +171,20 @@ class PasswordResetLink(Resource):
 
 class PasswordResetToken(Resource):
     def get(self, token):
-        if token:
-            try:
-                password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
-                email = password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT"), max_age=3600)
-
-                token = password_reset_serializer.dumps(email, salt=os.getenv("RESET_SALT_VERIFY"))
-
-                response = jsonify({
-                    "message": "Password Reset Link Verified Successfully",
-                    "verified": True,
-                    "token": token
-                })
-                response.status_code = 200
-                return response
-            except Exception as e:
-                response = jsonify({
-                    "message": "Password Reset Link is invalid, or Expired"
-                })
-                response.status_code = 400
-                return response
-
-        else:
+        try:
+            password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
+            email = password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT"), max_age=3600)
+            token = password_reset_serializer.dumps(email, salt=os.getenv("RESET_SALT_VERIFY"))
             response = jsonify({
-                "message": "Password Reset failed, Please check your input"
+                "message": "Password Reset Link Verified Successfully",
+                "verified": True,
+                "token": token
+            })
+            response.status_code = 200
+            return response
+        except Exception as e:
+            response = jsonify({
+                "message": "Password Reset Link is invalid, or Expired"
             })
             response.status_code = 400
             return response
@@ -221,13 +211,6 @@ class PasswordResetChangePassword(Resource):
                 })
                 response.status_code = 400
                 return response
-
-        else:
-            response = jsonify({
-                "message": "Password Reset failed, Please check your input"
-            })
-            response.status_code = 400
-            return response
 
     def post(self, token):
         data = request.get_json()
