@@ -1,6 +1,6 @@
 [report]
 omit =  
-    */python?.?/*
-    */site-packages/nose/*
+    *designs*
+    *envir*
     *__init__*
 

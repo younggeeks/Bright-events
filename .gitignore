@@ -10,3 +10,8 @@
 env/
 migrations/
 instance/
+.coveragerc
+.env
+.gitignore
+.coverage
+
