@@ -1,5 +1,7 @@
-import jwt
+
 import os
+
+import jwt
 
 from api import db
 import datetime
@@ -64,6 +66,13 @@ class Category(db.Model):
     name = db.Column(db.String, nullable=False)
     events = db.relationship("Event", back_populates="category")
     __tablename__ = "categories"
+
+    def __init__(self, name):
+        self.name = name
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
 
 class BlacklistToken(db.Model):
