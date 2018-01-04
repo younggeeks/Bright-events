@@ -1,4 +1,42 @@
-from flask import jsonify
+from flask import jsonify, request, g
+from six import wraps
+
+from api.models import User
+
+
+def protected_route(f):
+    @wraps(f)
+    def func_wrapper(*args, **kwargs):
+        bearer_token = request.headers.get("Authorization")
+        if not bearer_token:
+            response = jsonify({
+                "message": "Token is missing"
+            })
+            response.status_code = 401
+            return response
+
+        token = bearer_token.replace("Bearer ", "")
+
+        resp = User.decode_token(token)
+
+        if isinstance(resp, int):
+            user = User.query.filter_by(id=resp).first()
+            if not user:
+                response = jsonify({
+                    "message": "User not found "
+                })
+                response.status_code = 404
+                return response
+            g.user = user
+            return f(*args, **kwargs)
+        else:
+            response = jsonify({
+                "message": resp
+            })
+            response.status_code = 401
+            return response
+
+    return func_wrapper
 
 
 def event_parser(event):
