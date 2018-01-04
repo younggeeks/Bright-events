@@ -29,24 +29,16 @@ class Register(Resource):
             return response
         new_user = User.query.filter_by(email=data["email"]).first()
         if not new_user:
-            try:
-                hashed_password = generate_password_hash(data["password"])
-                user = User(public_id=uuid.uuid4(), name=data["name"], email=data["email"], password=hashed_password)
-                token = user.encode_token()
-                user.save()
-                response = jsonify({
-                    "message": "Successfully Registered",
-                    "token": token.decode('UTF-8')
-                })
-                response.status_code = 201
-                return response
-            except Exception as e:
-                print(e)
-                response = jsonify({
-                    "message": "User Registration Failed"
-                })
-                response.status_code = 401
-                return response
+            hashed_password = generate_password_hash(data["password"])
+            user = User(public_id=uuid.uuid4(), name=data["name"], email=data["email"], password=hashed_password)
+            token = user.encode_token()
+            user.save()
+            response = jsonify({
+                "message": "Successfully Registered",
+                "token": token.decode('UTF-8')
+            })
+            response.status_code = 201
+            return response
         else:
             response = jsonify({
                 "message": "User Already Exists, Please Login"
@@ -77,7 +69,6 @@ class Login(Resource):
                 return response
             if check_password_hash(user.password, credentials["password"]):
                 token = user.encode_token()
-                print(token)
                 response = jsonify({
                     "message": "Login successful",
                     "token": token.decode("UTF-8")
@@ -114,7 +105,6 @@ class Logout(Resource):
 
         if isinstance(decode_response, int):
             already_blacklisted = BlacklistToken.query.filter_by(token=token).first()
-
             if already_blacklisted:
                 response = jsonify({
                     "message": "User is already signed out"
@@ -192,75 +182,56 @@ class PasswordResetToken(Resource):
 
 class PasswordResetChangePassword(Resource):
     def get(self, token):
-        if token:
-            try:
-                password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
-                password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT_VERIFY"), max_age=3600)
+        password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
+        password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT_VERIFY"), max_age=3600)
 
-                response = jsonify({
-                    "message": "Password Reset Link Verified Successfully",
-                    "verified": True,
-                    "token": token
-                })
-                response.status_code = 200
-                return response
-            except Exception as e:
-                print(e)
-                response = jsonify({
-                    "message": "Password Reset Link is invalid, or Expired"
-                })
-                response.status_code = 400
-                return response
+        response = jsonify({
+            "message": "Password Reset Link Verified Successfully",
+            "verified": True,
+            "token": token
+        })
+        response.status_code = 200
+        return response
 
     def post(self, token):
         data = request.get_json()
-        if token:
-            try:
-                password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
-                email = password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT_VERIFY"), max_age=3600)
 
-                if "password" in data and "password_confirmation" in data:
-                    if data["password"] != "" and data["password_confirmation"] != "":
-                        if data["password"] == data["password_confirmation"]:
-                            hashed_password = generate_password_hash(data["password"])
-                            user = User.query.filter_by(email=email).first()
-                            user.password = hashed_password
-                            user.save()
-                            response = jsonify({
-                                "message": "Password Reset Successfully"
-                            })
-                            response.status_code = 200
-                            return response
-
-                        else:
-                            response = jsonify({
-                                "message": "Password and Password confirmation do not match"
-                            })
-                            response.status_code = 401
-                            return response
+        password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
+        email = password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT_VERIFY"), max_age=3600)
+        if data:
+            if "password" in data and "password_confirmation" in data:
+                if data["password"] != "" and data["password_confirmation"] != "":
+                    if data["password"] == data["password_confirmation"]:
+                        hashed_password = generate_password_hash(data["password"])
+                        user = User.query.filter_by(email=email).first()
+                        user.password = hashed_password
+                        user.save()
+                        response = jsonify({
+                            "message": "Password Reset Successfully"
+                        })
+                        response.status_code = 200
+                        return response
                     else:
                         response = jsonify({
-                            "message": "Password Reset Failed, All fields are required"
+                            "message": "Password and Password confirmation do not match"
                         })
-                        response.status_code = 400
+                        response.status_code = 401
                         return response
                 else:
                     response = jsonify({
-                        "message": "Password Reset Failed, Please check your input"
+                        "message": "Password Reset Failed, All fields are required"
                     })
                     response.status_code = 400
                     return response
-            except Exception as e:
-                print(e)
+            else:
                 response = jsonify({
-                    "message": "Password Reset Link is invalid, or Expired"
+                    "message": "Password Reset Failed, Please check your input"
                 })
                 response.status_code = 400
                 return response
-
         else:
             response = jsonify({
-                "message": "Password Reset failed, Please check your input"
+                "message": "Password Reset Failed, Please check your input"
             })
             response.status_code = 400
             return response
