@@ -12,7 +12,6 @@ flask_restful
 flask-swagger==0.2.13
 geolocation-python==0.2.2
 gunicorn==19.7.1
-isort==4.2.15
 itsdangerous==0.24
 Jinja2==2.10
 MarkupSafe==1.0
