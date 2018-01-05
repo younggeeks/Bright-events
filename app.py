@@ -15,16 +15,31 @@ api = Api(app)
 
 @app.errorhandler(404)
 def page_not_found(e):
+    """
+    Catches 404 errors and returns json with error information
+    :param e:
+    :return json:
+    """
     return jsonify(error=404, text=str(e)), 404
 
 
 @app.route("/", methods=["GET"])
 def index():
+    """
+    Handles displaying Api documentation
+    :return:
+    """
     return render_template("docs.html")
 
 
 class Register(Resource):
     def post(self):
+        """
+        User registration, It uses list of dictionaries stored in memory to store users
+        Checks for existence of user email and returns 400 if user exists otherwise user is
+        added to the list
+        :return:
+        """
         data = request.get_json()
         user = [user for user in DataMocks.users if user.email == data["email"]]
         if not user:
@@ -46,6 +61,10 @@ class Register(Resource):
 
 class Login(Resource):
     def post(self):
+        """Handles authentication of user , if user credentials match the ones in the list
+            json response is sent with user details otherwise error response is sent
+         """
+
         credentials = request.get_json()
         user = [found_user for found_user in DataMocks.users
                 if found_user.email == credentials["email"]]
@@ -63,6 +82,8 @@ class Login(Resource):
 
 class Logout(Resource):
     def post(self):
+        """Logged in users can logout, credentials are removed from the list, if user doesn't exist
+           Error message will be sent with status of 401 """
         credentials = request.get_json()
         user = [found_user for found_user in
                 DataMocks.users if found_user.email == credentials["email"]]
@@ -86,6 +107,9 @@ class Logout(Resource):
 
 class PasswordReset(Resource):
     def post(self):
+        """Users who have created an account before can reset their password
+           This method checks if an account associated with the email exists , if not
+           Error is sent otherwise it resets the password"""
         data = request.get_json()
         user = [found_user for found_user in DataMocks.users if found_user.email == data["email"]]
         if not user:
@@ -110,6 +134,9 @@ class PasswordReset(Resource):
 
 
 class Events(Resource):
+    """
+    Fetches all events from the data structure
+    """
     def get(self):
         return jsonify({
             "message": "successfully Fetched Events",
@@ -118,6 +145,9 @@ class Events(Resource):
         })
 
     def post(self):
+        """Handles event registration, checks if event with same name is registered first
+           If event exists error message is sent with status 400 otherwise event is added to
+           Events list"""
         data = request.get_json()
         event = [found_event for found_event in DataMocks.events if found_event.name == data["name"]]
         if not event:
@@ -138,6 +168,12 @@ class Events(Resource):
 
 class UserEvents(Resource):
     def get(self, user):
+        """
+        Fetching All events of Specified user, if user doesn't exist an error is sent , otherwise
+        response is sent with message and list of events posted by specified user
+        :param user:
+        :return json:
+        """
         found_users = [found_user for found_user in DataMocks.users if found_user.full_name == user]
 
         if not found_users:
@@ -155,6 +191,12 @@ class UserEvents(Resource):
 
 class EventList(Resource):
     def get(self, event_id):
+        """
+        Fetching Single Event from data structure , if event is not found error message is sent
+        with 404 status otherwise response is sent with message and found event
+        :param event_id:
+        :return:
+        """
         event = [found_event for found_event in DataMocks.events if str(found_event.id) == str(event_id)]
         if not event:
             resp = jsonify({"message": "Event Not Found, Fetch Failed", "status": 404})
@@ -168,6 +210,13 @@ class EventList(Resource):
         })
 
     def put(self, event_id):
+        """
+        Handles updating specified event, uses passed event id to lookup and if an event is not found
+        error is sent with 404, otherwise event is updated according to user input and response is
+        sent with message and updated event
+        :param event_id:
+        :return:
+        """
         data = request.get_json()
         event = [found_event for found_event in DataMocks.events if str(found_event.id) == str(event_id)]
         if not event:
@@ -209,6 +258,12 @@ class EventList(Resource):
         })
 
     def delete(self, event_id):
+        """
+        Handling deletion of specified event , uses event id to lookup , if event with that is is
+        found it is deleted otherwise error response is sent with message and status of 404
+        :param event_id:
+        :return:
+        """
         event_list = [temp_event for temp_event in
                       DataMocks.events if str(temp_event.id) == event_id]
         if not event_list:
@@ -323,9 +378,10 @@ class RSVP(Resource):
 class GetEventByCategory(Resource):
     def get(self, category):
         """
-        Fetching Events by CAtegory
+        Fetching Events by category, if category is not found error is sent with 404 status
+        otherwise response is sent with with list of events in that category
         :param category:
-        :return:
+        :return List<event>:
         """
         found_events = [event for event in DataMocks.events if event.category == category]
 
@@ -345,8 +401,12 @@ class GetEventByCategory(Resource):
 
 class Reports(Resource):
     def get(self, user):
+        """
+        Fetches reports for a specified user 
+        :param user:
+        :return:
+        """
         my_events = [event for event in DataMocks.events if event.user == user]
-
         counter = Counter()
         for event in my_events:
             counter[event.category] += 1
