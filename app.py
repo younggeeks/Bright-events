@@ -402,7 +402,7 @@ class GetEventByCategory(Resource):
 class Reports(Resource):
     def get(self, user):
         """
-        Fetches reports for a specified user 
+        Fetches reports for a specified user
         :param user:
         :return:
         """

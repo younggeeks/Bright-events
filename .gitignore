@@ -14,4 +14,3 @@ instance/
 .env
 .gitignore
 .coverage
-
