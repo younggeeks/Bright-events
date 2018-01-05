@@ -3,8 +3,7 @@ import unittest
 
 import app
 from database.data_mocks import DataMocks
-
-BASE_URL = "http://localhost:5000"
+from settings import BASE_URL
 
 
 class UsersTester(unittest.TestCase):
