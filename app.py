@@ -1,4 +1,3 @@
-import json
 import uuid
 from collections import Counter
 
@@ -33,6 +32,7 @@ def index():
 
 
 class Register(Resource):
+    """handles users registration """
     def post(self):
         """
         User registration, It uses list of dictionaries stored in memory to store users
