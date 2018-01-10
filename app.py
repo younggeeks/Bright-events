@@ -303,7 +303,8 @@ class Attendees(Resource):
             })
 
         return jsonify({
-            "message": "Currently there are no guests registered for {}".format(matching_events[0].name),
+            "message": "Currently there are no"
+                       " guests registered for {}".format(matching_events[0].name),
             "status": 200,
             "attendees": None
         })
@@ -341,7 +342,7 @@ class RSVP(Resource):
             rsvp_events[0]["users"].append(user)
         else:
             DataMocks.rsvps.append({"event_id": event_id, "users": [user]})
-        abort(200, "You've successfully RSVP'ed to {}".format(event[0].name))
+        return make_response(200, "You've successfully RSVP'ed to {}".format(event[0].name))
 
 
 class GetEventByCategory(Resource):

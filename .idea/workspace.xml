@@ -113,8 +113,8 @@
       <file leaf-file-name="app.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3102">
-              <caret line="176" column="26" lean-forward="true" selection-start-line="176" selection-start-column="26" selection-end-line="176" selection-end-column="26" />
+            <state relative-caret-position="352">
+              <caret line="344" column="29" lean-forward="false" selection-start-line="344" selection-start-column="29" selection-end-line="344" selection-end-column="29" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -137,8 +137,8 @@
       <file leaf-file-name="test_events.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/test_events.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="164" column="31" lean-forward="false" selection-start-line="164" selection-start-column="31" selection-end-line="164" selection-end-column="31" />
+            <state relative-caret-position="37">
+              <caret line="125" column="58" lean-forward="false" selection-start-line="125" selection-start-column="54" selection-end-line="125" selection-end-column="58" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -224,6 +224,7 @@
       <find>delete</find>
       <find>signout</find>
       <find>print</find>
+      <find>rsvp</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -256,8 +257,8 @@
         <option value="$PROJECT_DIR$/Events.py" />
         <option value="$PROJECT_DIR$/tests/test_users.py" />
         <option value="$PROJECT_DIR$/helpers.py" />
-        <option value="$PROJECT_DIR$/tests/test_events.py" />
         <option value="$PROJECT_DIR$/database/data_mocks.py" />
+        <option value="$PROJECT_DIR$/tests/test_events.py" />
         <option value="$PROJECT_DIR$/app.py" />
       </list>
     </option>
@@ -844,8 +845,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/test_events.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="164" column="31" lean-forward="false" selection-start-line="164" selection-start-column="31" selection-end-line="164" selection-end-column="31" />
+        <state relative-caret-position="37">
+          <caret line="125" column="58" lean-forward="false" selection-start-line="125" selection-start-column="54" selection-end-line="125" selection-end-column="58" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
@@ -854,8 +855,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3102">
-          <caret line="176" column="26" lean-forward="true" selection-start-line="176" selection-start-column="26" selection-end-line="176" selection-end-column="26" />
+        <state relative-caret-position="352">
+          <caret line="344" column="29" lean-forward="false" selection-start-line="344" selection-start-column="29" selection-end-line="344" selection-end-column="29" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
