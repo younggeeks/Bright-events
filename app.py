@@ -10,6 +10,26 @@ app = Flask(__name__)
 api = Api(app)
 
 
+def get_events_by_id(event_id):
+    return [found_event for found_event in DataMocks.events if str(found_event.id) == str(event_id)]
+
+
+def get_events_by_user(user):
+    return [found_event for found_event in DataMocks.events if str(found_event.user) == str(user)]
+
+
+def get_events_by_category(category):
+    return [found_event for found_event in DataMocks.events if str(found_event.category) == str(category)]
+
+
+def get_user_by_email(email):
+    return [temp_user for temp_user in DataMocks.users if str(temp_user.email) == str(email)]
+
+
+def get_user_by_id(user_id):
+    return [temp_user for temp_user in DataMocks.users if str(temp_user.id) == str(user_id)]
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     """
@@ -121,7 +141,8 @@ class PasswordReset(Resource):
         updated_users.append(user)
         data_mocks = DataMocks()
         data_mocks.update_users(updated_users)
-        return make_response(status=200, message="Password Reset Is Successful")
+        return make_response(status=200,
+                             message="Password Reset Is Successful")
 
 
 class Events(Resource):
@@ -191,7 +212,7 @@ class EventList(Resource):
         :param event_id:
         :return:
         """
-        event = [found_event for found_event in DataMocks.events if str(found_event.id) == str(event_id)]
+        event = get_events_by_id(event_id)
         if not event:
             return make_response(status=404, message="Event Not Found, Fetch Failed")
 
@@ -212,7 +233,7 @@ class EventList(Resource):
         :return:
         """
         data = request.get_json()
-        event = [found_event for found_event in DataMocks.events if str(found_event.id) == str(event_id)]
+        event = get_events_by_id(event_id)
         if not event:
             return make_response(status=404, message="Event Not Found, Update Failed")
 
@@ -315,10 +336,13 @@ class RSVP(Resource):
         :param event_id
         """
         data = request.get_json()
-        event = [temp_event for temp_event in DataMocks.events if str(temp_event.id) == str(event_id)]
-        user = [temp_user for temp_user in DataMocks.users if str(temp_user.id) == str(data["user_id"])]
-        if not event or not user:
-            return make_response(status=404, message="Event or User Not found, RSVP Failed")
+        event = get_events_by_id(event_id)
+
+        if not event:
+            return make_response(status=404, message="Event  Not found, RSVP Failed")
+        user = get_user_by_id(data.get("user_id"))
+        if not user:
+            return make_response(status=404, message=" User Not found, RSVP Failed")
         user = user[0]
         if event[0].user == user.full_name:
             return make_response(status=400, message="You can not RSVP To your own event")
@@ -358,7 +382,7 @@ class GetEventByCategory(Resource):
         :param category:
         :return List<event>:
         """
-        found_events = [event for event in DataMocks.events if event.category == category]
+        found_events = get_events_by_category(category)
         if not found_events:
             return make_response(status=404, message="Category Not found, Fetching Events Failed")
         response = jsonify(
@@ -377,8 +401,7 @@ class Reports(Resource):
         :param user:
         :return:
         """
-        my_events = [event for event in DataMocks.events if event.user == user]
-        print(my_events)
+        my_events = get_events_by_user(user=user)
         counter = Counter()
         for event in my_events:
             counter[event.category] += 1

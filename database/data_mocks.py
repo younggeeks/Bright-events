@@ -3,7 +3,6 @@ from helpers import user_parser, event_parser
 
 
 class DataMocks:
-
     def __init__(self):
         pass
 
@@ -95,23 +94,28 @@ class DataMocks:
         :return parsed_dictionary:
         """
         if data_type == 'users':
-            dict_users = []
-            if data is not None:
-                for user in data:
-                    dict_users.append(user_parser(user))
-                return dict_users
-            else:
-                for user in DataMocks.users:
-                    dict_users.append(user_parser(user))
+            return fetch_users(data)
+        elif data_type == "events":
+            print("data from get_data", data)
+            return fetch_events(data)
 
-                return dict_users
-        else:
-            events_list = []
-            if data is not None:
-                for event in data:
-                    events_list.append(event_parser(event))
-                return events_list
-            else:
-                for event in DataMocks.events:
-                    events_list.append(event_parser(event))
-                return events_list
+
+def fetch_users(data):
+    dict_users = []
+    if data:
+        [dict_users.append(user_parser(user)) for user in data]
+        return dict_users
+    else:
+        [dict_users.append(user_parser(user)) for user in DataMocks.users]
+        return dict_users
+
+
+def fetch_events(data):
+    print("data is ", data)
+    events_list = []
+    if data:
+        [events_list.append(event_parser(event)) for event in data]
+        return events_list
+    else:
+        [events_list.append(event_parser(event)) for event in DataMocks.events]
+        return events_list

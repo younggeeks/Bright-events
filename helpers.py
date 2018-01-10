@@ -26,6 +26,7 @@ def user_parser(user):
     return new_user
 
 
+
 def failed_login():
     """
     helper function used to return the message when login fails
