@@ -2,93 +2,93 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e270f20e-ebbf-40f0-8538-892e8164e941" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-grid.min.css.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/bootstrap.bundle.min.js.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/font-awesome/css/font-awesome.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/lib/python2.7/site-packages/pip/locations.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/custom/main.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/font-awesome/fonts/fontawesome-webfont.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/bin/easy_install" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/my_events.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/font-awesome/fonts/fontawesome-webfont.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/pip-selfcheck.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/img/logo.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/tests/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/apiary.apib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/database/data_mocks.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/Login Page.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/lib/python2.7/site-packages/setuptools/command/launcher manifest.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-reboot.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/lib/python2.7/site-packages/pip/__init__.py" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/bootstrap.bundle.js.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/event details.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/Deletion Confirmation (Alternate 238f).png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.coveragerc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/bootstrap.bundle.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/font-awesome/css/font-awesome.min.css" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/Chart.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/bootstrap.js.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/New Event Page.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/lib/python2.7/site-packages/setuptools/script (dev).tmpl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/requirements" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/signup.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/dredd.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/material_assets/material.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/font-awesome/fonts/fontawesome-webfont.woff" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/Edit Event  Page (Alternate 238f).png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/bootstrap.bundle.min.js" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/material_assets/material.min.css" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/api/database/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/input.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-reboot.css.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/bootstrap.min.js.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/helpers.py" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-reboot.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/settings.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/Edit Event  Page.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/app.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/bin/pip2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/invites.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/bootstrap.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-grid.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/lib/python2.7/site-packages/pip/_vendor/requests/hooks.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/login.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/Registration Page.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/bootstrap.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-reboot.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.travis.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/Edit Event  Page (Alternate 238f).png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/font-awesome/fonts/FontAwesome.otf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/lib/python2.7/site-packages/pip/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-reboot.min.css.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Procfile" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.codeclimate.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/lib/python2.7/lib-dynload" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-grid.css.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-grid.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/database/data_mocks.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/New Event Page.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/lib/python2.7/site-packages/setuptools/script (dev).tmpl" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/lib/python2.7/config" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/tests/users_tests.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap.css.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/bootstrap.bundle.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/database/models.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/bin/pip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/font-awesome/fonts/fontawesome-webfont.woff2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/dashboard.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/include/python2.7" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/dashboard.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/lib/python2.7/site-packages/pip/locations.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/app.py" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/api/tests/events_tests.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/lib/python2.7/encodings" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/tests/users_tests.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/database/models.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.codeclimate.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-grid.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/signup.html" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/custom/main.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/All Events Page (Alternate 238f).png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/apiary.apib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/.coverage" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/dashboard.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/lib/python2.7/encodings" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/Registration Page.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/lib/python2.7/lib-dynload" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/bootstrap.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/login.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/bootstrap.js.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/requirements" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/font-awesome/fonts/fontawesome-webfont.eot" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/font-awesome/fonts/fontawesome-webfont.ttf" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/font-awesome/fonts/FontAwesome.otf" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/font-awesome/fonts/fontawesome-webfont.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/bin/pip2.7" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/bin/easy_install-2.7" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap.min.css.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/font-awesome/css/font-awesome.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/Readme.md" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/img/wedding.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/lib/python2.7/site-packages/setuptools/command/launcher manifest.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/font-awesome/fonts/fontawesome-webfont.woff" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-grid.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.coveragerc" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/dredd.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/my_events.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/input.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/font-awesome/fonts/fontawesome-webfont.woff2" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/bootstrap.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/dashboard.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/tests/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/bin/pip" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-grid.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/bin/easy_install-2.7" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/apiary.apib" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/Readme.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/settings.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/lib/python2.7/site-packages/pip/_vendor/requests/hooks.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/event details.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-reboot.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/bootstrap.bundle.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/Login Page.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/bin/pip2" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/img/logo.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/include/python2.7" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-reboot.min.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/bin/easy_install" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap.min.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-reboot.min.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/custom/main.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/.coverage" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/pip-selfcheck.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/env/bin/pip2.7" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/Deletion Confirmation (Alternate 238f).png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/bootstrap.bundle.min.js.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/font-awesome/css/font-awesome.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/material_assets/material.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/helpers.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/api/apiary.apib" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Procfile" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/invites.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/Edit Event  Page.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/css/bootstrap-grid.min.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/UI/assets/js/bootstrap.min.js.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/designs/wireframes/All Events Page (Alternate 238f).png" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.coverage" afterPath="$PROJECT_DIR$/.coverage" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -110,7 +110,7 @@
       <file leaf-file-name="requirements.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/requirements.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
+            <state relative-caret-position="0">
               <caret line="20" column="16" lean-forward="false" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
               <folding />
             </state>
@@ -129,11 +129,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_events.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="test_events.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/test_events.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="571">
+              <caret line="179" column="0" lean-forward="false" selection-start-line="179" selection-start-column="0" selection-end-line="179" selection-end-column="0" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -156,28 +156,18 @@
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="12" column="5" lean-forward="false" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
+            <state relative-caret-position="168">
+              <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".travis.yml" pinned="false" current-in-tab="true">
+      <file leaf-file-name=".travis.yml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.travis.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="11" column="1" lean-forward="false" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="315">
+              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -246,6 +236,7 @@
         <option value="$PROJECT_DIR$/app.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/.travis.yml" />
+        <option value="$PROJECT_DIR$/.codeclimate.yml" />
       </list>
     </option>
   </component>
@@ -262,10 +253,10 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="84" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="82" />
     <option name="y" value="23" />
-    <option name="width" value="1280" />
+    <option name="width" value="1281" />
     <option name="height" value="732" />
   </component>
   <component name="ProjectLevelVcsManager">
@@ -286,6 +277,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -293,17 +286,10 @@
               <item name="Bright-events" type="b2602c69:ProjectViewProjectNode" />
               <item name="Bright-events" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="Bright-events" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Bright-events" type="462c0819:PsiDirectoryNode" />
-              <item name="tests" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -563,7 +549,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="84" y="23" width="1280" height="732" extended-state="0" />
+    <frame x="0" y="23" width="1280" height="732" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -583,7 +569,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32880846" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287879" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -600,7 +586,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/run.py" />
     <entry file="file://$PROJECT_DIR$/.env" />
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
@@ -735,19 +720,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/test_events.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
+        <state relative-caret-position="0">
           <caret line="20" column="16" lean-forward="false" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
           <folding />
         </state>
@@ -775,8 +750,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="12" column="5" lean-forward="false" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
+        <state relative-caret-position="168">
+          <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
           <folding />
         </state>
       </provider>
@@ -793,7 +768,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -807,9 +781,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="11" column="1" lean-forward="false" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
+        <state relative-caret-position="315">
+          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.codeclimate.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_events.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="571">
+          <caret line="179" column="0" lean-forward="false" selection-start-line="179" selection-start-column="0" selection-end-line="179" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
