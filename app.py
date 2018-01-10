@@ -1,8 +1,8 @@
 import uuid
 from collections import Counter
 
-from flask import Flask, request, jsonify, redirect, render_template
-from flask_restful import Resource, Api, reqparse
+from flask import Flask, request, jsonify, render_template
+from flask_restful import Resource, Api
 
 from database.data_mocks import DataMocks
 from database.models import User, Event
