@@ -1,9 +1,7 @@
 import uuid
 from collections import Counter
-
 from flask import Flask, request, jsonify, render_template
 from flask_restful import Resource, Api
-
 from database.data_mocks import DataMocks
 from database.models import User, Event
 from helpers import event_parser, user_parser, failed_login, make_response
@@ -36,8 +34,10 @@ class Register(Resource):
 
     def post(self):
         """
-        User registration, It uses list of dictionaries stored in memory to store users
-        Checks for existence of user email and returns 400 if user exists otherwise user is
+        User registration, It uses list of
+        dictionaries stored in memory to store users
+        Checks for existence of user email and returns
+        400 if user exists otherwise user is
         added to the list
         :return:
         """
@@ -53,15 +53,18 @@ class Register(Resource):
             )
             response.status_code = 201
             return response
-        return make_response(status=400, message="Account With Email {} Already Exists".format(data["email"]))
+        return make_response(status=400,
+                             message="Account With Email {} Already Exists".format(data["email"]))
 
 
 class Login(Resource):
     def post(self):
-        """Handles authentication of user , if user credentials match the ones in the list
-            json response is sent with user details otherwise error response is sent
+        """
+        Handles authentication of user ,
+         if user credentials match the ones in the list
+         json response is sent with user details otherwise
+         error response is sent
          """
-
         credentials = request.get_json()
         user = [found_user for found_user in DataMocks.users
                 if found_user.email == credentials["email"]]
@@ -80,8 +83,9 @@ class Login(Resource):
 class Logout(Resource):
     def post(self):
         """
-        Logged in users can logout, credentials are removed from the list, if user doesn't exist
-           Error message will be sent with status of 401
+        Logged in users can logout, credentials are removed
+        from the list, if user doesn't exist
+        Error message will be sent with status of 401
         :return:
         """
         credentials = request.get_json()
@@ -92,20 +96,23 @@ class Logout(Resource):
         user = user_parser(user[0])
         if credentials["password"] not in user.values():
             return make_response(status=401, message="User is already Signed out")
-
         return make_response(status=200, message="Sign out Successfully")
 
 
 class PasswordReset(Resource):
     def post(self):
-        """Users who have created an account before can reset their password
-           This method checks if an account associated with the email exists , if not
+        """Users who have created an account
+           before can reset their password
+           This method checks if an account
+           associated with the email exists , if not
            Error is sent otherwise it resets the password"""
         data = request.get_json()
-        user = [found_user for found_user in DataMocks.users if found_user.email == data["email"]]
+        user = [found_user for found_user in
+                DataMocks.users if found_user.email == data["email"]]
         if not user:
-            return make_response(status=401, message="Email {} is not associated with any Account,"
-                                                     " Reset Failed".format(data["email"]))
+            return make_response(status=401,
+                                 message="Email {} is not associated with any Account,"
+                                         " Reset Failed".format(data["email"]))
         user = user[0]
         user.password = data["password"]
 
@@ -114,7 +121,6 @@ class PasswordReset(Resource):
         updated_users.append(user)
         data_mocks = DataMocks()
         data_mocks.update_users(updated_users)
-
         return make_response(status=200, message="Password Reset Is Successful")
 
 
@@ -131,11 +137,14 @@ class Events(Resource):
         })
 
     def post(self):
-        """Handles event registration, checks if event with same name is registered first
-           If event exists error message is sent with status 400 otherwise event is added to
+        """Handles event registration,
+            checks if event with same name is registered first
+           If event exists error message is sent with status
+            400 otherwise event is added to
            Events list"""
         data = request.get_json()
-        event = [found_event for found_event in DataMocks.events if found_event.name == data["name"]]
+        event = [found_event for found_event in DataMocks.events
+                 if found_event.name == data["name"]]
         if not event:
             event = Event(id=uuid.uuid4(), price=data["price"], name=data["name"],
                           address=data["address"], start_date=data["start_date"],
@@ -153,8 +162,10 @@ class Events(Resource):
 class UserEvents(Resource):
     def get(self, user):
         """
-        Fetching All events of Specified user, if user doesn't exist an error is sent , otherwise
-        response is sent with message and list of events posted by specified user
+        Fetching All events of Specified user,
+         if user doesn't exist an error is sent ,
+          otherwise response is sent with message
+          and list of events posted by specified user
         :param user:
         :return json:
         """
@@ -173,8 +184,10 @@ class UserEvents(Resource):
 class EventList(Resource):
     def get(self, event_id):
         """
-        Fetching Single Event from data structure , if event is not found error message is sent
-        with 404 status otherwise response is sent with message and found event
+        Fetching Single Event from data structure ,
+         if event is not found error message is sent
+        with 404 status otherwise response is sent
+         with message and found event
         :param event_id:
         :return:
         """
@@ -190,8 +203,10 @@ class EventList(Resource):
 
     def put(self, event_id):
         """
-        Handles updating specified event, uses passed event id to lookup and if an event is not found
-        error is sent with 404, otherwise event is updated according to user input and response is
+        Handles updating specified event, uses passed
+        event id to lookup and if an event is not found
+        error is sent with 404, otherwise event is updated
+         according to user input and response is
         sent with message and updated event
         :param event_id:
         :return:
@@ -236,8 +251,10 @@ class EventList(Resource):
 
     def delete(self, event_id):
         """
-        Handling deletion of specified event , uses event id to lookup , if event with that is is
-        found it is deleted otherwise error response is sent with message and status of 404
+        Handling deletion of specified event ,
+        uses event id to lookup , if event with that is is
+        found it is deleted otherwise error response is
+        sent with message and status of 404
         :param event_id:
         :return:
         """
@@ -256,7 +273,8 @@ class EventList(Resource):
 class Attendees(Resource):
     def get(self, event_id):
         """
-        Fetching Event Guests from Our Data Structure, if event is not found 404 error is returned otherwise
+        Fetching Event Guests from Our Data Structure,
+         if event is not found 404 error is returned otherwise
         list of attendees is returned
         :param event_id:
         :return List<attendees>:
@@ -288,43 +306,36 @@ class RSVP(Resource):
     """
 
     def post(self, event_id):
-
         """
-        Inputs user_id and event_id , Before user can rsvp we check to see if event exists and if user exists
-        if not 404 status code is set and error is returned , other wise user can rsvp to an event
+        Inputs user_id and event_id , Before user can rsvp
+         we check to see if event exists and if user exists
+        if not 404 status code is set and error is returned
+         , other wise user can rsvp to an event
         :return json response :
         :param event_id
         """
         data = request.get_json()
         event = [temp_event for temp_event in DataMocks.events if str(temp_event.id) == str(event_id)]
-        if not event:
-            return make_response(status=404, message="Event Not found, RSVP Failed")
         user = [temp_user for temp_user in DataMocks.users if str(temp_user.id) == str(data["user_id"])]
-        if not user:
-            return make_response(status=404, message="User Not found, RSVP Failed")
+        if not event or not user:
+            return make_response(status=404, message="Event or User Not found, RSVP Failed")
         user = user[0]
-
         if event[0].user == user.full_name:
             return make_response(status=400, message="You can not RSVP To your own event")
-
         # checking if event exists in rsvp array
         rsvp_events = [found_event for found_event in DataMocks.rsvps if str(found_event["event_id"]) == str(event_id)]
-
         # new_user = User(id=user.id, full_name=user.full_name, email=user.email, password=user.password)
         # if event has at least one guest  we fetch guests to check if our current guest has already rsvp'ed
         if rsvp_events:
             # we get all guests from that event
             event_guests = [guest for guest in rsvp_events[0]["users"] if str(guest.id) == str(user.id)]
-
             # we check to see the user who wants to rsvp is existing guest
             existing_users = [found_user for found_user in event_guests if str(found_user.id) == str(user.id)]
             if existing_users:
                 return make_response(status=400,
                                      message="Your name is already in guest list of  {}".format(event[0].name))
             rsvp_events[0]["users"].append(user)
-
         else:
-
             DataMocks.rsvps.append(
                 {
                     "event_id": event_id,
@@ -340,16 +351,16 @@ class RSVP(Resource):
 class GetEventByCategory(Resource):
     def get(self, category):
         """
-        Fetching Events by category, if category is not found error is sent with 404 status
-        otherwise response is sent with with list of events in that category
+        Fetching Events by category, if
+         category is not found error is sent with 404 status
+        otherwise response is sent with
+         with list of events in that category
         :param category:
         :return List<event>:
         """
         found_events = [event for event in DataMocks.events if event.category == category]
-
         if not found_events:
             return make_response(status=404, message="Category Not found, Fetching Events Failed")
-
         response = jsonify(
             {
                 "message": "Successfully Fetched events",
@@ -378,7 +389,6 @@ class Reports(Resource):
             [categories.append(category) for category in counter.keys()]
             # fetch counts  from events and use them as titles for graph
             [counts.append(num) for num in counter.values()]
-
         response = jsonify({
             "categories": categories,
             "values": counts
