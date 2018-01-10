@@ -126,7 +126,7 @@ class UsersTester(unittest.TestCase):
                                  data=json.dumps(credentials), content_type='application/json')
 
         # testing if Login is unsuccessful
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
 
     def test_password_reset_unsuccessful(self):
         credentials = {

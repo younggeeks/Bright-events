@@ -127,13 +127,12 @@ class EventTester(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_jsuccessful_rsvp(self):
-        event_id = 987
+        event_id = 5879
         data = {
             "user_id": 4
         }
         response = self.app.post("{}/api/v1/events/{}/rsvp".format(BASE_URL, event_id),
                                  data=json.dumps(data), content_type='application/json')
-
         self.assertEqual(response.status_code, 200)
 
     def test_j_rsvp_name_exists(self):
@@ -149,7 +148,7 @@ class EventTester(unittest.TestCase):
     def test_kretrieve_guest_successful(self):
         event_id = 987
         response = self.app.get("{}/api/v1/events/{}/guests".format(BASE_URL, event_id))
-        data = json.loads(response.get_data())
+        json.loads(response.get_data())
         self.assertEqual(response.status_code, 200)
 
     def test_lretrieve_guest_unsuccessful(self):
