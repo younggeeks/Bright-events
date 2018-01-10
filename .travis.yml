@@ -12,4 +12,4 @@ script:
 
 after_success:  
   - coveralls
-  - coverage report
+  - codeclimate-test-reporter --file .coverage
