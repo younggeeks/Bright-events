@@ -6,7 +6,7 @@ from flask_restful import Resource, Api
 
 from database.data_mocks import DataMocks
 from database.models import User, Event
-from helpers import event_parser, user_parser, failed_login
+from helpers import event_parser, user_parser, failed_login, make_response
 
 app = Flask(__name__)
 api = Api(app)
@@ -33,6 +33,7 @@ def index():
 
 class Register(Resource):
     """handles users registration """
+
     def post(self):
         """
         User registration, It uses list of dictionaries stored in memory to store users
@@ -52,11 +53,7 @@ class Register(Resource):
             )
             response.status_code = 201
             return response
-        resp = jsonify(
-            {"message": "Account With Email {} Already Exists".format(data["email"])})
-        resp.status_code = 400
-
-        return resp
+        return make_response(status=400, message="Account With Email {} Already Exists".format(data["email"]))
 
 
 class Login(Resource):
@@ -82,27 +79,21 @@ class Login(Resource):
 
 class Logout(Resource):
     def post(self):
-        """Logged in users can logout, credentials are removed from the list, if user doesn't exist
-           Error message will be sent with status of 401 """
+        """
+        Logged in users can logout, credentials are removed from the list, if user doesn't exist
+           Error message will be sent with status of 401
+        :return:
+        """
         credentials = request.get_json()
         user = [found_user for found_user in
                 DataMocks.users if found_user.email == credentials["email"]]
         if not user:
-            resp = jsonify({"message": "User is already Signed out"})
-            resp.status_code = 401
-            return resp
-
+            return make_response(status=401, message="User is already Signed out")
         user = user_parser(user[0])
-
         if credentials["password"] not in user.values():
-            resp = jsonify({"message": "User is already Signed out"})
-            resp.status_code = 401
-            return resp
+            return make_response(status=401, message="User is already Signed out")
 
-        # destroying session
-        resp = jsonify({"message": "Sign out Successfully"})
-        resp.status_code = 200
-        return resp
+        return make_response(status=200, message="Sign out Successfully")
 
 
 class PasswordReset(Resource):
@@ -113,30 +104,25 @@ class PasswordReset(Resource):
         data = request.get_json()
         user = [found_user for found_user in DataMocks.users if found_user.email == data["email"]]
         if not user:
-            resp = jsonify({"message": "Email {} is not associated with any Account,"
-                                       " Reset Failed".format(data["email"])})
-            resp.status_code = 401
-            return resp
-
+            return make_response(status=401, message="Email {} is not associated with any Account,"
+                                                     " Reset Failed".format(data["email"]))
         user = user[0]
         user.password = data["password"]
 
         updated_users = [temp_user for temp_user in
                          DataMocks.users if str(temp_user.email) != str(data["email"])]
         updated_users.append(user)
-
         data_mocks = DataMocks()
         data_mocks.update_users(updated_users)
 
-        resp = jsonify({"message": "Password Reset Is Successful"})
-        resp.status_code = 201
-        return resp
+        return make_response(status=200, message="Password Reset Is Successful")
 
 
 class Events(Resource):
     """
     Fetches all events from the data structure
     """
+
     def get(self):
         return jsonify({
             "message": "successfully Fetched Events",
@@ -161,9 +147,7 @@ class Events(Resource):
             resp.status_code = 201
             return resp
         else:
-            resp = jsonify({"message": "Event Name Must Be unique"})
-            resp.status_code = 400
-            return resp
+            return make_response(status=400, message="Event Name Must Be unique")
 
 
 class UserEvents(Resource):
@@ -177,12 +161,9 @@ class UserEvents(Resource):
         found_users = [found_user for found_user in DataMocks.users if found_user.full_name == user]
 
         if not found_users:
-            resp = jsonify({"message": "User Not Found, Fetch Failed"})
-            resp.status_code = 404
-            return resp
+            return make_response(status=404, message="User Not Found, Fetch Failed")
 
         user_events = [found_event for found_event in DataMocks.events if str(found_event.user) == str(user)]
-
         resp = jsonify(
             {"message": "Successfully Fetched Events", "events": DataMocks.get_data("events", data=user_events)})
         resp.status_code = 200
@@ -199,9 +180,7 @@ class EventList(Resource):
         """
         event = [found_event for found_event in DataMocks.events if str(found_event.id) == str(event_id)]
         if not event:
-            resp = jsonify({"message": "Event Not Found, Fetch Failed", "status": 404})
-            resp.status_code = 404
-            return resp
+            return make_response(status=404, message="Event Not Found, Fetch Failed")
 
         return jsonify({
             "message": "Event Fetch Successfully",
@@ -220,9 +199,7 @@ class EventList(Resource):
         data = request.get_json()
         event = [found_event for found_event in DataMocks.events if str(found_event.id) == str(event_id)]
         if not event:
-            resp = jsonify({"message": "Event Not Found, Update Failed", "status": 404})
-            resp.status_code = 404
-            return resp
+            return make_response(status=404, message="Event Not Found, Update Failed")
 
         event = event[0]
 
@@ -267,18 +244,13 @@ class EventList(Resource):
         event_list = [temp_event for temp_event in
                       DataMocks.events if str(temp_event.id) == event_id]
         if not event_list:
-            response = jsonify({"message": "Event ID Not Found, Deletion Failed"})
-            response.status_code = 404
-            return response
+            return make_response(status=404, message="Event ID Not Found, Deletion Failed")
 
         updated_events = [event_to_remove for event_to_remove in DataMocks.events
                           if str(event_to_remove.id) != str(event_id)]
         data_mocks = DataMocks()
         data_mocks.update_events(updated_events)
-
-        response = jsonify({"message": "Event Deleted Successfully", "status": 200})
-        response.status_code = 200
-        return response
+        return make_response(status=200, message="Event Deleted Successfully")
 
 
 class Attendees(Resource):
@@ -292,9 +264,7 @@ class Attendees(Resource):
         matching_events = [found_event for found_event in DataMocks.events if str(found_event.id) == str(event_id)]
 
         if not matching_events:
-            resp = jsonify({"message": "Event Not found, Retrieval Failed"})
-            resp.status_code = 404
-            return resp
+            return make_response(status=404, message="Event Not found, Retrieval Failed")
         guests = [event for event in DataMocks.rsvps if str(event["event_id"]) == str(event_id)]
         if guests:
             guests = guests[0]
@@ -328,20 +298,14 @@ class RSVP(Resource):
         data = request.get_json()
         event = [temp_event for temp_event in DataMocks.events if str(temp_event.id) == str(event_id)]
         if not event:
-            response = jsonify({"message": "Event Not found, RSVP Failed"})
-            response.status_code = 404
-            return response
+            return make_response(status=404, message="Event Not found, RSVP Failed")
         user = [temp_user for temp_user in DataMocks.users if str(temp_user.id) == str(data["user_id"])]
         if not user:
-            response = jsonify({"message": "User Not found, RSVP Failed"})
-            response.status_code = 404
-            return response
+            return make_response(status=404, message="User Not found, RSVP Failed")
         user = user[0]
 
         if event[0].user == user.full_name:
-            response = jsonify({"message": "You can not RSVP To your own event", "owner": True})
-            response.status_code = 400
-            return response
+            return make_response(status=400, message="You can not RSVP To your own event")
 
         # checking if event exists in rsvp array
         rsvp_events = [found_event for found_event in DataMocks.rsvps if str(found_event["event_id"]) == str(event_id)]
@@ -355,10 +319,8 @@ class RSVP(Resource):
             # we check to see the user who wants to rsvp is existing guest
             existing_users = [found_user for found_user in event_guests if str(found_user.id) == str(user.id)]
             if existing_users:
-                return jsonify({
-                    "message": "Your name is already in guest list of  {}".format(event[0].name),
-                    "status": 400
-                })
+                return make_response(status=400,
+                                     message="Your name is already in guest list of  {}".format(event[0].name))
             rsvp_events[0]["users"].append(user)
 
         else:
@@ -386,9 +348,7 @@ class GetEventByCategory(Resource):
         found_events = [event for event in DataMocks.events if event.category == category]
 
         if not found_events:
-            response = jsonify({"message": "Category Not found, Fetching Events Failed"})
-            response.status_code = 404
-            return response
+            return make_response(status=404, message="Category Not found, Fetching Events Failed")
 
         response = jsonify(
             {
@@ -407,17 +367,17 @@ class Reports(Resource):
         :return:
         """
         my_events = [event for event in DataMocks.events if event.user == user]
+        print(my_events)
         counter = Counter()
         for event in my_events:
             counter[event.category] += 1
         categories = []
         counts = []
         if counter:
-            for category in counter.keys():
-                categories.append(category)
-
-            for num in counter.values():
-                counts.append(num)
+            # fetch categories from events and use them as titles for graph
+            [categories.append(category) for category in counter.keys()]
+            # fetch counts  from events and use them as titles for graph
+            [counts.append(num) for num in counter.values()]
 
         response = jsonify({
             "categories": categories,
