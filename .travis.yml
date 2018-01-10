@@ -8,8 +8,8 @@ install:
   - pip install codeclimate-test-reporter
 # command to run tests
 script:
-  - nosetests -w tests
- 
+  - nosetests --rednose tests/test_events.py tests/test_users.py --with-coverage
+
 after_success:  
   - coveralls
   - coverage report
