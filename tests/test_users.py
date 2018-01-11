@@ -1,14 +1,14 @@
 import json
 import unittest
-
 import app
+from config.config import environments
 from database.data_mocks import DataMocks
-from settings import BASE_URL
 
 
 class UsersTester(unittest.TestCase):
     def setUp(self):
         self.app = app.app.test_client()
+        self.BASE_URL = environments["testing"].BASE_URL
         app.app.testing = True
 
     def test_register_successful(self):
@@ -21,7 +21,7 @@ class UsersTester(unittest.TestCase):
 
         # testing if it returns correct number of users in our list
         self.assertEqual(len(DataMocks.users), 6)
-        response = self.app.post("{}/api/v1/auth/register".format(BASE_URL),
+        response = self.app.post("{}/api/v1/auth/register".format(self.BASE_URL),
                                  data=json.dumps(user), content_type='application/json')
         # testing if it returns correct number after inserting
         self.assertEqual(len(DataMocks.users), 7)
@@ -38,7 +38,7 @@ class UsersTester(unittest.TestCase):
 
         # testing if it returns correct number of users in our list
         self.assertEqual(len(DataMocks.users), 6)
-        response = self.app.post("{}/api/v1/auth/register".format(BASE_URL),
+        response = self.app.post("{}/api/v1/auth/register".format(self.BASE_URL),
                                  data=json.dumps(user), content_type='application/json')
 
         # testing if it returns the same number after failed registration
@@ -53,7 +53,7 @@ class UsersTester(unittest.TestCase):
             "password": "secret",
         }
 
-        response = self.app.post("{}/api/v1/auth/login".format(BASE_URL),
+        response = self.app.post("{}/api/v1/auth/login".format(self.BASE_URL),
                                  data=json.dumps(credentials), content_type='application/json')
 
         # testing if Login is successful
@@ -65,7 +65,7 @@ class UsersTester(unittest.TestCase):
             "password": "secret",
         }
 
-        response = self.app.post("{}/api/v1/auth/login".format(BASE_URL),
+        response = self.app.post("{}/api/v1/auth/login".format(self.BASE_URL),
                                  data=json.dumps(credentials), content_type='application/json')
 
         # testing if Login is unsuccessful
@@ -77,7 +77,7 @@ class UsersTester(unittest.TestCase):
             "password": "secretj",
         }
 
-        response = self.app.post("{}/api/v1/auth/login".format(BASE_URL),
+        response = self.app.post("{}/api/v1/auth/login".format(self.BASE_URL),
                                  data=json.dumps(credentials), content_type='application/json')
 
         # testing if Login is unsuccessful
@@ -89,7 +89,7 @@ class UsersTester(unittest.TestCase):
             "password": "secret",
         }
 
-        response = self.app.post("{}/api/v1/auth/logout".format(BASE_URL),
+        response = self.app.post("{}/api/v1/auth/logout".format(self.BASE_URL),
                                  data=json.dumps(credentials), content_type='application/json')
 
         # testing if Login is unsuccessful
@@ -100,7 +100,7 @@ class UsersTester(unittest.TestCase):
             "email": "younggeeks101@gmail.comw",
             "password": "secret",
         }
-        response = self.app.post("{}/api/v1/auth/logout".format(BASE_URL),
+        response = self.app.post("{}/api/v1/auth/logout".format(self.BASE_URL),
                                  data=json.dumps(credentials), content_type='application/json')
 
         # testing if Login is unsuccessful
@@ -111,7 +111,7 @@ class UsersTester(unittest.TestCase):
             "email": "younggeeks101@gmail.com",
             "password": "secretdfd",
         }
-        response = self.app.post("{}/api/v1/auth/logout".format(BASE_URL),
+        response = self.app.post("{}/api/v1/auth/logout".format(self.BASE_URL),
                                  data=json.dumps(credentials), content_type='application/json')
 
         # testing if Login is unsuccessful
@@ -122,7 +122,7 @@ class UsersTester(unittest.TestCase):
             "email": "younggeeks101@gmail.com",
             "password": "secretd",
         }
-        response = self.app.post("{}/api/v1/auth/reset-password".format(BASE_URL),
+        response = self.app.post("{}/api/v1/auth/reset-password".format(self.BASE_URL),
                                  data=json.dumps(credentials), content_type='application/json')
 
         # testing if Login is unsuccessful
@@ -134,7 +134,7 @@ class UsersTester(unittest.TestCase):
             "password": "secretd",
         }
 
-        response = self.app.post("{}/api/v1/auth/reset-password".format(BASE_URL),
+        response = self.app.post("{}/api/v1/auth/reset-password".format(self.BASE_URL),
                                  data=json.dumps(credentials), content_type='application/json')
         # testing if Login is unsuccessful
         self.assertEqual(response.status_code, 401)
