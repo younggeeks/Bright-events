@@ -130,8 +130,7 @@ class Logout(Resource):
         :return:
         """
         credentials = request.get_json()
-        user = [found_user for found_user in
-                DataMocks.users if found_user.email == credentials["email"]]
+        user = get_user_by_email(credentials["email"])
         if not user:
             return make_response(status=401, message="User is already Signed out")
         user = user_parser(user[0])
