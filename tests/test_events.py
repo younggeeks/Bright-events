@@ -1,28 +1,26 @@
 import json
 import unittest
+
+from config.config import environments
 from database.data_mocks import DataMocks
 import app
-from settings import BASE_URL
-
-
-class UsersTester(unittest.TestCase):
-    pass
 
 
 class EventTester(unittest.TestCase):
     def setUp(self):
+        self.BASE_URL = environments["testing"].BASE_URL
         self.app = app.app.test_client()
         app.app.testing = True
 
     def test_afetch_events(self):
-        response = self.app.get("{}/api/v1/events".format(BASE_URL))
+        response = self.app.get("{}/api/v1/events".format(self.BASE_URL))
         data = json.loads(response.get_data())
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(data["events"]), 5)
 
     def test_afetch_reports(self):
         user = "sam"
-        response = self.app.get("{}/api/v1/events/{}/charts".format(BASE_URL, user))
+        response = self.app.get("{}/api/v1/events/{}/charts".format(self.BASE_URL, user))
         self.assertEqual(response.status_code, 200)
 
     def test_bsave_event_successfully(self):
@@ -40,7 +38,7 @@ class EventTester(unittest.TestCase):
 
         # testing if it returns number of events in our list
         self.assertEqual(len(DataMocks.events), 5)
-        response = self.app.post("{}/api/v1/events".format(BASE_URL),
+        response = self.app.post("{}/api/v1/events".format(self.BASE_URL),
                                  data=json.dumps(event), content_type='application/json')
 
         # testing if adding event is successful
@@ -61,7 +59,7 @@ class EventTester(unittest.TestCase):
             "price": "Free",
             "category": " Wedding"
         }
-        response = self.app.post("{}/api/v1/events".format(BASE_URL),
+        response = self.app.post("{}/api/v1/events".format(self.BASE_URL),
                                  data=json.dumps(event), content_type='application/json')
         self.assertEqual(response.status_code, 400)
 
@@ -77,7 +75,7 @@ class EventTester(unittest.TestCase):
             "price": "frees",
             "description": "awesome event You would'nt want to miss it"
         }
-        response = self.app.put("{}/api/v1/events/{}".format(BASE_URL, event["id"]),
+        response = self.app.put("{}/api/v1/events/{}".format(self.BASE_URL, event["id"]),
                                 data=json.dumps(event), content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
@@ -92,23 +90,23 @@ class EventTester(unittest.TestCase):
             "user": "Samaki",
             "description": "awesome event You would'nt want to miss it"
         }
-        response = self.app.put("{}/api/v1/events/{}".format(BASE_URL, event["id"]),
+        response = self.app.put("{}/api/v1/events/{}".format(self.BASE_URL, event["id"]),
                                 data=json.dumps(event), content_type='application/json')
         self.assertEqual(response.status_code, 404)
 
     def test_gdelete_successful(self):
         event_id = 9494
-        response = self.app.delete("{}/api/v1/events/{}".format(BASE_URL, event_id))
+        response = self.app.delete("{}/api/v1/events/{}".format(self.BASE_URL, event_id))
         self.assertEqual(response.status_code, 200)
 
     def test_hdelete_wrong_id(self):
         event_id = "9494fds"
-        response = self.app.delete("{}/api/v1/events/{}".format(BASE_URL, event_id))
+        response = self.app.delete("{}/api/v1/events/{}".format(self.BASE_URL, event_id))
         self.assertEqual(response.status_code, 404)
 
     def test_irsvp_wrong_id(self):
         event_id = "9494fds"
-        response = self.app.post("{}/api/v1/events/{}/rsvp".format(BASE_URL, event_id))
+        response = self.app.post("{}/api/v1/events/{}/rsvp".format(self.BASE_URL, event_id))
         self.assertEqual(response.status_code, 404)
 
     def test_zrsvp_correct_id(self):
@@ -116,13 +114,14 @@ class EventTester(unittest.TestCase):
         data = {
             "user_id": 4
         }
-        response = self.app.post("{}/api/v1/events/{}/rsvp".format(BASE_URL, event_id), data=json.dumps(data), content_type='application/json')
+        response = self.app.post("{}/api/v1/events/{}/rsvp".format(self.BASE_URL, event_id),
+                                 data=json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
     def test_irsvp_own_event(self):
         event_id = 894
         data = {"user_id": 2}
-        response = self.app.post("{}/api/v1/events/{}/rsvp".format(BASE_URL, event_id),
+        response = self.app.post("{}/api/v1/events/{}/rsvp".format(self.BASE_URL, event_id),
                                  data=json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 400)
 
@@ -131,7 +130,7 @@ class EventTester(unittest.TestCase):
         data = {
             "user_id": 4
         }
-        response = self.app.post("{}/api/v1/events/{}/rsvp".format(BASE_URL, event_id),
+        response = self.app.post("{}/api/v1/events/{}/rsvp".format(self.BASE_URL, event_id),
                                  data=json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
@@ -140,25 +139,25 @@ class EventTester(unittest.TestCase):
         data = {
             "user_id": 4
         }
-        response = self.app.post("{}/api/v1/events/{}/rsvp".format(BASE_URL, event_id),
+        response = self.app.post("{}/api/v1/events/{}/rsvp".format(self.BASE_URL, event_id),
                                  data=json.dumps(data), content_type='application/json')
 
         self.assertEqual(response.status_code, 200)
 
     def test_kretrieve_guest_successful(self):
         event_id = 987
-        response = self.app.get("{}/api/v1/events/{}/guests".format(BASE_URL, event_id))
+        response = self.app.get("{}/api/v1/events/{}/guests".format(self.BASE_URL, event_id))
         json.loads(response.get_data())
         self.assertEqual(response.status_code, 200)
 
     def test_lretrieve_guest_unsuccessful(self):
         event_id = 9949454
-        response = self.app.get("{}/api/v1/events/{}/guests".format(BASE_URL, event_id))
+        response = self.app.get("{}/api/v1/events/{}/guests".format(self.BASE_URL, event_id))
         self.assertEqual(response.status_code, 404)
 
     def test_lretrieve_guest_ok_but_none(self):
         event_id = 5221
-        response = self.app.get("{}/api/v1/events/{}/guests".format(BASE_URL, event_id))
+        response = self.app.get("{}/api/v1/events/{}/guests".format(self.BASE_URL, event_id))
         self.assertEqual(response.status_code, 200)
 
     def test_helper_methods(self):
@@ -178,41 +177,41 @@ class EventTester(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_redirect_index(self):
-        response = self.app.get("{}".format(BASE_URL))
+        response = self.app.get("{}".format(self.BASE_URL))
         self.assertEqual(response.status_code, 301)
 
     def test_user_events_ok(self):
-        response = self.app.get("{}/api/v1/sam/events".format(BASE_URL))
+        response = self.app.get("{}/api/v1/sam/events".format(self.BASE_URL))
         self.assertEqual(response.status_code, 200)
 
     def test_user_events_404(self):
-        response = self.app.get("{}/api/v1/samakid/events".format(BASE_URL))
+        response = self.app.get("{}/api/v1/samakid/events".format(self.BASE_URL))
         self.assertEqual(response.status_code, 404)
 
     def test_fetch_single_event_success(self):
         event_id = 894
-        response = self.app.get("{}/api/v1/events/{}".format(BASE_URL, event_id))
+        response = self.app.get("{}/api/v1/events/{}".format(self.BASE_URL, event_id))
         self.assertEqual(response.status_code, 200)
 
     def test_fetch_single_event_unsuccess(self):
         event_id = 88994
-        response = self.app.get("{}/api/v1/events/{}".format(BASE_URL, event_id))
+        response = self.app.get("{}/api/v1/events/{}".format(self.BASE_URL, event_id))
 
         self.assertEqual(response.status_code, 404)
 
     def test_fetch_guest_success(self):
         event_id = 9494
-        response = self.app.get("{}/api/v1/events/{}/guests".format(BASE_URL, event_id))
+        response = self.app.get("{}/api/v1/events/{}/guests".format(self.BASE_URL, event_id))
         self.assertEqual(response.status_code, 200)
 
     def test_fetch_by_category_success(self):
         category = "Meetup"
-        response = self.app.get("{}/api/v1/category/{}/events".format(BASE_URL, category))
+        response = self.app.get("{}/api/v1/category/{}/events".format(self.BASE_URL, category))
         self.assertEqual(response.status_code, 200)
 
     def test_fetch_by_category_failed(self):
         category = "Meetuep"
-        response = self.app.get("{}/api/v1/category/{}/events".format(BASE_URL, category))
+        response = self.app.get("{}/api/v1/category/{}/events".format(self.BASE_URL, category))
         self.assertEqual(response.status_code, 404)
 
 

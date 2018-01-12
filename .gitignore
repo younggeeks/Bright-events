@@ -10,3 +10,4 @@ instance/
 .env
 .gitignore
 .coverage
+__pychache__/
