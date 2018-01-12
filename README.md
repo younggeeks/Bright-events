@@ -34,9 +34,10 @@ $ python app.py
 ```
 To see your application, access this url in your browser: http://localhost:5000
 
+<<<<<<< HEAD
+=======
 
-
-
+>>>>>>> master
 #### How should this be manually tested?
 All end points can be tested by clicking run Postman button below
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/3fc163c59b314fdebeb7)

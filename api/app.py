@@ -1,12 +1,17 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from models import User, Event
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 from helpers import event_parser, user_parser, failed_login
-from data_mocks import events, get_data, users
+from data_mocks import events, get_data, users, rsvps
 import uuid
 
 app = Flask(__name__)
 api = Api(app)
+
+
+@app.route("/")
+def docs():
+    return render_template("api_docs.html")
 
 
 class Register(Resource):
@@ -60,6 +65,15 @@ class Logout(Resource):
         return resp
 
 
+class SearchEvent(Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('query', type=str, help='Please Specify query ')
+        args = parser.parse_args()
+
+        print args
+
+
 class PasswordReset(Resource):
     def post(self):
         data = request.get_json()
@@ -73,7 +87,6 @@ class PasswordReset(Resource):
 
         user = user[0]
         user["password"] = data["password"]
-
         new_users = filter(lambda found_user: found_user["email"] != data["email"], get_data("users"))
         new_users.append(user)
 
@@ -110,6 +123,19 @@ class Events(Resource):
 
 
 class EventList(Resource):
+    def get(self, event_id):
+        event = filter(lambda found_event: str(found_event["id"]) == str(event_id), get_data("events"))
+        if not event:
+            resp = jsonify({"message": "Event Not Found, Fetch Failed", "status": 404})
+            resp.status_code = 404
+            return resp
+
+        return jsonify({
+            "message": "Event Fetch Successfully",
+            "status": 200,
+            "event": event
+        })
+
     def put(self, event_id):
         data = request.get_json()
         event = filter(lambda found_event: str(found_event["id"]) == str(event_id), get_data("events"))
@@ -117,7 +143,7 @@ class EventList(Resource):
             resp = jsonify({"message": "Event Not Found, Update Failed", "status": 404})
             resp.status_code = 404
             return resp
-    
+
         event = event[0]
         if "name" in data:
             event["name"] = data["name"]
@@ -150,8 +176,6 @@ class EventList(Resource):
             response = jsonify({"message": "Event ID Not Found, Deletion Failed"})
             response.status_code = 404
             return response
-        # simulating removal of event from database , we are using lambda function to remove it from the list
-        # new_events = filter(lambda found_event: found_event["id"] != event_id, self.get_data("events"))
 
         response = jsonify({"message": "Event Deleted Successfully", "status": 200})
         response.status_code = 200
@@ -161,6 +185,7 @@ class EventList(Resource):
 class Attendees(Resource):
     def get(self, event_id):
         event = filter(lambda found_event: str(found_event["id"]) == str(event_id), get_data("events"))
+
         if not event:
             resp = jsonify({
                 "message": "Event Not found, Retrieval Failed"
@@ -168,23 +193,51 @@ class Attendees(Resource):
             resp.status_code = 404
             return resp
 
-        # event is found get event_id and user_id from data["user_id"] search from db
-        return jsonify({
-            "message": "Successfully Fetched Attendees",
-            "status": 200,
-            "attendees": get_data("users")
-        })
+        guests = filter(lambda found_event: str(found_event["event_id"]) == str(event_id), rsvps)
+
+        if guests:
+            guests = guests[0]
+            rsvp_guests = get_data("users", guests["users"])
+            return jsonify({
+                "message": "Successfully Fetched Attendees",
+                "status": 200,
+                "attendees": rsvp_guests
+            })
+        else:
+            return jsonify({
+                "message": "Currently there are no guests registered for {}".format(event[0]["name"]),
+                "status": 200,
+            })
 
 
 class RSVP(Resource):
     def post(self, event_id):
-        data = request.get_data()
+        data = request.get_json()
         event = filter(lambda found_event: str(found_event["id"]) == str(event_id), get_data("events"))
         if not event:
             response = jsonify({"message": "Event Not found, RSVP Failed"})
             response.status_code = 404
             return response
 
+        user = filter(lambda found_user: str(found_user["id"]) == str(data["user_id"]), get_data("users"))
+        if not user:
+            response = jsonify({"message": "User Not found, RSVP Failed"})
+            response.status_code = 404
+            return response
+        # filter method above returns an array so we pass in index 0 to get the first one
+        user = user[0]
+
+        guests = filter(lambda found_event: str(found_event["event_id"]) == str(event_id), rsvps)
+        new_user = User(id=user["id"], full_name=user["full_name"], email=user["email"], password=user["password"])
+        if guests:
+            guests[0]["users"].append(new_user)
+        else:
+            guests.append(
+                {
+                    "event_id": event_id,
+                    "users": [new_user]
+                }
+            )
         # event is found we can add event_id and user_id to user_event_table
         return jsonify({
             "message": "You've successfully RSVP'ed to {}".format(event[0]["name"]),
@@ -197,6 +250,7 @@ api.add_resource(Events, '/api/v1/events')
 api.add_resource(RSVP, '/api/v1/events/<event_id>/rsvp')
 api.add_resource(EventList, '/api/v1/events/<event_id>')
 api.add_resource(Attendees, '/api/v1/events/<event_id>/guests')
+api.add_resource(SearchEvent, '/api/v1/events/search')
 
 # routes for Authentication
 api.add_resource(Register, '/api/v1/auth/register')
