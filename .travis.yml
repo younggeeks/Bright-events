@@ -10,7 +10,7 @@ install:
   - pip install codeclimate-test-reporter
 
 script:
-  - nosetests --rednose tests/test_events.py tests/test_users.py tests/test_docs_page.py --with-coverage
+  - nosetests --rednose tests/test_events.py tests/test_users.py tests/test_docs_page.py --nocapture --with-coverage
 
 after_success:  
   - coveralls
