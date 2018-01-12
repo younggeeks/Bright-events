@@ -8,7 +8,7 @@ Bright events provides a platform for event organizers to create and manage diff
 
 ## Group Users
 
-## User Registration [/api/v1/auth/register]
+## User Registration [/api/v2/auth/register]
 
 ### Register [POST]
 Users Can Create an Account with Bright Events and Start Posting Events and They can RSVP to an event
@@ -37,7 +37,7 @@ Users Can Create an Account with Bright Events and Start Posting Events and They
             "message": "An Error Occured , Could Not Create an Account"
         }
 
-## User Login [/api/v1/auth/login]
+## User Login [/api/v2/auth/login]
 ### Login  [POST]
 
 Registered Users can login to Bright Events and Manage Events or RSVP to events
@@ -45,12 +45,8 @@ Registered Users can login to Bright Events and Manage Events or RSVP to events
 + Request (application/json)
 
         {
-           "name": "Dora's wedding",
-           "description": "this is going to be epic ",
-           "start_date": "1/2/1039",
-           "end_date": "2/2/2009",
-           "user": "samjunir",
-           "address":"kilimani, dar es salaam"
+            "email": "younggeeks101@gmail.com",
+            "password": "secret"
         }
 
 + Response 201 (application/json)
@@ -58,19 +54,7 @@ Registered Users can login to Bright Events and Manage Events or RSVP to events
     + Body
     
             {
-                "event":{
-                    "address":"Riveroad, Nairobi",
-                    "category": "Meetup",
-                    "description": "This is going to be epic",
-                    "start_date": "1/2/1029",
-                    "end_date": "1/2/2019",
-                    "user": "samjunior",
-                    "id": 90
-                },
-                "message": "Succesfully Created User",
-                "status": 200
-    
-    
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiIyYWUwY2RhOC1kOWFhLTQ3NjAtYjZmZC0xOTM0MjQxMTYyNDYiLCJleHAiOjE1MTI0NDAxNzV9.KhqtKlji981UZWjLQZ6qO4GpFNOyBmg4AVDXA4j0zlk"
             }
 
 
@@ -78,7 +62,7 @@ Registered Users can login to Bright Events and Manage Events or RSVP to events
 
 ## Group Events
 
-### Events Management [/api/v1/events/]
+### Events Management [/api/v2/events/]
 
 ### Posting New Event [POST]
 Posting New Event Which Users can login and RSVP
@@ -130,10 +114,7 @@ Retrieve All Registered events in the system
 
 + Request (application/json)
    
-    + Headers
-        
-            Authorization: JWT Token
-
+ 
 + Response 200 (application/json)
 
         [
@@ -318,6 +299,8 @@ Fetching Details of posted Event By Providing an ID
 
         
 
+### RSVP To an Event  [/events/{event_id}/rsvp]
+Fetching Details of posted Event By Providing an ID
 ## RSVP To an Event [POST]
 Authenticated Users Can RSVP To an Event
 
@@ -335,6 +318,43 @@ Authenticated Users Can RSVP To an Event
     
             {
             "event_id": 89
+            }
+            
++ Response 200 (Application/json)
+
+        {
+            "message": "You've successfully RSVP'ed to Geeks General Meeting"
+        }
+        
+
+
+      
+### RSVP To an Event  [/events/{event_id}/guests]
+## View Event Guests [GET]
+Authenticated Users Can View Guests of Their Events
+
++ parameters
+    
+    + event_id (string) - ID of an event user wants to RSVP
+    
++ Request (Application/json)
+    
+    + Headers 
+    
+            Authorization: JWT Token
+    
+    + Body 
+    
+            {
+                    "guests": [
+            {
+            "email": "younggeeks101@gmail.com",
+            "name": " samwel Charesl",
+            "password": "pbkdf2:sha256:50000$pOpmGcnT$e4b6dceecae06cbcd931876dcb094e11cda0046bf5dbd8a00aba969e17458dae",
+            "public_id": "2ae0cda8-d9aa-4760-b6fd-193424116246"
+            }
+                ],  
+                    "message": "successfully fetched Guests"
             }
             
 + Response 200 (Application/json)
