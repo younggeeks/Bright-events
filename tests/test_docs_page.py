@@ -13,7 +13,5 @@ class DocsPageTester(unittest.TestCase):
 
     def test_docs_route(self):
         response = self.app.get("{}/".format(self.BASE_URL))
-        print(response)
-        self.assertEqual(isinstance(response.data, str), True)
         self.assertEqual(response.status_code, 200)
 
