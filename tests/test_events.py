@@ -118,6 +118,31 @@ class EventTester(unittest.TestCase):
                                  data=json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
+    def test_zrsvp_wrong_user_id(self):
+        event_id = 5221
+        data = {
+            "user_id": 34423
+        }
+        response = self.app.post("{}/api/v1/events/{}/rsvp".format(self.BASE_URL, event_id),
+                                 data=json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 404)
+
+    def test_zrsvp_existing_guest(self):
+        event_id = 5879
+        data = {
+            "user_id": 4
+        }
+        self.app.post("{}/api/v1/events/{}/rsvp".format(self.BASE_URL, event_id),
+                      data=json.dumps(data), content_type='application/json')
+
+        event_id = 5879
+        data = {
+            "user_id": 4
+        }
+        response = self.app.post("{}/api/v1/events/{}/rsvp".format(self.BASE_URL, event_id),
+                                 data=json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+
     def test_irsvp_own_event(self):
         event_id = 894
         data = {"user_id": 2}
