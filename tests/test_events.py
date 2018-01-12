@@ -213,12 +213,3 @@ class EventTester(unittest.TestCase):
         category = "Meetuep"
         response = self.app.get("{}/api/v1/category/{}/events".format(self.BASE_URL, category))
         self.assertEqual(response.status_code, 404)
-
-
-
-
-
-
-
-
-
