@@ -1,6 +1,0 @@
-[report]
-omit =  
-    *designs*
-    *envir*
-    *__init__*
-
