@@ -1,0 +1,17 @@
+language : python
+python:
+    - "3.6"
+
+install:
+  - pip install -r requirements.txt
+  - pip install python-coveralls
+  - pip install coverage
+  - pip install nose
+  - pip install codeclimate-test-reporter
+
+script:
+  - nosetests --rednose tests/test_events.py tests/test_users.py --nocapture --with-coverage
+
+after_success:
+  - coveralls
+  - codeclimate-test-reporter --file .coverage
