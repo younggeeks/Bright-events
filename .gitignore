@@ -1,3 +1,4 @@
 envir/
 migrations/
 .idea/
+**.pyc
