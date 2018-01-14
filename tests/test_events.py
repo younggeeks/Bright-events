@@ -6,7 +6,7 @@ from api import create_app, db
 from api.helpers.tests_dummy_data import BASE_URL, correct_event, correct_user, missing_field_event, \
     updated_correct_event, expired_token, correct_user2
 from api.models import Category
-from tests.auth_tests import UsersTester
+from tests.test_users import UsersTester
 
 
 class EventsTester(unittest.TestCase):
