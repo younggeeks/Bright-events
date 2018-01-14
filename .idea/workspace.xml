@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list id="060afcb6-b4f6-4498-a7d1-6eeaf34f2ba8" name="Revert: [Test] add test database uri to configuration" comment="" />
     <list default="true" id="e1dcc0b9-c891-43e6-8a72-dae8a8acc05e" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/runtime.txt" afterPath="$PROJECT_DIR$/runtime.txt" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/runtime.txt" afterPath="" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -40,21 +40,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Procfile" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Procfile" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Procfile">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="21" lean-forward="false" selection-start-line="0" selection-start-column="21" selection-end-line="0" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="runtime.txt" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/runtime.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -602,14 +592,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Procfile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="21" lean-forward="false" selection-start-line="0" selection-start-column="21" selection-end-line="0" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="42">
@@ -630,6 +612,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Procfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="21" lean-forward="false" selection-start-line="0" selection-start-column="21" selection-end-line="0" selection-end-column="21" />
           <folding />
         </state>
       </provider>
