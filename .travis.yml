@@ -1,18 +1,17 @@
 language : python
+python:
+    - "3.6"
 
 install:
   - pip install -r requirements.txt
   - pip install python-coveralls
-  - pip install coverage       # Add me to install coverage.py
-  - pip install nose  
+  - pip install coverage
+  - pip install nose
   - pip install codeclimate-test-reporter
-# command to run tests
+
 script:
-  - nosetests --with-coverage api # or py.test for Python versions 3.5 and below
+  - nosetests --rednose tests/test_events.py tests/test_users.py --nocapture --with-coverage
 
-env:
-  CODECLIMATE_REPO_TOKEN: 33c5ddda59b1074f656e97d66e74f7f6130ef9016081a60b115f0d8b079fc50e
-
-after_success:  
+after_success:
   - coveralls
-  - coverage report
+  - codeclimate-test-reporter --file .coverage
