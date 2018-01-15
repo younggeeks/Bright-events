@@ -1,8 +1,36 @@
+
+import os
+import jwt
+import datetime
+
 fake_link = "http://localhost:5000/api/v1/auth/reset-password/verify" \
-       "/Im5haWlmZ0BnbWFkZmFkc2ZzZGZzZGZpbC5jb21kIg.DSwpyw.xAS1IkwDjuPpA2ydCjcFgNHRAtE "
+            "/Im5haWlmZ0BnbWFkZmFkc2ZzZGZzZGZpbC5jb21kIg.DSwpyw.xAS1IkwDjuPpA2ydCjcFgNHRAtE "
 expired_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9" \
                 ".eyJleHAiOjE1MTM3OTI5OTEsImlhdCI6MTUxMzYyMDE5MSwic3ViIjoxfQ" \
                 ".7fO_hfHaFyp0IMH24Kl0s6StdnVJxdTGKi5dNQ1pr5U"
+
+fake_token = "ldsjfkajdsfajsr95803495493sdtjiortue9005384058934sdfasdfasdf9874942079472"
+
+
+def encode_token():
+    """
+    Generating a token that'll expire in 3 milliseconds
+    :return:token
+    """
+    try:
+        payload = {
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(milliseconds=3),
+            "iat": datetime.datetime.utcnow(),
+            "sub": 1
+        }
+        return jwt.encode(
+            payload,
+            os.getenv("SECRET"),
+            algorithm="HS256"
+        )
+    except Exception as e:
+        return e
+
 
 correct_user = {
     "name": "Kilango Jumiya",

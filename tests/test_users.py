@@ -1,10 +1,12 @@
 import json
 import unittest
 
+import time
+
 from api import create_app, db
 from api.helpers.tests_dummy_data import BASE_URL, correct_user, wrong_input_user, empty_input_user, wrong_email_user, \
-    wrong_password_user, incorrect_reset_email, new_password, new_password_wrong, new_password_empty_fields, fake_link, \
-    expired_token
+    wrong_password_user, incorrect_reset_email, new_password, new_password_wrong, new_password_empty_fields, \
+    fake_link, fake_token, encode_token
 
 
 class UsersTester(unittest.TestCase):
@@ -175,8 +177,6 @@ class UsersTester(unittest.TestCase):
         self.assertEqual(second_logout_data["message"], "User is already signed out")
 
     def test_logout_invalid_token(self):
-
-        fake_token = "ldsjfkajdsfajsr95803495493sdtjiortue9005384058934"
         response = self.logout(fake_token)
         data = json.loads(response.data.decode())
 
@@ -185,8 +185,9 @@ class UsersTester(unittest.TestCase):
         self.assertEqual(data["message"], "Invalid Token , Please Login again")
 
     def test_logout_expired_token(self):
-
-        response = self.logout(expired_token)
+        token = encode_token()
+        time.sleep(1)
+        response = self.logout(token)
         data = json.loads(response.data.decode())
 
         # testing if Logout is unsuccessful
@@ -298,5 +299,3 @@ class UsersTester(unittest.TestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data["message"], "Password Reset Failed, Please check your input")
-
-
