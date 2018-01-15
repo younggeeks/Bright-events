@@ -10,6 +10,10 @@ install:
   - pip install nose
   - pip install codeclimate-test-reporter
 
+env:
+  global:
+      - DATABASE_URL=postgres://localhost:5433/test_db
+
 script:
   - nosetests --rednose tests/test_events.py tests/test_users.py --nocapture --with-coverage
 
