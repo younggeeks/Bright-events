@@ -21,7 +21,7 @@ def encode_token():
         payload = {
             "exp": datetime.datetime.utcnow() + datetime.timedelta(milliseconds=3),
             "iat": datetime.datetime.utcnow(),
-            "sub": 1
+            "sub": "1"
         }
         return jwt.encode(
             payload,
