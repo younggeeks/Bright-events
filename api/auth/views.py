@@ -53,7 +53,8 @@ class Login(Resource):
 
             user = User.query.filter_by(email=credentials["email"]).first()
             if not user:
-                return make_response(401, "No Account is associated with Email {}, Login Failed".format(credentials["email"]))
+                return make_response(401, "No Account is associated with Email {}, Login Failed".format(
+                    credentials["email"]))
 
             if check_password_hash(user.password, credentials["password"]):
                 token = user.encode_token()
@@ -119,7 +120,6 @@ class PasswordResetLink(Resource):
             return make_response(400, "Password Reset failed, Please check your input")
 
 
-
 class PasswordResetToken(Resource):
     def get(self, token):
         try:
@@ -135,6 +135,7 @@ class PasswordResetToken(Resource):
             return response
         except Exception as e:
             return make_response(400, "Password Reset Link is invalid, or Expired")
+
 
 class PasswordResetChangePassword(Resource):
     def get(self, token):
@@ -178,7 +179,7 @@ class PasswordResetChangePassword(Resource):
 
         else:
             return make_response(400, "Password Reset Failed, Please check your input")
-           
+
 
 api.add_resource(Register, "/register")
 api.add_resource(Login, "/login")

@@ -368,6 +368,13 @@ class EventsTester(unittest.TestCase):
         self.assertEqual(response["status"], 200)
         self.assertEqual(isinstance(events, list), True)
 
+    def test_pagination_success_offset_4(self):
+        self.register(correct_event, token=self.get_token())
+        response = self.paginate(offset=4)
+        events = response["data"]["events"]
+        self.assertEqual(response["status"], 200)
+        self.assertEqual(isinstance(events, list), True)
+
     def test_pagination_no_events(self):
         response = self.paginate()
         self.assertEqual(response["status"], 200)
