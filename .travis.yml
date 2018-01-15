@@ -16,6 +16,7 @@ install:
   - pip install codeclimate-test-reporter
 
 env:
+- REQUIREMENTS=lowest EXTRAS=all,postgresql SQLALCHEMY_DATABASE_URI="postgres://localhost:5433/test_db"
   global:
       - DATABASE_URL=postgres://localhost:5433/test_db
       - SQLALCHEMY_DATABASE_URI=postgres://localhost:5433/test_db
