@@ -7,6 +7,8 @@ from flask_restful import Api, Resource
 
 from itsdangerous import URLSafeTimedSerializer
 from werkzeug.security import generate_password_hash, check_password_hash
+
+from api.helpers.response_helpers import make_response
 from api.models import User, BlacklistToken
 
 auth = Blueprint("auth", __name__, url_prefix="/api/v1/auth")
@@ -22,11 +24,8 @@ class Register(Resource):
     def post(self):
         data = request.get_json()
         if "email" not in data or "name" not in data or "password" not in data:
-            response = jsonify({
-                "message": "Registration Failed, Please check your input"
-            })
-            response.status_code = 400
-            return response
+            return make_response(400, "Registration Failed, Please check your input")
+
         new_user = User.query.filter_by(email=data["email"]).first()
         if not new_user:
             hashed_password = generate_password_hash(data["password"])
@@ -40,11 +39,7 @@ class Register(Resource):
             response.status_code = 201
             return response
         else:
-            response = jsonify({
-                "message": "User Already Exists, Please Login"
-            })
-            response.status_code = 401
-            return response
+            return make_response(401, "User Already Exists, Please Login")
 
 
 class Login(Resource):
@@ -54,19 +49,12 @@ class Login(Resource):
         credentials = request.get_json()
         if "email" in credentials and "password" in credentials:
             if credentials["email"] == "" or credentials["password"] == "":
-                response = jsonify({
-                    "message": "Email and password fields are required to login"
-                })
-                response.status_code = 400
-                return response
+                return make_response(400, "Email and password fields are required to login")
 
             user = User.query.filter_by(email=credentials["email"]).first()
             if not user:
-                response = jsonify({
-                    "message": "No Account is associated with Email {}, Login Failed".format(credentials["email"])
-                })
-                response.status_code = 401
-                return response
+                return make_response(401, "No Account is associated with Email {}, Login Failed".format(credentials["email"]))
+
             if check_password_hash(user.password, credentials["password"]):
                 token = user.encode_token()
                 response = jsonify({
@@ -76,29 +64,17 @@ class Login(Resource):
                 response.status_code = 200
                 return response
             else:
-                response = jsonify({
-                    "message": "Wrong Combination of Email and password, Login Failed"
-                })
-                response.status_code = 401
-                return response
+                return make_response(401, "Wrong Combination of Email and password, Login Failed")
 
         else:
-            response = jsonify({
-                "message": "Login Failed, Please check your input"
-            })
-            response.status_code = 400
-            return response
+            return make_response(400, "Login Failed, Please check your input")
 
 
 class Logout(Resource):
     def post(self):
         bearer_token = request.headers.get("Authorization")
         if not bearer_token:
-            response = jsonify({
-                "message": "Token is missing from your header"
-            })
-            response.status_code = 401
-            return response
+            return make_response(401, "Token is missing from your header")
 
         token = bearer_token.replace("Bearer ", "")
         decode_response = User.decode_token(token)
@@ -106,11 +82,7 @@ class Logout(Resource):
         if isinstance(decode_response, int):
             already_blacklisted = BlacklistToken.query.filter_by(token=token).first()
             if already_blacklisted:
-                response = jsonify({
-                    "message": "User is already signed out"
-                })
-                response.status_code = 401
-                return response
+                return make_response(401, "User is already signed out")
 
             blacklist = BlacklistToken(token=token)
             blacklist.save()
@@ -120,11 +92,7 @@ class Logout(Resource):
             })
             response.status_code = 200
             return response
-        response = jsonify({
-            "message": decode_response
-        })
-        response.status_code = 400
-        return response
+        return make_response(400, decode_response)
 
 
 class PasswordResetLink(Resource):
@@ -133,11 +101,7 @@ class PasswordResetLink(Resource):
         if "email" in data and data["email"] != "":
             user = User.query.filter_by(email=data["email"]).first()
             if not user:
-                response = jsonify({
-                    "message": "Email not found , Password reset Failed"
-                })
-                response.status_code = 404
-                return response
+                return make_response(404, "Email not found , Password reset Failed")
 
             password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
             reset_url = url_for("auth.passwordresettoken",
@@ -152,11 +116,8 @@ class PasswordResetLink(Resource):
             response.status_code = 200
             return response
         else:
-            response = jsonify({
-                "message": "Password Reset failed, Please check your input"
-            })
-            response.status_code = 400
-            return response
+            return make_response(400, "Password Reset failed, Please check your input")
+
 
 
 class PasswordResetToken(Resource):
@@ -173,12 +134,7 @@ class PasswordResetToken(Resource):
             response.status_code = 200
             return response
         except Exception as e:
-            response = jsonify({
-                "message": "Password Reset Link is invalid, or Expired"
-            })
-            response.status_code = 400
-            return response
-
+            return make_response(400, "Password Reset Link is invalid, or Expired")
 
 class PasswordResetChangePassword(Resource):
     def get(self, token):
@@ -212,30 +168,17 @@ class PasswordResetChangePassword(Resource):
                         response.status_code = 200
                         return response
                     else:
-                        response = jsonify({
-                            "message": "Password and Password confirmation do not match"
-                        })
-                        response.status_code = 401
-                        return response
-                else:
-                    response = jsonify({
-                        "message": "Password Reset Failed, All fields are required"
-                    })
-                    response.status_code = 400
-                    return response
-            else:
-                response = jsonify({
-                    "message": "Password Reset Failed, Please check your input"
-                })
-                response.status_code = 400
-                return response
-        else:
-            response = jsonify({
-                "message": "Password Reset Failed, Please check your input"
-            })
-            response.status_code = 400
-            return response
+                        return make_response(401, "Password and Password confirmation do not match")
 
+                else:
+                    return make_response(400, "Password Reset Failed, All fields are required")
+
+            else:
+                return make_response(400, "Password Reset Failed, Please check your input")
+
+        else:
+            return make_response(400, "Password Reset Failed, Please check your input")
+           
 
 api.add_resource(Register, "/register")
 api.add_resource(Login, "/login")

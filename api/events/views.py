@@ -184,7 +184,7 @@ class Guests(Resource):
 
         if event.user_id != user.id:
             return make_response(403, "You can only See the guests of the event you created")
-            
+
         guests = response_helpers.parse_list("users", event.rsvps)
 
         response = jsonify({
