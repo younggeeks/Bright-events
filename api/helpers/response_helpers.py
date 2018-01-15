@@ -71,6 +71,18 @@ def failed_login():
     return response
 
 
+def make_response(status, message):
+    """
+    helper function used to return the message when request fails fails
+    :param status:
+    :param message:
+    :return:
+    """
+    response = jsonify({"message": "{}".format(message)})
+    response.status_code = status
+    return response
+
+
 def parse_list(list_type, data):
     """
     Helper function which will be responsible for converting(parsing) list of either User or Event models

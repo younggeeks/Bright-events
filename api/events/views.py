@@ -4,7 +4,7 @@ from flask import Blueprint, request, jsonify, g, url_for
 from flask_restful import Api, Resource
 from sqlalchemy import asc
 
-from api.helpers.response_helpers import protected_route
+from api.helpers.response_helpers import protected_route, make_response
 
 events = Blueprint("events", __name__, url_prefix="/api/v1/events")
 
@@ -86,25 +86,14 @@ class Events(Resource):
     def put(self, event_id):
         event = Event.query.filter_by(id=event_id).first()
         if not event:
-            response = jsonify({
-                "message": "Event With ID {} is not found".format(event_id)
-            })
-            response.status_code = 404
-            return response
+            return make_response(404, "Event With ID {} is not found".format(event_id))
+
         if event.user_id != g.user.id:
-            response = jsonify({
-                "message": "You can only Update Events You Created"
-            })
-            response.status_code = 403
-            return response
+            return make_response(403, "You can only Update Events You Created")
 
         data = request.get_json()
         if not data:
-            response = jsonify({
-                "message": "Update Failed, Please check your input"
-            })
-            response.status_code = 400
-            return response
+            return make_response(400, "Update Failed, Please check your input")
 
         if "name" in data:
             event.name = data["name"]
@@ -131,11 +120,7 @@ class Events(Resource):
     def get(self, event_id):
         event = Event.query.filter_by(id=event_id).first()
         if not event:
-            response = jsonify({
-                "message": "Event With ID {} is not found".format(event_id)
-            })
-            response.status_code = 404
-            return response
+            return make_response(404, "Event With ID {} is not found".format(event_id))
 
         event = response_helpers.event_parser(event)
         response = jsonify({"message": "Event Retrieved Successfully", "event": event})
@@ -146,17 +131,10 @@ class Events(Resource):
     def delete(self, event_id):
         event = Event.query.filter_by(id=event_id).first()
         if not event:
-            response = jsonify({
-                "message": "Event With ID {} is not found".format(event_id)
-            })
-            response.status_code = 404
-            return response
+            return make_response(404, "Event With ID {} is not found".format(event_id))
+
         if event.user_id != g.user.id:
-            response = jsonify({
-                "message": "You can only Delete Events You Created"
-            })
-            response.status_code = 403
-            return response
+            return make_response(403, "You can only Delete Events You Created")
 
         event.delete()
         response = jsonify({
@@ -171,35 +149,20 @@ class RSVP(Resource):
     def post(self, event_id):
         data = request.get_json()
         if "user_id" not in data:
-            response = jsonify({
-                "message": "RSVP Failed, Please check your input"
-            })
-            response.status_code = 400
-            return response
+            return make_response(400, "RSVP Failed, Please check your input")
+
         event = Event.query.filter_by(id=event_id).first()
         if not event:
-            response = jsonify({
-                "message": "Event With ID {} is not found".format(event_id)
-            })
-            response.status_code = 404
-            return response
+            return make_response(404, "Event With ID {} is not found".format(event_id))
 
         guest = g.user
 
         if event.user_id == guest.id:
-            response = jsonify({
-                "message": "You can not RSVP To your own event"
-            })
-            response.status_code = 403
-            return response
+            return make_response(403, "You can not RSVP To your own event")
 
         existing_user = [user for user in event.rsvps if user.id == guest.id]
         if existing_user:
-            response = jsonify({
-                "message": "Your Name is already in {}'s Guest List".format(event.name)
-            })
-            response.status_code = 403
-            return response
+            return make_response(403, "Your Name is already in {}'s Guest List".format(event.name))
 
         event.rsvps.append(guest)
         event.save()
@@ -215,21 +178,13 @@ class Guests(Resource):
     def get(self, event_id):
         event = Event.query.filter_by(id=event_id).first()
         if not event:
-            response = jsonify({
-                "message": "Event With ID {} is not found".format(event_id)
-            })
-            response.status_code = 404
-            return response
+            return make_response(404, "Event With ID {} is not found".format(event_id))
 
         user = g.user
 
         if event.user_id != user.id:
-            response = jsonify({
-                "message": "You can only See the guests of the event you created"
-            })
-            response.status_code = 403
-            return response
-
+            return make_response(403, "You can only See the guests of the event you created")
+            
         guests = response_helpers.parse_list("users", event.rsvps)
 
         response = jsonify({
