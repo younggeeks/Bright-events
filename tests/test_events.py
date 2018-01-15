@@ -2,9 +2,11 @@
 import json
 import unittest
 
+import time
+
 from api import create_app, db
 from api.helpers.tests_dummy_data import BASE_URL, correct_event, correct_user, missing_field_event, \
-    updated_correct_event, expired_token, correct_user2
+    updated_correct_event, correct_user2, encode_token
 from api.models import Category
 from tests.test_users import UsersTester
 
@@ -135,7 +137,9 @@ class EventsTester(unittest.TestCase):
 
     def get_token(self, user=correct_user, correct=True):
         if not correct:
-            return expired_token
+            token = encode_token()
+            time.sleep(1)
+            return token
         UsersTester.user_registration(self, user)
         resp = self.user_login(user)
         token = resp["data"]["token"]

@@ -13,6 +13,7 @@ fake_token = "ldsjfkajdsfajsr95803495493sdtjiortue9005384058934sdfasdfasdf987494
 
 
 def encode_token():
+    print(os.environ.get("SECRET"))
     """
     Generating a token that'll expire in 3 milliseconds
     :return:token
