@@ -187,7 +187,7 @@ class UsersTester(unittest.TestCase):
     def test_logout_expired_token(self):
         token = encode_token()
         time.sleep(1)
-        response = self.logout(token)
+        response = self.logout(token.decode())
         data = json.loads(response.data.decode())
 
         # testing if Logout is unsuccessful
