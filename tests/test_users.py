@@ -186,6 +186,7 @@ class UsersTester(unittest.TestCase):
 
     def test_logout_expired_token(self):
         token = encode_token()
+        print(token)
         time.sleep(1)
         response = self.logout(token)
         data = json.loads(response.data.decode())
