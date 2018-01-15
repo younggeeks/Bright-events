@@ -25,7 +25,7 @@ def encode_token():
         }
         return jwt.encode(
             payload,
-            os.getenv("SECRET"),
+            os.environ.get("SECRET"),
             algorithm="HS256"
         )
     except Exception as e:
