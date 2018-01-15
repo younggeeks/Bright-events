@@ -2,3 +2,5 @@ envir/
 .idea/
 **.pyc
 .coverage
+.env
+envir/
