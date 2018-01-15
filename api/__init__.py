@@ -15,6 +15,7 @@ def create_app(environment):
     app.config.from_pyfile("config.py")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+
     app.register_blueprint(auth)
     app.register_blueprint(events)
     db.init_app(app)
