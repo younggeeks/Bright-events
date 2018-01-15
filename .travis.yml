@@ -16,7 +16,7 @@ install:
 
 env:
  global:
-      - DATABASE_URL="postgresql:///test_db"
+      - TEST_DB_URL="postgresql:///test_db"
       - SQLALCHEMY_DATABASE_URI="postgresql:///test_db"
 script:
   - nosetests --rednose tests/test_events.py tests/test_users.py --nocapture --with-coverage
