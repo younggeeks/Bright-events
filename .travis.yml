@@ -16,10 +16,10 @@ install:
   - pip install codeclimate-test-reporter
 
 env:
-- REQUIREMENTS=lowest EXTRAS=all,postgresql SQLALCHEMY_DATABASE_URI="postgres://localhost:5433/test_db"
+- REQUIREMENTS=lowest EXTRAS=all,postgresql SQLALCHEMY_DATABASE_URI="postgresql:///brighteventstest"
   global:
-      - DATABASE_URL=postgres://localhost:5433/test_db
-      - SQLALCHEMY_DATABASE_URI=postgres://localhost:5433/test_db
+      - DATABASE_URL="postgresql:///test_db"
+      - SQLALCHEMY_DATABASE_URI="postgresql:///test_db"
 script:
   - nosetests --rednose tests/test_events.py tests/test_users.py --nocapture --with-coverage
 
