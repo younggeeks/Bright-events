@@ -30,11 +30,9 @@ class Register(Resource):
         if not new_user:
             hashed_password = generate_password_hash(data["password"])
             user = User(public_id=uuid.uuid4(), name=data["name"], email=data["email"], password=hashed_password)
-            token = user.encode_token()
             user.save()
             response = jsonify({
-                "message": "Successfully Registered",
-                "token": token.decode('UTF-8')
+                "message": "Successfully Registered"
             })
             response.status_code = 201
             return response
