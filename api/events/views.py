@@ -1,5 +1,6 @@
 from functools import wraps
 
+import sys
 from flask import Blueprint, request, jsonify, g, url_for
 from flask_restful import Api, Resource
 from sqlalchemy import asc
@@ -69,7 +70,12 @@ class EventList(Resource):
                                   category_id=data["category_id"])
                 user = g.user
                 user.events.append(new_event)
-                user.save()
+                try:
+                    user.save()
+                except Exception as e:
+                    return make_response(400,
+                                         "Category With id {} is not found,"
+                                         " Event Creating Failed".format(data["category_id"]))
                 response = jsonify({"message": "Event Registration Successfully"})
                 response.status_code = 201
                 return response
