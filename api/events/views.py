@@ -211,7 +211,6 @@ class Paginate(Resource):
             page = max(0, int(request.args.get("page")))
 
         ordered_events = Event.query.order_by(asc(Event.id)).all()
-        
         if ordered_events:
             next_page = page + limit
             maximum_index = len(ordered_events) - 1
