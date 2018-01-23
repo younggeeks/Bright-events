@@ -207,23 +207,24 @@ class Paginate(Resource):
         if "limit" in request.args and request.args.get("limit"):
             limit = int(request.args.get('limit', 3))
 
-        if "offset" in request.args and request.args.get("offset"):
-            offset = max(0, int(request.args.get("offset")))
+        if "page" in request.args and request.args.get("page"):
+            page = max(0, int(request.args.get("page")))
 
         ordered_events = Event.query.order_by(asc(Event.id)).all()
+        
         if ordered_events:
-            next_offset = offset + limit
+            next_page = page + limit
             maximum_index = len(ordered_events) - 1
-            if offset > maximum_index:
+            if page > maximum_index:
                 last_id = ordered_events[maximum_index].id
-                next_offset = offset
+                next_page = page
             else:
-                last_id = ordered_events[offset].id
+                last_id = ordered_events[page].id
 
             all_events = Event.query.filter(Event.id >= last_id).limit(limit).all()
 
-            next_url = url_for("events.paginate", limit=limit, offset=next_offset)
-            prev_url = url_for("events.paginate", limit=limit, offset=max(0, next_offset - limit))
+            next_url = url_for("events.paginate", limit=limit, page=next_page)
+            prev_url = url_for("events.paginate", limit=limit, page=max(0, next_page - limit))
 
             return jsonify({
                 "events": response_helpers.parse_list("events", all_events),
