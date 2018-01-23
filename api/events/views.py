@@ -5,13 +5,13 @@ from flask import Blueprint, request, jsonify, g, url_for
 from flask_restful import Api, Resource
 from sqlalchemy import asc
 
-from api.helpers.response_helpers import protected_route, make_response
+from api.helpers.response_helpers import protected_route, make_response, validate_event
 
 events = Blueprint("events", __name__, url_prefix="/api/v1/events")
 
 api = Api(events, catch_all_404s=True)
 
-from api.models import Event, User
+from api.models import Event
 from api.helpers import response_helpers
 
 
@@ -54,36 +54,26 @@ class EventList(Resource):
         return response
 
     @protected_route
+    @validate_event
     def post(self):
         data = request.get_json()
-
-        if "name" in data and "address" in data and "start_date" in data and "end_date" in data and "description" \
-                in data and "price" in data and "category_id" in data:
-            event = Event.query.filter_by(name=data["name"]).first()
-            if event:
-                response = jsonify({"message": "Event name must be unique"})
-                response.status_code = 400
-                return response
-            else:
-                new_event = Event(name=data["name"], address=data["address"], start_date=data["start_date"],
-                                  end_date=data["end_date"], description=data["description"], price=data["price"],
-                                  category_id=data["category_id"])
-                user = g.user
-                user.events.append(new_event)
-                try:
-                    user.save()
-                except Exception as e:
-                    return make_response(400,
-                                         "Category With id {} is not found,"
-                                         " Event Creating Failed".format(data["category_id"]))
-                response = jsonify({"message": "Event Registration Successfully"})
-                response.status_code = 201
-                return response
+        event = Event.query.filter_by(name=data["name"]).first()
+        if event:
+            return make_response(400, "Event Name Must be Unique")
         else:
-            response = jsonify({
-                "message": "Event Registration failed, Please check your input"
-            })
-            response.status_code = 400
+            new_event = Event(name=data["name"], address=data["address"], start_date=data["start_date"],
+                              end_date=data["end_date"], description=data["description"], price=data["price"],
+                              category_id=data["category_id"])
+            user = g.user
+            user.events.append(new_event)
+            try:
+                user.save()
+            except Exception as e:
+                return make_response(400,
+                                     "Category With id {} is not found,"
+                                     " Event Creating Failed".format(data["category_id"]))
+            response = jsonify({"message": "Event Registration Successfully"})
+            response.status_code = 201
             return response
 
 
