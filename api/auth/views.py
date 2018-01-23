@@ -8,7 +8,7 @@ from flask_restful import Api, Resource
 from itsdangerous import URLSafeTimedSerializer
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from api.helpers.response_helpers import make_response
+from api.helpers.response_helpers import make_response, validate_user
 from api.models import User, BlacklistToken
 
 auth = Blueprint("auth", __name__, url_prefix="/api/v1/auth")
@@ -20,12 +20,9 @@ class Register(Resource):
     """
     New User Registration
     """
-
+    @validate_user
     def post(self):
         data = request.get_json()
-        if "email" not in data or "name" not in data or "password" not in data:
-            return make_response(400, "Registration Failed, Please check your input")
-
         new_user = User.query.filter_by(email=data["email"]).first()
         if not new_user:
             hashed_password = generate_password_hash(data["password"])
