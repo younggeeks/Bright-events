@@ -11,88 +11,10 @@ from api.helpers.tests_dummy_data import BASE_URL, correct_user, wrong_input_use
 
 class UsersTester(unittest.TestCase):
     def setUp(self):
-        self.app = create_app("testing")
-        self.client = self.app.test_client()
-        self.test_db = db.init_app(self.app)
-        with self.app.app_context():
-            db.init_app(self.app)
-            db.drop_all()
-            db.create_all()
+        super(UsersTester, self).setUp()
+        
 
-    @staticmethod
-    def user_registration(cls, user):
 
-        response = cls.client.post("{}/api/v1/auth/register".format(BASE_URL),
-                                   data=json.dumps(user), content_type='application/json')
-        data = json.loads(response.data.decode())
-        return {
-            "status": response.status_code,
-            "data": data
-        }
-
-    @staticmethod
-    def login(cls, user):
-        response = cls.client.post("{}/api/v1/auth/login".format(BASE_URL),
-                                   data=json.dumps(user), content_type='application/json')
-
-        data = json.loads(response.data.decode())
-        return {
-            "status": response.status_code,
-            "data": data
-        }
-
-    def logout(self, token=None):
-
-        if not token:
-            headers = None
-        else:
-            headers = dict(
-                Authorization='Bearer ' + token
-            )
-
-        response = self.client.post("{}/api/v1/auth/logout".format(BASE_URL), data={}, headers=headers)
-        return response
-
-    def reset_link(self, email=None):
-        if not email:
-            data = {}
-        else:
-            data = {"email": email}
-        return self.client.post("{}/api/v1/auth/reset".format(BASE_URL),
-                                data=json.dumps(data), content_type='application/json')
-
-    def verify_token_request(self, link):
-        return self.client.get(link)
-
-    def do_verify_token(self, user, correct=True):
-        """
-        Test token verification, if correct parameter is set to true, It'll send
-        request with correct reset link otherwise it'll send expired link
-
-        :param user:
-        :param correct:
-        :return:
-        """
-        self.user_registration(self, user)
-        response = self.reset_link(email=user["email"])
-        data = json.loads(response.data.decode())
-        if "link" not in data:
-            return {
-                "data": data,
-                "status": response.status_code
-            }
-        if not correct:
-            link = fake_link
-        else:
-            link = data["link"]
-
-        verify_response = self.verify_token_request(link=link)
-        verify_data = json.loads(verify_response.data.decode())
-
-        return {
-            "status": verify_response.status_code,
-            "data": verify_data
-        }
 
     def test_register_successful(self):
         response = self.user_registration(self, correct_user)
