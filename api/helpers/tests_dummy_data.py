@@ -63,8 +63,8 @@ wrong_password_user = {
 }
 BASE_URL = "http://localhost:5000"
 new_password = {
-    "password": "123",
-    "password_confirmation": "123"
+    "password": "123456789",
+    "password_confirmation": "123456789"
 }
 new_password_wrong = {
     "password": "123e",
