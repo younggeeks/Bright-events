@@ -16,12 +16,10 @@ class UserRegistrationTestCase(BaseTestCase):
     def test_register_email_exists(self):
         self.http_helpers.user_registration(correct_user)
         response = self.http_helpers.user_registration(correct_user)
-
         self.assertEqual(response["status"], 401)
         self.assertEqual(response["data"]["message"], "User Already Exists, Please Login")
 
     def test_wrong_registration_input(self):
         response = self.http_helpers.user_registration(wrong_input_user)
-
         self.assertEqual(response["status"], 400)
         self.assertEqual(response["data"]["message"], "The following Required Field(s) are Missing: email")

@@ -12,7 +12,6 @@ class EventsSearchTestCase(BaseTestCase):
     def test_search_event_name_successfully(self):
         self.http_helpers.register(correct_event, token=self.http_helpers.get_token())
         response = self.http_helpers.search(search_by="name", query=correct_event["name"])
-
         self.assertEqual(response["status"], 200)
         self.assertEqual(response["data"]["message"], "Successfully Retrieved Events Matching Coders Campusess")
 
@@ -20,7 +19,6 @@ class EventsSearchTestCase(BaseTestCase):
     def test_search_event_location_successfully(self):
         self.http_helpers.register(correct_event, token=self.http_helpers.get_token())
         response = self.http_helpers.search(search_by="location", query="Magomeni")
-
         self.assertEqual(response["status"], 200)
         self.assertEqual(response["data"]["message"], "Successfully Retrieved Events Matching Magomeni")
     #

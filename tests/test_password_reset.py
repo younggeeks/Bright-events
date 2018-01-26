@@ -33,7 +33,6 @@ class PasswordResetTestCase(BaseTestCase):
 
     def test_password_reset_verify_token_successful(self):
         verification = self.http_helpers.do_verify_token(correct_user)
-
         self.assertEqual(verification["status"], 200)
         self.assertEqual(verification["data"]["message"], "Password Reset Link Verified Successfully")
 
@@ -53,12 +52,10 @@ class PasswordResetTestCase(BaseTestCase):
         token = verification["data"]["token"]
         response_get = self.http_helpers.client.get("{}/api/v1/auth/reset-password/{}".format(BASE_URL, token))
         data = json.loads(response_get.data.decode())
-
         new_token = data["token"]
         response = self.http_helpers.client.post("{}/api/v1/auth/reset-password/{}".format(BASE_URL, new_token),
                                                  data=json.dumps(new_password), content_type="application/json")
         data = json.loads(response.data.decode())
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data["message"], "Password Reset Successfully")
 
@@ -67,12 +64,10 @@ class PasswordResetTestCase(BaseTestCase):
         token = verification["data"]["token"]
         response_get = self.http_helpers.client.get("{}/api/v1/auth/reset-password/{}".format(BASE_URL, token))
         data = json.loads(response_get.data.decode())
-
         new_token = data["token"]
         response = self.http_helpers.client.post("{}/api/v1/auth/reset-password/{}".format(BASE_URL, new_token),
                                                  data=json.dumps(new_password_wrong), content_type="application/json")
         data = json.loads(response.data.decode())
-
         self.assertEqual(response.status_code, 401)
         self.assertEqual(data["message"], "Password and Password confirmation do not match")
 
@@ -81,12 +76,10 @@ class PasswordResetTestCase(BaseTestCase):
         token = verification["data"]["token"]
         response_get = self.http_helpers.client.get("{}/api/v1/auth/reset-password/{}".format(BASE_URL, token))
         data = json.loads(response_get.data.decode())
-
         new_token = data["token"]
         response = self.http_helpers.client.post("{}/api/v1/auth/reset-password/{}".format(BASE_URL, new_token),
                                                  data=json.dumps({}), content_type="application/json")
         data = json.loads(response.data.decode())
-
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data["message"], "Password Reset Failed, Please check your input")
 
@@ -95,13 +88,11 @@ class PasswordResetTestCase(BaseTestCase):
         token = verification["data"]["token"]
         response_get = self.http_helpers.client.get("{}/api/v1/auth/reset-password/{}".format(BASE_URL, token))
         data = json.loads(response_get.data.decode())
-
         new_token = data["token"]
         response = self.http_helpers.client.post("{}/api/v1/auth/reset-password/{}".format(BASE_URL, new_token),
                                                  data=json.dumps(new_password_empty_fields),
                                                  content_type="application/json")
         data = json.loads(response.data.decode())
-
         self.assertEqual(response.status_code, 400)
         self.assertEqual(data["message"], "Password Reset Failed, All fields are required")
 
@@ -110,7 +101,6 @@ class PasswordResetTestCase(BaseTestCase):
         token = verification["data"]["token"]
         response_get = self.http_helpers.client.get("{}/api/v1/auth/reset-password/{}".format(BASE_URL, token))
         data = json.loads(response_get.data.decode())
-
         new_token = data["token"]
         response = self.http_helpers.client.post("{}/api/v1/auth/reset-password/{}".format(BASE_URL, new_token),
                                                  data=json.dumps(empty_input_user), content_type="application/json")

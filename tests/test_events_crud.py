@@ -11,15 +11,11 @@ class EventCrud(BaseTestCase):
         self.http_helpers = EventsHttpHelper(client=self.client)
 
     def test_fetch_all_events(self):
-
-        """ Tests the retrieval of all events """
         response = self.http_helpers.fetch_all()
         self.assertEqual(response["status"], 200)
         self.assertEqual(response["data"]["message"], "Events Retrieved Successfully")
 
     def test_register_missing_token(self):
-
-        """Tests to see whether endpoint will return error if token is missing"""
         response = self.http_helpers.register(correct_event)
         self.assertEqual(response["status"], 401)
         self.assertEqual(response["data"]["message"], "Token is missing")
