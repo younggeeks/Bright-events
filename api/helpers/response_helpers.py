@@ -16,11 +16,8 @@ def protected_route(f):
             })
             response.status_code = 401
             return response
-
         token = bearer_token.replace("Bearer ", "")
-
         resp = User.decode_token(token)
-
         if isinstance(resp, int):
             user = User.query.filter_by(id=resp).first()
             if not user:
@@ -33,7 +30,6 @@ def protected_route(f):
             })
             response.status_code = 401
             return response
-
     return func_wrapper
 
 
@@ -63,15 +59,11 @@ def validate_user(f):
         if empty_fields:
             empty_fields = ', '.join(empty_fields)
             return make_response(400, "The following Field(s) are Empty: {}".format(empty_fields))
-
         if not isValidEmail(data["email"]):
             return make_response(400, "{} is invalid Email Address".format(data["email"]))
-
-        if len(data["password"])<8:
+        if len(data["password"]) < 8:
             return make_response(400, "Minimum length of Password is 8 Characters")
-
         return f(*args, **kwargs)
-
     return func_wrapper
 
 
@@ -93,15 +85,35 @@ def validate_password(f):
         if empty_fields:
             empty_fields = ', '.join(empty_fields)
             return make_response(400, "The following Field(s) are Empty: {}".format(empty_fields))
-
         if data["password"] != data["password_confirmation"]:
             return make_response(400, "Password and Password Confirmation do not match")
-
-        if len(data["password"])<8:
+        if len(data["password"]) < 8:
             return make_response(400, "Minimum length of Password is 8 Characters")
-
         return f(*args, **kwargs)
+    return func_wrapper
 
+
+def validate_credentials(f):
+    @wraps(f)
+    def func_wrapper(*args, **kwargs):
+        if not request.is_json and not request.get_json():
+            return make_response(400, "You have not provided Valid Json Input")
+        required_fields = ["password", "email"]
+        data = request.get_json()
+        fields = set(required_fields)
+        missing_fields = fields - set(data)
+        if missing_fields:
+            missing_fields = ', '.join(missing_fields)
+            return make_response(400, "The following Required Field(s) are Missing: {}".format(missing_fields))
+        empty_fields = []
+        [empty_fields.append(field) for field in required_fields if
+         not data[field] or len(str(data[field]).strip()) <= 0]
+        if empty_fields:
+            empty_fields = ', '.join(empty_fields)
+            return make_response(400, "The following Field(s) are Empty: {}".format(empty_fields))
+        if not isValidEmail(data["email"]):
+            return make_response(400, "{} is invalid Email Address".format(data["email"]))
+        return f(*args, **kwargs)
     return func_wrapper
 
 
@@ -124,7 +136,6 @@ def validate_event(f):
             empty_fields = ', '.join(empty_fields)
             return make_response(400, "The following Field(s) are Empty: {}".format(empty_fields))
         return f(*args, **kwargs)
-
     return func_wrapper
 
 
