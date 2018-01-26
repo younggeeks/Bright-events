@@ -36,18 +36,18 @@ def encode_token():
 correct_user = {
     "name": "Kilango Jumiya",
     "email": "naiifg@gmadfadsfsdfsdfil.comd",
-    "password": "secret"
+    "password": "secreting"
 }
 correct_user2 = {
     "name": "Junior Yusuph",
     "email": "yusuphjunior@gmail.com",
-    "password": "secret"
+    "password": "secretsldkjfasd"
 }
 reset_email = "naiifg@gmadfadsfsdfsdfil.comd"
 incorrect_reset_email = "naiifg@gmadfadsfsdfsdfil.comdfsd"
 wrong_input_user = {
     "name": "Kilango Jumiya",
-    "password": "secret"
+    "password": "secretfsadfasdfa"
 }
 empty_input_user = {
     "email": "",
@@ -55,11 +55,11 @@ empty_input_user = {
 }
 wrong_email_user = {
     "email": "juma@gmail.com",
-    "password": "11234"
+    "password": "jfklasdfjjasdjfjaslkd"
 }
 wrong_password_user = {
     "email": "naiifg@gmadfadsfsdfsdfil.comd",
-    "password": "asfsadf"
+    "password": "jfklasdjkflasdf"
 }
 BASE_URL = "http://localhost:5000"
 new_password = {

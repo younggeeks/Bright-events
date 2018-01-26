@@ -2,17 +2,16 @@ import json
 
 import time
 
+from api.helpers.AuthHttpHelpers import AuthHttpHelpers
 from api.helpers.tests_dummy_data import BASE_URL, correct_user, updated_correct_event, encode_token
-from tests.test_users import UsersTester
+
+
 
 
 class EventsHttpHelper:
     def __init__(self, client):
         self.client = client
-
-    def user_login(self, user):
-        response = UsersTester.login(self, user)
-        return response
+        self.auth_helpers = AuthHttpHelpers(self.client)
 
     def fetch_all(self):
         response = self.client.get("{}/api/v1/events/".format(BASE_URL))
@@ -21,6 +20,10 @@ class EventsHttpHelper:
             "status": response.status_code,
             "data": data
         }
+
+    def user_login(self, user):
+        response = self.auth_helpers.login(user)
+        return response
 
     def fetch_one(self, event_id=1):
         response = self.client.get("{}/api/v1/events/{}".format(BASE_URL, event_id))
@@ -47,7 +50,7 @@ class EventsHttpHelper:
             headers = {}
         elif token and header:
             headers = dict(Authorization='Bearer ' + token)
-        UsersTester.user_registration(self, correct_user)
+        self.auth_helpers.user_registration(correct_user)
         response = self.client.post("{}/api/v1/events/".format(BASE_URL),
                                     data=json.dumps(user), headers=headers, content_type='application/json')
         data = json.loads(response.data.decode())
@@ -69,7 +72,7 @@ class EventsHttpHelper:
         else:
             event = {}
 
-        UsersTester.user_registration(self, correct_user)
+        self.auth_helpers.user_registration(correct_user)
         response = self.client.put("{}/api/v1/events/{}".format(BASE_URL, event_id),
                                    data=json.dumps(event), headers=headers, content_type='application'
                                                                                          '/json')
@@ -118,8 +121,10 @@ class EventsHttpHelper:
             token = encode_token()
             time.sleep(1)
             return token
-        UsersTester.user_registration(self, user)
+        response = self.auth_helpers.user_registration(user)
+        print(response)
         resp = self.user_login(user)
+        print(resp["data"])
         token = resp["data"]["token"]
         return token
 
@@ -142,7 +147,7 @@ class EventsHttpHelper:
         }
 
     def paginate(self, limit=3, offset=0):
-        response = self.client.get("{}/api/v1/events/filter?limit={}&&offset={}".format(BASE_URL, limit, offset))
+        response = self.client.get("{}/api/v1/events/filter?limit={}&&page={}".format(BASE_URL, limit, offset))
         return {
             "status": response.status_code,
             "data": json.loads(response.data.decode())

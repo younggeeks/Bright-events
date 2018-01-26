@@ -24,11 +24,7 @@ def protected_route(f):
         if isinstance(resp, int):
             user = User.query.filter_by(id=resp).first()
             if not user:
-                response = jsonify({
-                    "message": "User not found "
-                })
-                response.status_code = 404
-                return response
+                return make_response(404, "User not Found")
             g.user = user
             return f(*args, **kwargs)
         else:
