@@ -1,0 +1,6 @@
+nose_show_skipped.egg-info/PKG-INFO
+nose_show_skipped.egg-info/SOURCES.txt
+nose_show_skipped.egg-info/dependency_links.txt
+nose_show_skipped.egg-info/entry_points.txt
+nose_show_skipped.egg-info/requires.txt
+nose_show_skipped.egg-info/top_level.txt
