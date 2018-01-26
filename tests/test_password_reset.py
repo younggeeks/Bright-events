@@ -29,7 +29,7 @@ class PasswordResetTestCase(BaseTestCase):
         response = self.http_helpers.reset_link()
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data["message"], "Password Reset failed, Please check your input")
+        self.assertEqual(data["message"], "Email field is required, Password Reset failed")
 
     def test_password_reset_verify_token_successful(self):
         verification = self.http_helpers.do_verify_token(correct_user)
@@ -81,7 +81,7 @@ class PasswordResetTestCase(BaseTestCase):
                                                  data=json.dumps({}), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data["message"], "Password Reset Failed, Please check your input")
+        self.assertEqual(data["message"], "Email field is required, Password Reset failed")
 
     def test_password_reset_change_password_empty_field(self):
         verification = self.http_helpers.do_verify_token(correct_user)
@@ -106,4 +106,4 @@ class PasswordResetTestCase(BaseTestCase):
                                                  data=json.dumps(empty_input_user), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data["message"], "Password Reset Failed, Please check your input")
+        self.assertEqual(data["message"], "Email field is required, Password Reset failed")
