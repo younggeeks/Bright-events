@@ -30,7 +30,7 @@ class UserLoginTestCase(BaseTestCase):
     def test_login_unsuccessful_empty_fields(self):
         response = self.http_helpers.login(empty_input_user)
         self.assertEqual(response["status"], 400)
-        self.assertEqual(response["data"]["message"], "Email and password fields are required to login")
+        self.assertEqual(response["data"]["message"], "The following Field(s) are Empty: password, email")
 
     def test_login_unsuccessful_wrong_email(self):
         response = self.http_helpers.login(wrong_email_user)

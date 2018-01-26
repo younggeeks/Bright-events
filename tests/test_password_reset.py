@@ -48,7 +48,6 @@ class PasswordResetTestCase(BaseTestCase):
 
     def test_password_reset_change_password_successful(self):
         verification = self.http_helpers.do_verify_token(correct_user)
-
         token = verification["data"]["token"]
         response_get = self.http_helpers.client.get("{}/api/v1/auth/reset-password/{}".format(BASE_URL, token))
         data = json.loads(response_get.data.decode())
@@ -56,6 +55,7 @@ class PasswordResetTestCase(BaseTestCase):
         response = self.http_helpers.client.post("{}/api/v1/auth/reset-password/{}".format(BASE_URL, new_token),
                                                  data=json.dumps(new_password), content_type="application/json")
         data = json.loads(response.data.decode())
+        print(data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data["message"], "Password Reset Successfully")
 
@@ -68,8 +68,8 @@ class PasswordResetTestCase(BaseTestCase):
         response = self.http_helpers.client.post("{}/api/v1/auth/reset-password/{}".format(BASE_URL, new_token),
                                                  data=json.dumps(new_password_wrong), content_type="application/json")
         data = json.loads(response.data.decode())
-        self.assertEqual(response.status_code, 401)
-        self.assertEqual(data["message"], "Password and Password confirmation do not match")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data["message"], "Password and Password Confirmation do not match")
 
     def test_password_reset_change_password_missing_field(self):
         verification = self.http_helpers.do_verify_token(correct_user)
@@ -81,7 +81,7 @@ class PasswordResetTestCase(BaseTestCase):
                                                  data=json.dumps({}), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data["message"], "Email field is required, Password Reset failed")
+        self.assertEqual(data["message"], "The following Required Field(s) are Missing: password, password_confirmation")
 
     def test_password_reset_change_password_empty_field(self):
         verification = self.http_helpers.do_verify_token(correct_user)
@@ -94,7 +94,7 @@ class PasswordResetTestCase(BaseTestCase):
                                                  content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data["message"], "Password Reset Failed, All fields are required")
+        self.assertEqual(data["message"], "The following Field(s) are Empty: password, password_confirmation")
 
     def test_password_reset_change_password_missing_data(self):
         verification = self.http_helpers.do_verify_token(correct_user)
@@ -106,4 +106,4 @@ class PasswordResetTestCase(BaseTestCase):
                                                  data=json.dumps(empty_input_user), content_type="application/json")
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data["message"], "Email field is required, Password Reset failed")
+        self.assertEqual(data["message"], "The following Required Field(s) are Missing: password_confirmation")
