@@ -30,6 +30,7 @@ def protected_route(f):
             })
             response.status_code = 401
             return response
+
     return func_wrapper
 
 
@@ -41,102 +42,41 @@ def isValidEmail(email):
         return False
 
 
-def validate_user(f):
-    @wraps(f)
-    def func_wrapper(*args, **kwargs):
-        if not request.is_json and not request.get_json():
-            return make_response(400, "You have not provided Valid Json Input")
-        required_fields = ["name", "email", "password"]
-        data = request.get_json()
-        fields = set(required_fields)
-        missing_fields = fields - set(data)
-        if missing_fields:
-            missing_fields = ', '.join(missing_fields)
-            return make_response(400, "The following Required Field(s) are Missing: {}".format(missing_fields))
-        empty_fields = []
-        [empty_fields.append(field) for field in required_fields if
-         not data[field] or len(str(data[field]).strip()) <= 0]
-        if empty_fields:
-            empty_fields = ', '.join(empty_fields)
-            return make_response(400, "The following Field(s) are Empty: {}".format(empty_fields))
-        if not isValidEmail(data["email"]):
-            return make_response(400, "{} is invalid Email Address".format(data["email"]))
-        if len(data["password"]) < 8:
-            return make_response(400, "Minimum length of Password is 8 Characters")
-        return f(*args, **kwargs)
-    return func_wrapper
+def password_confirmation_matches(password, confirmation):
+    return password == confirmation
 
 
-def validate_password(f):
-    @wraps(f)
-    def func_wrapper(*args, **kwargs):
-        if not request.is_json and not request.get_json():
-            return make_response(400, "You have not provided Valid Json Input")
-        required_fields = ["password", "password_confirmation"]
-        data = request.get_json()
-        fields = set(required_fields)
-        missing_fields = fields - set(data)
-        if missing_fields:
-            missing_fields = ', '.join(missing_fields)
-            return make_response(400, "The following Required Field(s) are Missing: {}".format(missing_fields))
-        empty_fields = []
-        [empty_fields.append(field) for field in required_fields if
-         not data[field] or len(str(data[field]).strip()) <= 0]
-        if empty_fields:
-            empty_fields = ', '.join(empty_fields)
-            return make_response(400, "The following Field(s) are Empty: {}".format(empty_fields))
-        if data["password"] != data["password_confirmation"]:
-            return make_response(400, "Password and Password Confirmation do not match")
-        if len(data["password"]) < 8:
-            return make_response(400, "Minimum length of Password is 8 Characters")
-        return f(*args, **kwargs)
-    return func_wrapper
+def validate_inputs(required_fields):
+    def validate(f):
+        @wraps(f)
+        def func_wrapper(*args, **kwargs):
+            if not request.is_json and not request.get_json():
+                return make_response(400, "You have not provided Valid Json Input")
+            data = request.get_json()
+            fields = set(required_fields)
+            missing_fields = fields - set(data)
+            if missing_fields:
+                missing_fields = ', '.join(missing_fields)
+                return make_response(400, "The following Required Field(s) are Missing: {}".format(missing_fields))
+            empty_fields = []
+            [empty_fields.append(field) for field in required_fields if
+             not data[field] or len(str(data[field]).strip()) <= 0]
+            if empty_fields:
+                empty_fields = ', '.join(empty_fields)
+                return make_response(400, "The following Field(s) are Empty: {}".format(empty_fields))
+            if "email" in required_fields and not isValidEmail(data["email"]):
+                return make_response(400, "{} is invalid Email Address".format(data["email"]))
+            if "password" in required_fields and len(data["password"]) < 8:
+                return make_response(400, "Minimum length of Password is 8 Characters")
+            if "password_confirmation" in required_fields:
+                if not password_confirmation_matches(data["password"], data["password_confirmation"]):
+                    return make_response(400, "Password and Password Confirmation do not match")
 
+            return f(*args, **kwargs)
 
-def validate_credentials(f):
-    @wraps(f)
-    def func_wrapper(*args, **kwargs):
-        if not request.is_json and not request.get_json():
-            return make_response(400, "You have not provided Valid Json Input")
-        required_fields = ["password", "email"]
-        data = request.get_json()
-        fields = set(required_fields)
-        missing_fields = fields - set(data)
-        if missing_fields:
-            missing_fields = ', '.join(missing_fields)
-            return make_response(400, "The following Required Field(s) are Missing: {}".format(missing_fields))
-        empty_fields = []
-        [empty_fields.append(field) for field in required_fields if
-         not data[field] or len(str(data[field]).strip()) <= 0]
-        if empty_fields:
-            empty_fields = ', '.join(empty_fields)
-            return make_response(400, "The following Field(s) are Empty: {}".format(empty_fields))
-        if not isValidEmail(data["email"]):
-            return make_response(400, "{} is invalid Email Address".format(data["email"]))
-        return f(*args, **kwargs)
-    return func_wrapper
+        return func_wrapper
 
-
-def validate_event(f):
-    @wraps(f)
-    def func_wrapper(*args, **kwargs):
-        if not request.is_json and not request.get_json():
-            return make_response(400, "You have not provided Valid Json Input")
-        required_fields = ["name", "address", "start_date", "end_date", "description", "price", "category_id"]
-        data = request.get_json()
-        fields = set(required_fields)
-        missing_fields = fields - set(data)
-        if missing_fields:
-            missing_fields = ', '.join(missing_fields)
-            return make_response(400, "The following Required Field(s) are Missing: {}".format(missing_fields))
-        empty_fields = []
-        [empty_fields.append(field) for field in required_fields if
-         not data[field] or len(str(data[field]).strip()) <= 0]
-        if empty_fields:
-            empty_fields = ', '.join(empty_fields)
-            return make_response(400, "The following Field(s) are Empty: {}".format(empty_fields))
-        return f(*args, **kwargs)
-    return func_wrapper
+    return validate
 
 
 def event_parser(event):

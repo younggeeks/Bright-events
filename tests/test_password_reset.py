@@ -2,7 +2,7 @@ from flask import json
 
 from api.helpers.AuthHttpHelpers import AuthHttpHelpers
 from api.helpers.tests_dummy_data import correct_user, incorrect_reset_email, wrong_email_user, new_password, BASE_URL, \
-    new_password_wrong, new_password_empty_fields, empty_input_user
+    new_password_wrong, new_password_empty_fields
 from tests.BaseTest import BaseTestCase
 
 
@@ -92,6 +92,7 @@ class PasswordResetTestCase(BaseTestCase):
         response = self.http_helpers.client.post("{}/api/v1/auth/reset-password/{}".format(BASE_URL, new_token),
                                                  data=json.dumps(new_password), content_type="application/json")
         data = json.loads(response.data.decode())
+        print(data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data["message"], "Password Reset Successfully")
 

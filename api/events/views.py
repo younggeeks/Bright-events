@@ -5,7 +5,8 @@ from flask import Blueprint, request, jsonify, g, url_for
 from flask_restful import Api, Resource
 from sqlalchemy import asc
 
-from api.helpers.response_helpers import protected_route, make_response, validate_event
+from api.helpers.response_helpers import protected_route, make_response, validate_inputs
+from api.helpers.tests_dummy_data import required_event_fields
 
 events = Blueprint("events", __name__, url_prefix="/api/v1/events")
 
@@ -54,7 +55,7 @@ class EventList(Resource):
         return response
 
     @protected_route
-    @validate_event
+    @validate_inputs(required_event_fields)
     def post(self):
         data = request.get_json()
         event = Event.query.filter_by(name=data["name"]).first()

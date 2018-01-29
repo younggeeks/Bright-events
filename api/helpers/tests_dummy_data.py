@@ -32,13 +32,15 @@ def encode_token():
         return e
 
 
-
+required_user_fields = ["name", "email", "password"]
+required_new_password_fields = ["password", "password_confirmation"]
+required_credentials_fields = ["password", "email"]
+required_event_fields = ["name", "address", "start_date", "end_date", "description", "price", "category_id"]
 correct_user = {
     "name": "Kilango Jumiya",
     "email": "naiifg@gmadfadsfsdfsdfil.comd",
     "password": "secreting"
 }
-
 invalid_email_user = {
     "name": "Kilango Jumiya",
     "email": "naiifg",
@@ -73,15 +75,14 @@ new_password = {
     "password_confirmation": "123456789"
 }
 new_password_wrong = {
-    "password": "123e",
-    "password_confirmation": "123"
+    "password": "123eferasdfsa",
+    "password_confirmation": "123fasdfawergafag"
 }
 
 new_password_empty_fields = {
     "password": "",
     "password_confirmation": ""
 }
-
 correct_event = {
     "name": "Coders Campusess",
     "address": "Magomeni, Dar es salaam",
@@ -93,7 +94,6 @@ correct_event = {
     "user_id": 1,
     "category_id": 1
 }
-
 updated_correct_event = {
     "name": "Googly Fellas",
     "address": "Magomeni, Dar es salaam",
@@ -105,7 +105,6 @@ updated_correct_event = {
     "user_id": 1,
     "category_id": 1
 }
-
 updated_wrong_user_event = {
     "name": "Googly Fellas",
     "address": "Magomeni, Dar es salaam",
@@ -117,7 +116,6 @@ updated_wrong_user_event = {
     "user_id": 2,
     "category_id": 1
 }
-
 missing_field_event = {
     "address": "Magomeni, Dar es salaam",
     "start_date": "1/12/2019",
