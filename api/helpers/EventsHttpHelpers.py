@@ -122,9 +122,7 @@ class EventsHttpHelper:
             time.sleep(1)
             return token
         response = self.auth_helpers.user_registration(user)
-        print(response)
         resp = self.user_login(user)
-        print(resp["data"])
         token = resp["data"]["token"]
         return token
 
