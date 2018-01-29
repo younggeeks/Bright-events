@@ -67,7 +67,6 @@ class EventRSVP(BaseTestCase):
     def test_rsvp_already_in_the_list(self):
         """
         User should not be allowed to rsvp more than once
-        
         :return:
         """
         token = self.http_helpers.get_token(user=correct_user)
