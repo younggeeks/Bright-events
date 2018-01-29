@@ -1,4 +1,3 @@
-
 import os
 import jwt
 import datetime
@@ -33,9 +32,16 @@ def encode_token():
         return e
 
 
+
 correct_user = {
     "name": "Kilango Jumiya",
     "email": "naiifg@gmadfadsfsdfsdfil.comd",
+    "password": "secreting"
+}
+
+invalid_email_user = {
+    "name": "Kilango Jumiya",
+    "email": "naiifg",
     "password": "secreting"
 }
 correct_user2 = {
