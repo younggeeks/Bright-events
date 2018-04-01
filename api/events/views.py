@@ -1,3 +1,4 @@
+from collections import Counter
 from functools import wraps
 
 import sys
@@ -237,6 +238,35 @@ class Paginate(Resource):
             })
 
 
+class Reports(Resource):
+    @protected_route
+    def get(self):
+        """
+        Fetches reports for a specified user
+        :param user:
+        :return:
+        """
+
+        my_events = Event.query.filter(Event.user_id == g.user.id).all()
+
+        counter = Counter()
+        for event in my_events:
+            counter[event.category.name] += 1
+        categories = []
+        counts = []
+        if counter:
+            # fetch categories from events and use them as titles for graph
+            [categories.append(category) for category in counter.keys()]
+            # fetch counts  from events and use them as titles for graph
+            [counts.append(num) for num in counter.values()]
+        response = jsonify({
+            "categories": categories,
+            "values": counts
+
+        })
+        return response
+
+
 api.add_resource(EventList, "/")
 api.add_resource(Events, "/<int:event_id>")
 api.add_resource(RSVP, "/<int:event_id>/rsvp")
@@ -244,3 +274,4 @@ api.add_resource(Guests, "/<int:event_id>/guests")
 api.add_resource(Search, "/search")
 api.add_resource(SearchLocation, "/location")
 api.add_resource(Paginate, "/filter")
+api.add_resource(Reports, "/reports")
