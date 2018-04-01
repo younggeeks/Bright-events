@@ -103,6 +103,13 @@ def user_parser(user):
     return new_user
 
 
+def category_parse(category):
+    return {
+        'id': category.id,
+        'name': category.name
+    }
+
+
 # helper function used to return the message when login fails
 def failed_login():
     response = jsonify({"message": "Wrong Combination of Username and Password"})
@@ -131,6 +138,7 @@ def parse_list(list_type, data):
     :param data
     :return parsed_dictionary:
     """
+
     if list_type == 'users':
         dict_users = []
         for user in data:
