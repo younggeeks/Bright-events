@@ -13,7 +13,7 @@ events = Blueprint("events", __name__, url_prefix="/api/v1/events")
 
 api = Api(events, catch_all_404s=True)
 
-from api.models import Event
+from api.models import Event, Category
 from api.helpers import response_helpers
 
 
@@ -45,6 +45,18 @@ def search(search_type):
         return response
 
 
+class Categories(Resource):
+    def get(self):
+        all_categories = Category.query.all()
+        categories_dict = []
+        [categories_dict.append(category.name) for category in all_categories]
+        response = jsonify({
+            "categories": categories_dict
+        })
+        response.status_code = 200
+        return response
+
+
 class EventList(Resource):
     def get(self):
         all_events = Event.query.all()
@@ -63,9 +75,16 @@ class EventList(Resource):
         if event:
             return make_response(400, "Event Name Must be Unique")
         else:
+            category = Category.query.filter_by(name=data["name"]).first()
+            if category:
+                category_id = category.id
+            else:
+                new_category = Category(name=data["name"])
+                new_category.save()
+                category_id = new_category.id
             new_event = Event(name=data["name"], address=data["address"], start_date=data["start_date"],
                               end_date=data["end_date"], description=data["description"], price=data["price"],
-                              category_id=data["category_id"])
+                              category_id=category_id)
             user = g.user
             user.events.append(new_event)
             try:
@@ -238,6 +257,15 @@ class Paginate(Resource):
             })
 
 
+def check_guests(events):
+    print("events are ", events)
+    with_guests = []
+    for event in events:
+        if len(event.rsvps) > 0:
+            with_guests.append(event)
+    return with_guests
+
+
 class Reports(Resource):
     @protected_route
     def get(self):
@@ -246,12 +274,12 @@ class Reports(Resource):
         :param user:
         :return:
         """
-
         my_events = Event.query.filter(Event.user_id == g.user.id).all()
 
         counter = Counter()
-        for event in my_events:
+        for event in check_guests(my_events):
             counter[event.category.name] += 1
+
         categories = []
         counts = []
         if counter:
@@ -275,3 +303,4 @@ api.add_resource(Search, "/search")
 api.add_resource(SearchLocation, "/location")
 api.add_resource(Paginate, "/filter")
 api.add_resource(Reports, "/reports")
+api.add_resource(Categories, "/categories")

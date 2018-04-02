@@ -89,9 +89,16 @@ def event_parser(event):
         "user_id": event.user.id,
         "price": event.price,
         "description": event.description,
-        "category_id": event.category.id
+        # "category_id": event.category.id
     }
     return new_event
+
+
+def category_parser(category):
+    return {
+        "id": category.id,
+        "name": category.name,
+    }
 
 
 def user_parser(user):

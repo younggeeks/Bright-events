@@ -35,7 +35,7 @@ def encode_token():
 required_user_fields = ["name", "email", "password"]
 required_new_password_fields = ["password", "password_confirmation"]
 required_credentials_fields = ["password", "email"]
-required_event_fields = ["name", "address", "start_date", "end_date", "description", "price", "category_id"]
+required_event_fields = ["name", "address", "start_date", "end_date", "description", "price", "category"]
 correct_user = {
     "name": "Kilango Jumiya",
     "email": "naiifg@gmadfadsfsdfsdfil.comd",
