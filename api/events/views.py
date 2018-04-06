@@ -5,7 +5,7 @@ import sys
 from flask import Blueprint, request, jsonify, g, url_for
 from flask_restful import Api, Resource
 from sqlalchemy import asc
-
+import collections
 from api.helpers.response_helpers import protected_route, make_response, validate_inputs
 from api.helpers.tests_dummy_data import required_event_fields
 
@@ -75,11 +75,11 @@ class EventList(Resource):
         if event:
             return make_response(400, "Event Name Must be Unique")
         else:
-            category = Category.query.filter_by(name=data["name"]).first()
+            category = Category.query.filter_by(name=data["category"]).first()
             if category:
                 category_id = category.id
             else:
-                new_category = Category(name=data["name"])
+                new_category = Category(name=data["category"])
                 new_category.save()
                 category_id = new_category.id
             new_event = Event(name=data["name"], address=data["address"], start_date=data["start_date"],
@@ -257,15 +257,6 @@ class Paginate(Resource):
             })
 
 
-def check_guests(events):
-    print("events are ", events)
-    with_guests = []
-    for event in events:
-        if len(event.rsvps) > 0:
-            with_guests.append(event)
-    return with_guests
-
-
 class Reports(Resource):
     @protected_route
     def get(self):
@@ -274,11 +265,13 @@ class Reports(Resource):
         :param user:
         :return:
         """
+
         my_events = Event.query.filter(Event.user_id == g.user.id).all()
 
         counter = Counter()
-        for event in check_guests(my_events):
-            counter[event.category.name] += 1
+        for event in my_events:
+            if len(event.rsvps)>0:
+                counter[event.name] = len(event.rsvps)
 
         categories = []
         counts = []
