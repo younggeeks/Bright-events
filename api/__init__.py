@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
@@ -14,6 +15,9 @@ def create_app(environment):
     app.config.from_object(env_config[environment])
     app.config.from_pyfile("config.py")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    PROJECT_HOME = os.path.dirname(os.path.realpath(__file__))
+    UPLOAD_FOLDER = '{}/uploads/'.format(PROJECT_HOME)
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
     app.register_blueprint(auth)

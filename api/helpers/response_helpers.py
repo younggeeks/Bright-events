@@ -46,6 +46,40 @@ def password_confirmation_matches(password, confirmation):
     return password == confirmation
 
 
+def validate_event_form(required_fields):
+    def validate(f):
+        @wraps(f)
+        def func_wrapper(*args, **kwargs):
+            print("the request is ", request)
+            if not request.files.get('image'):
+                return make_response(400, "You need to upload an Image")
+            data = request.form
+            fields = set(required_fields)
+            missing_fields = fields - set(data)
+            if missing_fields:
+                missing_fields = ', '.join(missing_fields)
+                return make_response(400, "The following Required Field(s) are Missing: {}".format(missing_fields))
+            empty_fields = []
+            [empty_fields.append(field) for field in required_fields if
+             not data[field] or len(str(data[field]).strip()) <= 0]
+            if empty_fields:
+                empty_fields = ', '.join(empty_fields)
+                return make_response(400, "The following Field(s) are Empty: {}".format(empty_fields))
+            if "email" in required_fields and not isValidEmail(data["email"]):
+                return make_response(400, "{} is invalid Email Address".format(data["email"]))
+            if "password" in required_fields and len(data["password"]) < 8:
+                return make_response(400, "Minimum length of Password is 8 Characters")
+            if "password_confirmation" in required_fields:
+                if not password_confirmation_matches(data["password"], data["password_confirmation"]):
+                    return make_response(400, "Password and Password Confirmation do not match")
+
+            return f(*args, **kwargs)
+
+        return func_wrapper
+
+    return validate
+
+
 def validate_inputs(required_fields):
     def validate(f):
         @wraps(f)

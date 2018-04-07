@@ -21,6 +21,7 @@ class Register(Resource):
     """
     New User Registration
     """
+
     @validate_inputs(required_user_fields)
     def post(self):
         data = request.get_json()
@@ -40,6 +41,7 @@ class Register(Resource):
 
 class Login(Resource):
     """User Authentication using Email and password"""
+
     @validate_inputs(required_credentials_fields)
     def post(self):
         credentials = request.get_json()
@@ -59,9 +61,9 @@ class Login(Resource):
             return make_response(401, "Wrong Combination of Email and password, Login Failed")
 
 
-
 class Logout(Resource):
     """Authenticated Users can Destroy their token to indicate logging  out"""
+
     def post(self):
         bearer_token = request.headers.get("Authorization")
         if not bearer_token:
@@ -84,6 +86,7 @@ class Logout(Resource):
 
 class PasswordResetLink(Resource):
     """User enters their email and resent link is returned as a feedback for them to reset"""
+
     def post(self):
         data = request.get_json()
         if "email" in data and data["email"] != "":
@@ -108,6 +111,7 @@ class PasswordResetLink(Resource):
 
 class PasswordResetToken(Resource):
     """Once User clicks on the link that was sent to them  we verify to see the validity of the link"""
+
     def get(self, token):
         try:
             password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
@@ -126,6 +130,7 @@ class PasswordResetToken(Resource):
 
 class PasswordResetChangePassword(Resource):
     """User can now enter their new password and change their password"""
+
     def get(self, token):
         password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
         password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT_VERIFY"), max_age=3600)
@@ -151,7 +156,6 @@ class PasswordResetChangePassword(Resource):
         })
         response.status_code = 200
         return response
-
 
 
 api.add_resource(Register, "/register")

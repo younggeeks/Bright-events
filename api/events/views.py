@@ -1,12 +1,10 @@
+import uuid
 from collections import Counter
-from functools import wraps
-
-import sys
+import os
 from flask import Blueprint, request, jsonify, g, url_for
 from flask_restful import Api, Resource
 from sqlalchemy import asc
-import collections
-from api.helpers.response_helpers import protected_route, make_response, validate_inputs
+from api.helpers.response_helpers import protected_route, make_response, validate_inputs, validate_event_form
 from api.helpers.tests_dummy_data import required_event_fields
 
 events = Blueprint("events", __name__, url_prefix="/api/v1/events")
@@ -15,6 +13,16 @@ api = Api(events, catch_all_404s=True)
 
 from api.models import Event, Category
 from api.helpers import response_helpers
+
+
+def uploadImage(local_dir, image):
+    newpath = local_dir
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
+    image_name = uuid.uuid4().hex + image.filename
+    saved_path = os.path.join(os.getenv("UPLOAD_FOLDER"), image_name)
+    image.save(saved_path)
+    return image_name
 
 
 def search(search_type):
@@ -68,10 +76,12 @@ class EventList(Resource):
         return response
 
     @protected_route
-    @validate_inputs(required_event_fields)
+    @validate_event_form(required_event_fields)
     def post(self):
-        data = request.get_json()
+        data = request.form
+        # data = request.get_json()
         event = Event.query.filter_by(name=data["name"]).first()
+
         if event:
             return make_response(400, "Event Name Must be Unique")
         else:
@@ -82,11 +92,20 @@ class EventList(Resource):
                 new_category = Category(name=data["category"])
                 new_category.save()
                 category_id = new_category.id
-            new_event = Event(name=data["name"], address=data["address"], start_date=data["start_date"],
-                              end_date=data["end_date"], description=data["description"], price=data["price"],
+
+            img = uploadImage(os.getenv("UPLOAD_FOLDER"), request.files['image'])
+
+            print("the uploaded image is ", img)
+
+            new_event = Event(name=data.get("name"), address=data.get("address"), start_date=data.get("start_date"),
+                              end_date=data.get("end_date"), description=data.get("description"),
+                              price=data.get("price"),
                               category_id=category_id)
+            print("the new event is ", new_event)
+            print("we've reached down here")
             user = g.user
             user.events.append(new_event)
+
             try:
                 user.save()
             except Exception as e:
@@ -270,7 +289,7 @@ class Reports(Resource):
 
         counter = Counter()
         for event in my_events:
-            if len(event.rsvps)>0:
+            if len(event.rsvps) > 0:
                 counter[event.name] = len(event.rsvps)
 
         categories = []
