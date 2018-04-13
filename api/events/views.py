@@ -19,7 +19,8 @@ def uploadImage(local_dir, image):
     newpath = local_dir
     if not os.path.exists(newpath):
         os.makedirs(newpath)
-    image_name = uuid.uuid4().hex + image.filename
+    ext = image.filename.strip()
+    image_name = uuid.uuid4().hex + ext
     saved_path = os.path.join(os.getenv("UPLOAD_FOLDER"), image_name)
     image.save(saved_path)
     return image_name
@@ -57,7 +58,7 @@ class Categories(Resource):
     def get(self):
         all_categories = Category.query.all()
         categories_dict = []
-        [categories_dict.append(category.name) for category in all_categories]
+        [categories_dict.append({'id':category.id,'name':category.name}) for category in all_categories]
         response = jsonify({
             "categories": categories_dict
         })
@@ -97,7 +98,8 @@ class EventList(Resource):
 
             print("the uploaded image is ", img)
 
-            new_event = Event(name=data.get("name"), address=data.get("address"), start_date=data.get("start_date"),
+            new_event = Event(name=data.get("name"), image=img, address=data.get("address"),
+                              start_date=data.get("start_date"),
                               end_date=data.get("end_date"), description=data.get("description"),
                               price=data.get("price"),
                               category_id=category_id)
@@ -115,6 +117,19 @@ class EventList(Resource):
             response = jsonify({"message": "Event Registration Successfully"})
             response.status_code = 201
             return response
+
+
+class MyEvents(Resource):
+    @protected_route
+    def get(self):
+        user = g.user
+        events = Event.query.filter_by(user_id=user.id).all()
+        response = jsonify({
+            "message": "Events Retrieved Successfully",
+            "events": response_helpers.parse_list("events", events)
+        })
+        response.status_code = 200
+        return response
 
 
 class Events(Resource):
@@ -316,3 +331,4 @@ api.add_resource(SearchLocation, "/location")
 api.add_resource(Paginate, "/filter")
 api.add_resource(Reports, "/reports")
 api.add_resource(Categories, "/categories")
+api.add_resource(MyEvents, "/my-events")
