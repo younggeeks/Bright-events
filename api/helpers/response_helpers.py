@@ -122,8 +122,10 @@ def event_parser(event):
         "end_date": event.end_date,
         "user_id": event.user.id,
         "price": event.price,
+        "image":event.image,
+        "created_at":event.created_at,
         "description": event.description,
-        # "category_id": event.category.id
+        "category_id": event.category.id
     }
     return new_event
 
