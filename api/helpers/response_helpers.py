@@ -50,9 +50,6 @@ def validate_event_form(required_fields):
     def validate(f):
         @wraps(f)
         def func_wrapper(*args, **kwargs):
-            print("the request is ", request)
-            if not request.files.get('image'):
-                return make_response(400, "You need to upload an Image")
             data = request.form
             fields = set(required_fields)
             missing_fields = fields - set(data)
@@ -113,7 +110,7 @@ def validate_inputs(required_fields):
     return validate
 
 
-def event_parser(event):
+def event_parser(event,category=""):
     new_event = {
         "id": event.id,
         "name": event.name,
@@ -125,7 +122,8 @@ def event_parser(event):
         "image":event.image,
         "created_at":event.created_at,
         "description": event.description,
-        "category_id": event.category.id
+        "category_id": event.category.id,
+        "category":category
     }
     return new_event
 
