@@ -80,9 +80,7 @@ class EventList(Resource):
     @validate_event_form(required_event_fields)
     def post(self):
         data = request.form
-        # data = request.get_json()
         event = Event.query.filter_by(name=data["name"]).first()
-
         if event:
             return make_response(400, "Event Name Must be Unique")
         else:
@@ -93,21 +91,18 @@ class EventList(Resource):
                 new_category = Category(name=data["category"])
                 new_category.save()
                 category_id = new_category.id
-
-            img = uploadImage(os.getenv("UPLOAD_FOLDER"), request.files['image'])
-
-            print("the uploaded image is ", img)
+            if request.files.get('image'):
+                img = uploadImage(os.getenv("UPLOAD_FOLDER"), request.files['image'])
+            else:
+                img = None
 
             new_event = Event(name=data.get("name"), image=img, address=data.get("address"),
                               start_date=data.get("start_date"),
                               end_date=data.get("end_date"), description=data.get("description"),
                               price=data.get("price"),
                               category_id=category_id)
-            print("the new event is ", new_event)
-            print("we've reached down here")
             user = g.user
             user.events.append(new_event)
-
             try:
                 user.save()
             except Exception as e:
@@ -173,7 +168,9 @@ class Events(Resource):
         if not event:
             return make_response(404, "Event With ID {} is not found".format(event_id))
 
-        event = response_helpers.event_parser(event)
+        category = Category.query.filter_by(id=event.category_id).first()
+
+        event = response_helpers.event_parser(event=event,category=category.name)
         response = jsonify({"message": "Event Retrieved Successfully", "event": event})
         response.status_code = 200
         return response
