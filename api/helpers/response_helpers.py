@@ -124,6 +124,7 @@ def event_parser(event,category=""):
         "description": event.description,
         "category_id": event.category.id,
         "category":category
+
     }
     return new_event
 

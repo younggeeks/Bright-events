@@ -127,6 +127,20 @@ class MyEvents(Resource):
         return response
 
 
+class MyRsvps(Resource):
+    @protected_route
+    def get(self):
+        user = g.user
+        # events = Event.query.filter_by(user_id=user.id).all()
+        print("the rsvps are",user.events)
+        response = jsonify({
+            "message": "Events Retrieved Successfully",
+            # "events": response_helpers.parse_list("events", events)
+        })
+        response.status_code = 200
+        return response
+
+
 class Events(Resource):
     @protected_route
     def put(self, event_id):
@@ -137,7 +151,7 @@ class Events(Resource):
         if event.user_id != g.user.id:
             return make_response(403, "You can only Update Events You Created")
 
-        data = request.get_json()
+        data = request.form
         if not data:
             return make_response(400, "Update Failed, Please check your input")
 
@@ -329,3 +343,4 @@ api.add_resource(Paginate, "/filter")
 api.add_resource(Reports, "/reports")
 api.add_resource(Categories, "/categories")
 api.add_resource(MyEvents, "/my-events")
+api.add_resource(MyRsvps, "/my-rsvps")
