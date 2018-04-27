@@ -26,6 +26,14 @@ def uploadImage(local_dir, image):
     return image_name
 
 
+def removeImage(image):
+    saved_path = os.path.join(os.getenv("UPLOAD_FOLDER"), image)
+    if os.path.isfile(saved_path):
+        os.remove(saved_path)
+    else:
+        print("Image {} Not found", format(saved_path))
+
+
 def search(search_type):
     q = request.args.get("q")
     if not q or q == "":
@@ -58,7 +66,7 @@ class Categories(Resource):
     def get(self):
         all_categories = Category.query.all()
         categories_dict = []
-        [categories_dict.append({'id':category.id,'name':category.name}) for category in all_categories]
+        [categories_dict.append({'id': category.id, 'name': category.name}) for category in all_categories]
         response = jsonify({
             "categories": categories_dict
         })
@@ -132,7 +140,7 @@ class MyRsvps(Resource):
     def get(self):
         user = g.user
         # events = Event.query.filter_by(user_id=user.id).all()
-        print("the rsvps are",user.events)
+        print("the rsvps are", user.events)
         response = jsonify({
             "message": "Events Retrieved Successfully",
             # "events": response_helpers.parse_list("events", events)
@@ -184,7 +192,7 @@ class Events(Resource):
 
         category = Category.query.filter_by(id=event.category_id).first()
 
-        event = response_helpers.event_parser(event=event,category=category.name)
+        event = response_helpers.event_parser(event=event, category=category.name)
         response = jsonify({"message": "Event Retrieved Successfully", "event": event})
         response.status_code = 200
         return response
@@ -199,6 +207,7 @@ class Events(Resource):
             return make_response(403, "You can only Delete Events You Created")
 
         event.delete()
+        removeImage(event.image)
         response = jsonify({
             "message": "Event Deletion Successful"
         })
