@@ -21,7 +21,7 @@ def protected_route(f):
         if isinstance(resp, int):
             user = User.query.filter_by(id=resp).first()
             if not user:
-                return make_response(404, "User not Found")
+                return make_response(404, "User not Found", e.message)
             g.user = user
             return f(*args, **kwargs)
         else:
@@ -65,10 +65,10 @@ def validate_event_form(required_fields):
             if "email" in required_fields and not isValidEmail(data["email"]):
                 return make_response(400, "{} is invalid Email Address".format(data["email"]))
             if "password" in required_fields and len(data["password"]) < 8:
-                return make_response(400, "Minimum length of Password is 8 Characters")
+                return make_response(400, "Minimum length of Password is 8 Characters",)
             if "password_confirmation" in required_fields:
                 if not password_confirmation_matches(data["password"], data["password_confirmation"]):
-                    return make_response(400, "Password and Password Confirmation do not match")
+                    return make_response(400, "Password and Password Confirmation do not match",)
 
             return f(*args, **kwargs)
 

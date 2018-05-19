@@ -114,9 +114,8 @@ class EventList(Resource):
             try:
                 user.save()
             except Exception as e:
-                return make_response(400,
-                                     "Category With id {} is not found,"
-                                     " Event Creating Failed".format(data["category_id"]))
+                return make_response(400, "Category With id {} is not found,"
+                                          " Event Creating Failed".format(data["category_id"]), e.message)
             response = jsonify({"message": "Event Registration Successfully"})
             response.status_code = 201
             return response

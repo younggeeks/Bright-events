@@ -2,10 +2,11 @@ import uuid
 
 import os
 
-from flask import Blueprint, request, jsonify, url_for
+from flask import Blueprint, request, jsonify, url_for, current_app, render_template
+from flask_mail import Message, Mail
 from flask_restful import Api, Resource
 
-from itsdangerous import URLSafeTimedSerializer
+from itsdangerous import URLSafeTimedSerializer, BadSignature
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from api.helpers.response_helpers import make_response, validate_inputs
@@ -88,6 +89,7 @@ class PasswordResetLink(Resource):
     """User enters their email and resent link is returned as a feedback for them to reset"""
 
     def post(self):
+        mail = Mail(current_app)
         data = request.get_json()
         if "email" in data and data["email"] != "":
             user = User.query.filter_by(email=data["email"]).first()
@@ -99,10 +101,18 @@ class PasswordResetLink(Resource):
                                                                       salt=os.getenv("RESET_SALT")),
                                 _external=True)
 
-            response = jsonify({
-                "message": "Password Reset Link Successfully Generated",
-                "link": reset_url
-            })
+            # new_url = url_for("http://localhost:3000/change-password",  token=password_reset_serializer.dumps(data["email"],
+            #                                                           salt=os.getenv("RESET_SALT")),
+            #                     _external=True)
+            salt = os.getenv("RESET_SALT")
+
+            token = password_reset_serializer.dumps(data["email"],salt)
+            url = "http://localhost:3000/change-password/{}".format(token)
+            msg = Message('Hello ', sender="Bright Events", recipients=[data["email"]])
+            msg.body = "Please click {} To reset your password".format(url)
+            msg.html = render_template('reset.html', username=user.name, url=url)
+            mail.send(msg)
+            response = jsonify({"success": True})
             response.status_code = 200
             return response
         else:
@@ -115,7 +125,7 @@ class PasswordResetToken(Resource):
     def get(self, token):
         try:
             password_reset_serializer = URLSafeTimedSerializer(os.getenv("SECRET"))
-            email = password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT"), max_age=3600)
+            email = password_reset_serializer.loads(token, salt=os.getenv("RESET_SALT"), max_age=14400)
             token = password_reset_serializer.dumps(email, salt=os.getenv("RESET_SALT_VERIFY"))
             response = jsonify({
                 "message": "Password Reset Link Verified Successfully",
@@ -124,8 +134,9 @@ class PasswordResetToken(Resource):
             })
             response.status_code = 200
             return response
-        except Exception as e:
-            return make_response(400, "Password Reset Link is invalid, or Expired")
+        except BadSignature as e:
+            print(e.message)
+            return make_response(400, "Password Reset Link is invalid")
 
 
 class PasswordResetChangePassword(Resource):
