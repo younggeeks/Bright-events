@@ -9,6 +9,7 @@ from api import models
 
 app = create_app(os.getenv("ENV_SETTINGS"))
 
+
 migrate = Migrate(app, db)
 manager = Manager(app)
 
