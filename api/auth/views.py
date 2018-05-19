@@ -105,9 +105,9 @@ class PasswordResetLink(Resource):
             #                                                           salt=os.getenv("RESET_SALT")),
             #                     _external=True)
             salt = os.getenv("RESET_SALT")
-
+            app_url = os.getenv("FRONTEND_URL")
             token = password_reset_serializer.dumps(data["email"],salt)
-            url = "http://localhost:3000/change-password/{}".format(token)
+            url = "{}/change-password/{}".format(app_url,token)
             msg = Message('Hello ', sender="Bright Events", recipients=[data["email"]])
             msg.body = "Please click {} To reset your password".format(url)
             msg.html = render_template('reset.html', username=user.name, url=url)

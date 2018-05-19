@@ -9,11 +9,12 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    FRONTEND_URL = "http://localhost:3000"
 
 
 class ProductionConfig(Config):
     DEBUG = False
-
+    FRONTEND_URL = "https://bright-events-jwt.herokuapp.com"
 
 class TestingConfig(Config):
     TESTING = True
