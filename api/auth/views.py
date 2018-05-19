@@ -3,8 +3,10 @@ import uuid
 import os
 
 from flask import Blueprint, request, jsonify, url_for, current_app, render_template
+from flask_cors import CORS
 from flask_mail import Message, Mail
 from flask_restful import Api, Resource
+from flask_restful.utils import cors
 
 from itsdangerous import URLSafeTimedSerializer, BadSignature
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -14,7 +16,7 @@ from api.helpers.tests_dummy_data import required_user_fields, required_credenti
 from api.models import User, BlacklistToken
 
 auth = Blueprint("auth", __name__, url_prefix="/api/v1/auth")
-
+CORS(auth)
 api = Api(auth, catch_all_404s=True)
 
 
@@ -106,8 +108,8 @@ class PasswordResetLink(Resource):
             #                     _external=True)
             salt = os.getenv("RESET_SALT")
             app_url = os.getenv("FRONTEND_URL")
-            token = password_reset_serializer.dumps(data["email"],salt)
-            url = "{}/change-password/{}".format(app_url,token)
+            token = password_reset_serializer.dumps(data["email"], salt)
+            url = "{}/change-password/{}".format(app_url, token)
             msg = Message('Hello ', sender="Bright Events", recipients=[data["email"]])
             msg.body = "Please click {} To reset your password".format(url)
             msg.html = render_template('reset.html', username=user.name, url=url)

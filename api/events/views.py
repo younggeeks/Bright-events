@@ -2,13 +2,14 @@ import uuid
 from collections import Counter
 import os
 from flask import Blueprint, request, jsonify, g, url_for
+from flask_cors import CORS
 from flask_restful import Api, Resource
 from sqlalchemy import asc
 from api.helpers.response_helpers import protected_route, make_response, validate_inputs, validate_event_form
 from api.helpers.tests_dummy_data import required_event_fields
 
 events = Blueprint("events", __name__, url_prefix="/api/v1/events")
-
+CORS(events)
 api = Api(events, catch_all_404s=True)
 
 from api.models import Event, Category

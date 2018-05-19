@@ -1,12 +1,10 @@
 import os
 
 from flask import render_template, send_from_directory
-from flask_cors import CORS
 from api import create_app
 
 environment = os.getenv("ENV_SETTINGS")
 app = create_app(environment)
-CORS(app)
 
 
 @app.route("/")
