@@ -84,9 +84,6 @@ class EventList(Resource):
 
         if "page" in request.args and request.args.get("page"):
             page = max(0, int(request.args.get("page")))
-
-        print("data is ", page,limit)
-
         paginated_events = Event.query.paginate(page,limit,False)
         all_events = paginated_events.items
         response = jsonify({
