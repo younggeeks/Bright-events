@@ -12,7 +12,7 @@ events = Blueprint("events", __name__, url_prefix="/api/v1/events")
 CORS(events)
 api = Api(events, catch_all_404s=True)
 
-from api.models import Event, Category
+from api.models import Event, Category, User
 from api.helpers import response_helpers
 
 
@@ -77,10 +77,22 @@ class Categories(Resource):
 
 class EventList(Resource):
     def get(self):
-        all_events = Event.query.all()
+        page = 1
+        limit = 3
+        if "limit" in request.args and request.args.get("limit"):
+            limit = int(request.args.get('limit', 3))
+
+        if "page" in request.args and request.args.get("page"):
+            page = max(0, int(request.args.get("page")))
+
+        print("data is ", page,limit)
+
+        paginated_events = Event.query.paginate(page,limit,False)
+        all_events = paginated_events.items
         response = jsonify({
             "message": "Events Retrieved Successfully",
-            "events": response_helpers.parse_list("events", all_events)
+            "events": response_helpers.parse_list("events", all_events),
+            "has_next":paginated_events.has_next
         })
         response.status_code = 200
         return response
@@ -139,11 +151,14 @@ class MyRsvps(Resource):
     @protected_route
     def get(self):
         user = g.user
-        # events = Event.query.filter_by(user_id=user.id).all()
-        print("the rsvps are", user.events)
+        mine_rsvps = []
+        eventz = Event.query.all()
+        for event in eventz:
+            [mine_rsvps.append(event) for foundUser in event.rsvps if foundUser.id == user.id]
+
         response = jsonify({
             "message": "Events Retrieved Successfully",
-            # "events": response_helpers.parse_list("events", events)
+            "events": response_helpers.parse_list("events", mine_rsvps)
         })
         response.status_code = 200
         return response
