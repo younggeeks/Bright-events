@@ -123,7 +123,8 @@ def event_parser(event,category=""):
         "created_at":event.created_at,
         "description": event.description,
         "category_id": event.category.id,
-        "category":category
+        "category":event.category.name,
+        "organizer":event.user.name
 
     }
     return new_event

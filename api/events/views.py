@@ -4,7 +4,7 @@ import os
 from flask import Blueprint, request, jsonify, g, url_for
 from flask_cors import CORS
 from flask_restful import Api, Resource
-from sqlalchemy import asc
+from sqlalchemy import asc, or_
 from api.helpers.response_helpers import protected_route, make_response, validate_inputs, validate_event_form
 from api.helpers.tests_dummy_data import required_event_fields
 
@@ -35,7 +35,7 @@ def removeImage(image):
         print("Image {} Not found", format(saved_path))
 
 
-def search(search_type):
+def search():
     q = request.args.get("q")
     if not q or q == "":
         response = jsonify({
@@ -43,10 +43,8 @@ def search(search_type):
         })
         response.status_code = 400
         return response
-    if search_type == "name":
-        found_events = Event.query.filter(Event.name.ilike('%{}%'.format(q))).all()
-    elif search_type == "location":
-        found_events = Event.query.filter(Event.address.ilike('%{}%'.format(q))).all()
+
+    found_events = Event.query.filter(or_(Event.address.ilike('%{}%'.format(q)),Event.description.ilike('%{}%'.format(q)),Event.name.ilike('%{}%'.format(q)))).all()
 
     if found_events and len(found_events) > 0:
         response = jsonify({
@@ -214,10 +212,8 @@ class Events(Resource):
         event = Event.query.filter_by(id=event_id).first()
         if not event:
             return make_response(404, "Event With ID {} is not found".format(event_id))
-
         if event.user_id != g.user.id:
             return make_response(403, "You can only Delete Events You Created")
-
         event.delete()
         removeImage(event.image)
         response = jsonify({
@@ -237,16 +233,12 @@ class RSVP(Resource):
         event = Event.query.filter_by(id=event_id).first()
         if not event:
             return make_response(404, "Event With ID {} is not found".format(event_id))
-
         guest = g.user
-
         if event.user_id == guest.id:
             return make_response(403, "You can not RSVP To your own event")
-
         existing_user = [user for user in event.rsvps if user.id == guest.id]
         if existing_user:
             return make_response(403, "Your Name is already in {}'s Guest List".format(event.name))
-
         event.rsvps.append(guest)
         event.save()
         response = jsonify({
@@ -262,14 +254,10 @@ class Guests(Resource):
         event = Event.query.filter_by(id=event_id).first()
         if not event:
             return make_response(404, "Event With ID {} is not found".format(event_id))
-
         user = g.user
-
         if event.user_id != user.id:
             return make_response(403, "You can only See the guests of the event you created")
-
         guests = response_helpers.parse_list("users", event.rsvps)
-
         response = jsonify({
             "message": "Successfully Retrieved Event Guests",
             "guests": guests
@@ -280,12 +268,7 @@ class Guests(Resource):
 
 class Search(Resource):
     def get(self):
-        return search("name")
-
-
-class SearchLocation(Resource):
-    def get(self):
-        return search("location")
+        return search()
 
 
 class Paginate(Resource):
@@ -359,7 +342,6 @@ api.add_resource(Events, "/<int:event_id>")
 api.add_resource(RSVP, "/<int:event_id>/rsvp")
 api.add_resource(Guests, "/<int:event_id>/guests")
 api.add_resource(Search, "/search")
-api.add_resource(SearchLocation, "/location")
 api.add_resource(Paginate, "/filter")
 api.add_resource(Reports, "/reports")
 api.add_resource(Categories, "/categories")
